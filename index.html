@@ -3,68 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SYSTEM: ASCENSION RANKED</title>
+    <title>SYSTEM: EVOLUTION</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;600;900&family=Orbitron:wght@900&display=swap" rel="stylesheet">
     <style>
-        :root { --bg: #000; --text: #eee; --bronz: #cd7f32; --silver: #c0c0c0; --gold: #ffd700; --dia: #00f2ff; --master: #ff00ea; --gm: #ff0044; }
+        :root { --bg: #000; --text: #eee; --deep-blue: #001a4d; }
         
         body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; margin: 0; padding: 15px; overflow-x: hidden; }
         
-        /* Панель Титула */
-        .rank-header { text-align: center; padding: 20px 0; border-bottom: 1px solid #111; }
+        .rank-header { text-align: center; padding: 10px 0 20px; }
         .title-text { font-family: 'Orbitron'; font-size: 1.8em; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; margin-top: 5px; }
-        
-        .lvl-box { font-size: 0.8em; color: #555; letter-spacing: 4px; }
-        .lvl-num { color: #fff; font-size: 1.5em; font-family: 'Orbitron'; }
+        .lvl-box { font-size: 0.7em; color: #444; letter-spacing: 3px; }
+        .lvl-num { color: #fff; font-size: 1.4em; font-family: 'Orbitron'; }
 
-        /* Прогресс бар */
-        .exp-bar { height: 2px; background: #111; margin: 20px 0; position: relative; }
-        .exp-fill { height: 100%; width: 0%; transition: 1s cubic-bezier(0.1, 0, 0, 1); box-shadow: 0 0 15px currentColor; }
+        /* Настройка шкалы опыта по твоему ТЗ */
+        .exp-bar { height: 6px; background: var(--deep-blue); margin: 15px 0; border-radius: 3px; overflow: hidden; }
+        .exp-fill { height: 100%; width: 0%; transition: width 0.6s ease, background-color 0.4s ease; box-shadow: 0 0 10px rgba(0,0,0,0.5); }
 
-        /* Статы */
-        .stats { display: flex; justify-content: space-around; margin-bottom: 30px; }
+        .stats { display: flex; justify-content: space-around; margin-bottom: 20px; }
         .stat-item { text-align: center; }
-        .stat-label { font-size: 0.6em; color: #444; text-transform: uppercase; letter-spacing: 1px; }
+        .stat-label { font-size: 0.6em; color: #444; text-transform: uppercase; }
         .stat-val { font-size: 1.1em; color: #fff; font-weight: 600; }
 
-        /* Карта */
-        .muscle-map { display: flex; justify-content: center; gap: 10px; margin-bottom: 30px; opacity: 0.7; }
-        .map-view { width: 45%; }
+        .muscle-map { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; }
+        .map-view { width: 45%; filter: drop-shadow(0 0 5px rgba(255,255,255,0.05)); }
         .muscle-group { fill: #111; stroke: #222; stroke-width: 0.5; transition: 0.3s; }
-        .muscle-group.active { fill: currentColor !important; filter: drop-shadow(0 0 5px currentColor); }
+        .muscle-group.active { fill: #fff; stroke: #fff; stroke-width: 0.8; filter: drop-shadow(0 0 5px #fff); }
 
-        /* Ввод данных */
-        select, input { width: 100%; padding: 18px; background: #08080a; border: 1px solid #151515; color: #fff; border-radius: 4px; margin-bottom: 10px; font-family: 'Inter'; font-size: 16px; box-sizing: border-box; outline: none; transition: 0.3s; }
-        input:focus { border-color: #333; }
+        select, input { width: 100%; padding: 16px; background: #08080a; border: 1px solid #151515; color: #fff; border-radius: 8px; margin-bottom: 10px; font-family: 'Inter'; font-size: 16px; box-sizing: border-box; outline: none; }
         
-        .btn { width: 100%; padding: 20px; background: #fff; border: none; color: #000; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; cursor: pointer; border-radius: 4px; }
-        .btn:active { transform: scale(0.98); background: #ccc; }
+        .btn { width: 100%; padding: 20px; background: #fff; border: none; color: #000; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; cursor: pointer; border-radius: 8px; }
+        .btn:active { transform: scale(0.97); background: #ccc; }
 
-        /* История */
-        .log { margin-top: 30px; border-top: 1px solid #111; padding-top: 10px; }
+        .log { margin-top: 20px; border-top: 1px solid #111; }
         .log-item { display: flex; justify-content: space-between; padding: 10px 0; font-size: 0.8em; color: #666; border-bottom: 1px solid #080808; }
     </style>
 </head>
 <body>
 
 <div class="rank-header">
-    <div class="lvl-box">LEVEL <span id="lvl" class="lvl-num">1</span></div>
+    <div class="lvl-box">STATUS: LVL <span id="lvl" class="lvl-num">1</span></div>
     <div id="title" class="title-text">BRONZE</div>
     <div class="exp-bar"><div id="exp-fill" class="exp-fill"></div></div>
 </div>
 
 <div class="stats">
     <div class="stat-item">
-        <div class="stat-label">Body (KG)</div>
-        <input type="number" id="uW" value="75" style="width:60px; padding:5px; margin:0; border:none; background:none; text-align:center;">
+        <div class="stat-label">Тело (кг)</div>
+        <input type="number" id="uW" value="75" style="width:50px; padding:0; margin:0; border:none; background:none; text-align:center; color:#fff; font-size:1.1em;">
     </div>
     <div class="stat-item">
-        <div class="stat-label">Total (KG)</div>
+        <div class="stat-label">Тоннаж (кг)</div>
         <div id="total" class="stat-val">0</div>
     </div>
 </div>
 
-<div class="muscle-map" id="mapCont">
+<div class="muscle-map">
     <div class="map-view">
         <svg viewBox="0 0 100 200">
             <path id="f-chest" class="muscle-group" d="M32 42 Q50 38 68 42 L68 55 Q50 58 32 55 Z" />
@@ -88,13 +81,11 @@
 <select id="ex" onchange="h()">
     <optgroup label="ГРУДЬ">
         <option value="1.0" d="f-chest,b-triceps">Жим штанги лежа</option>
-        <option value="1.1" d="f-chest,f-shoulders">Жим гантелей (30°)</option>
-        <option value="1.2" d="f-chest,f-shoulders">Жим гантелей (45°)</option>
+        <option value="1.2" d="f-chest,f-shoulders">Жим гантелей наклонный</option>
     </optgroup>
     <optgroup label="СПИНА">
         <option value="1.5" d="b-lats,b-glutes,b-hams">Становая тяга</option>
         <option value="1.1" d="b-lats,f-biceps">Подтягивания с весом</option>
-        <option value="1.0" d="b-lats,f-biceps">Тяга штанги</option>
     </optgroup>
     <optgroup label="НОГИ">
         <option value="1.3" d="f-quads,b-glutes">Приседания</option>
@@ -102,11 +93,11 @@
     </optgroup>
     <optgroup label="ПЛЕЧИ / ШЕЯ">
         <option value="0.9" d="f-shoulders,b-triceps">Армейский жим</option>
-        <option value="0.6" d="f-neck,f-abs">Тренировка шеи</option>
+        <option value="0.6" d="f-neck">Тренировка шеи</option>
     </optgroup>
     <optgroup label="РУКИ">
         <option value="0.5" d="f-biceps">Бицепс штанга</option>
-        <option value="0.6" d="b-triceps">Французский жим</option>
+        <option value="0.6" d="b-triceps">Трицепс блок</option>
     </optgroup>
 </select>
 
@@ -116,7 +107,7 @@
 <div class="log" id="hist"></div>
 
 <script>
-    let d = JSON.parse(localStorage.getItem('SL_RANKED')) || { lvl: 1, exp: 0, t: 0, h: [] };
+    let d = JSON.parse(localStorage.getItem('SL_V3')) || { lvl: 1, exp: 0, t: 0, h: [] };
 
     function h() {
         document.querySelectorAll('.muscle-group').forEach(m => m.classList.remove('active'));
@@ -128,34 +119,38 @@
     function reg() {
         const lw = parseFloat(document.getElementById('lW').value);
         if(!lw) return;
-        d.t += lw; d.exp += 20;
+        d.t += lw; d.exp += 20; // 5 тренировок до лвл-апа
         if(d.exp >= 100) { d.lvl++; d.exp = 0; }
-        
         d.h.unshift({ n: document.getElementById('ex').options[document.getElementById('ex').selectedIndex].text, w: lw });
         if(d.h.length > 3) d.h.pop();
         save(); u();
     }
 
-    function save() { localStorage.setItem('SL_RANKED', JSON.stringify(d)); }
+    function save() { localStorage.setItem('SL_V3', JSON.stringify(d)); }
+    
     function u() {
         document.getElementById('lvl').innerText = d.lvl;
         document.getElementById('total').innerText = d.t.toFixed(0);
-        document.getElementById('exp-fill').style.width = d.exp + '%';
         
-        let title = "BRONZE", color = "var(--bronz)";
-        if(d.lvl > 10) { title = "SILVER"; color = "var(--silver)"; }
-        if(d.lvl > 25) { title = "GOLD"; color = "var(--gold)"; }
+        const fill = document.getElementById('exp-fill');
+        fill.style.width = d.exp + '%';
+        
+        // Логика цвета шкалы по твоему запросу
+        if (d.exp < 35) { fill.style.backgroundColor = '#ff4444'; } // Красный
+        else if (d.exp < 80) { fill.style.backgroundColor = '#ffbb33'; } // Желтый
+        else { fill.style.backgroundColor = '#00c851'; } // Зеленый
+
+        let title = "BRONZE", color = "#cd7f32";
+        if(d.lvl > 10) { title = "SILVER"; color = "#c0c0c0"; }
+        if(d.lvl > 25) { title = "GOLD"; color = "#ffd700"; }
         if(d.lvl > 45) { title = "PLATINUM"; color = "#e5e4e2"; }
-        if(d.lvl > 70) { title = "DIAMOND"; color = "var(--dia)"; }
-        if(d.lvl > 100) { title = "MASTER"; color = "var(--master)"; }
-        if(d.lvl > 150) { title = "GRANDMASTER"; color = "var(--gm)"; }
+        if(d.lvl > 70) { title = "DIAMOND"; color = "#00f2ff"; }
+        if(d.lvl > 100) { title = "MASTER"; color = "#ff00ea"; }
+        if(d.lvl > 150) { title = "GRANDMASTER"; color = "#ff0044"; }
 
         const t = document.getElementById('title');
         t.innerText = title;
         t.style.color = color;
-        t.style.textShadow = `0 0 20px ${color}55`;
-        document.getElementById('exp-fill').style.color = color;
-        document.getElementById('mapCont').style.color = color;
 
         document.getElementById('hist').innerHTML = d.h.map(i => `<div class="log-item"><span>${i.n}</span><b>${i.w} кг</b></div>`).join('');
     }
