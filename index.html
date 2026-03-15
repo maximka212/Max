@@ -3,105 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SYSTEM: ELITE UI</title>
+    <title>SYSTEM: PRO TRAINING V14</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        :root { --bg: #050507; --neon: #00d4ff; --panel: #0d0d0f; --border: #1a1a22; --accent: #ff0044; }
-        body { background: var(--bg); color: #eee; font-family: 'Orbitron', sans-serif; margin: 0; padding: 20px; overflow: hidden; height: 100vh; display: flex; flex-direction: column; align-items: center; }
+        :root { --bg: #050507; --neon: #ff7b00; --panel: #0d0d0f; --border: #1a1a22; }
+        body { background: var(--bg); color: #eee; font-family: 'Orbitron', sans-serif; margin: 0; padding: 15px; overflow: hidden; height: 100vh; display: flex; flex-direction: column; }
         
-        /* Верхняя панель */
-        .header { width: 100%; display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
-        #rank-name { font-size: 1.8em; font-weight: 900; color: var(--neon); text-shadow: 0 0 15px var(--neon); }
-        .menu-btn { width: 50px; height: 50px; background: var(--panel); border: 1px solid var(--border); border-radius: 12px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 5px; cursor: pointer; }
-        .menu-btn div { width: 26px; height: 2px; background: var(--neon); box-shadow: 0 0 10px var(--neon); }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        #rank-name { font-size: 1.4em; font-weight: 900; color: var(--neon); text-shadow: 0 0 10px var(--neon); }
+        .menu-btn { width: 45px; height: 45px; background: var(--panel); border: 1px solid var(--border); border-radius: 10px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 4px; cursor: pointer; }
+        .menu-btn div { width: 20px; height: 2px; background: var(--neon); }
 
-        /* Центр: Иконка Титула */
-        .title-display { flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; }
-        .title-icon { width: 180px; height: 180px; background-size: contain; background-repeat: no-repeat; background-position: center; filter: drop-shadow(0 0 20px var(--neon)); margin-bottom: 20px; transition: 0.5s; }
+        .title-display { flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .icon-svg { width: 180px; height: 180px; filter: drop-shadow(0 0 20px var(--neon)); }
         
-        /* Полоса уровня (как на картинке) */
-        .level-container { width: 100%; max-width: 400px; background: #111; border: 2px solid var(--border); border-radius: 10px; padding: 5px; position: relative; margin-top: 10px; }
-        .progress-bar { height: 30px; background: linear-gradient(90deg, #ff0044, #ff7b00, #ffee00); width: 0%; border-radius: 6px; transition: 1s ease-out; display: flex; align-items: center; justify-content: center; font-weight: 900; color: #000; font-size: 0.8em; }
-        .lvl-info { display: flex; justify-content: space-between; width: 100%; max-width: 400px; margin-top: 10px; font-size: 0.9em; font-weight: 700; }
+        .lvl-zone { width: 100%; margin-top: auto; padding-bottom: 20px; }
+        .lvl-labels { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.8em; font-weight: 700; }
+        .progress-container { width: 100%; height: 30px; background: #111; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+        #exp-bar { height: 100%; width: 0%; background: linear-gradient(90deg, #ff4e00, #ffae00); transition: 0.5s; display: flex; align-items: center; justify-content: center; font-size: 0.7em; color: #000; font-weight: 900; }
 
-        /* Окна */
         .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); z-index: 100; display: none; flex-direction: column; align-items: center; justify-content: center; }
-        .modal { width: 90%; max-height: 80vh; background: #0a0a0c; border: 1px solid var(--neon); border-radius: 20px; padding: 25px; overflow-y: auto; }
-        .btn-list { width: 100%; padding: 20px; background: #111; border: 1px solid var(--border); color: #fff; margin-bottom: 12px; border-radius: 12px; font-family: 'Orbitron'; font-size: 14px; text-align: left; display: flex; justify-content: space-between; }
+        .modal { width: 90%; max-height: 80vh; background: #0a0a0c; border: 1px solid var(--neon); border-radius: 15px; padding: 20px; overflow-y: auto; }
+        .btn-list { width: 100%; padding: 16px; background: #111; border: 1px solid var(--border); color: #fff; margin-bottom: 10px; border-radius: 10px; font-family: 'Orbitron'; font-size: 11px; text-align: left; display: flex; justify-content: space-between; border-left: 4px solid var(--neon); }
         .btn-list:active { background: var(--neon); color: #000; }
         
-        .input-box { width: 100%; background: #000; border: 1px solid var(--neon); color: #fff; padding: 20px; border-radius: 12px; font-family: 'Orbitron'; font-size: 1.5em; text-align: center; margin-bottom: 20px; box-sizing: border-box; }
+        .input-box { width: 100%; background: #000; border: 1px solid var(--neon); color: #fff; padding: 15px; border-radius: 10px; font-family: 'Orbitron'; font-size: 1.4em; text-align: center; margin-bottom: 15px; box-sizing: border-box; }
     </style>
 </head>
 <body>
 
 <div class="header">
     <div id="rank-name">BRONZE E</div>
-    <div class="menu-btn" onclick="openModal('catModal')">
-        <div></div><div></div><div></div>
-    </div>
+    <div class="menu-btn" onclick="openModal('catModal')"><div></div><div></div><div></div></div>
 </div>
 
 <div class="title-display">
-    <div id="title-img" class="title-icon"></div>
-    
-    <div class="lvl-info">
-        <span>LVL <span id="current-lvl">1</span></span>
-        <span id="rank-label">SOLO LEVELING</span>
-    </div>
-    
-    <div class="level-container">
-        <div id="exp-bar" class="progress-bar">0%</div>
-    </div>
+    <svg class="icon-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path id="svg-path" d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM15.5 13.5L14 15.5H10L8.5 13.5V10.5L10 8.5H14L15.5 10.5V13.5Z" fill="currentColor"/>
+    </svg>
 </div>
 
-<div id="catModal" class="overlay">
-    <div class="modal">
-        <h2 style="color:var(--neon); text-align:center; letter-spacing:3px;">ВЫБОР КАТЕГОРИИ</h2>
-        <button class="btn-list" onclick="showEx('ГРУДЬ')">ГРУДЬ <span>></span></button>
-        <button class="btn-list" onclick="showEx('СПИНА')">СПИНА <span>></span></button>
-        <button class="btn-list" onclick="showEx('НОГИ')">НОГИ <span>></span></button>
-        <button class="btn-list" onclick="showEx('РУКИ')">РУКИ <span>></span></button>
-        <button class="btn-list" onclick="showEx('ШЕЯ')">ШЕЯ <span>></span></button>
-        <div style="text-align:center; color:#444; margin-top:20px;" onclick="closeModal('catModal')">ЗАКРЫТЬ</div>
-    </div>
+<div class="lvl-zone">
+    <div class="lvl-labels"><span>LVL <span id="current-lvl">1</span></span><span>SOLO LEVELING</span></div>
+    <div class="progress-container"><div id="exp-bar">0%</div></div>
 </div>
 
-<div id="exModal" class="overlay">
-    <div class="modal">
-        <h2 id="cat-title" style="color:var(--neon); text-align:center;"></h2>
-        <div id="ex-list"></div>
-        <div style="text-align:center; color:#444; margin-top:20px;" onclick="openModal('catModal')">НАЗАД</div>
-    </div>
-</div>
-
-<div id="weightModal" class="overlay">
-    <div class="modal">
-        <h2 id="ex-name" style="color:var(--neon); text-align:center;"></h2>
-        <input type="number" id="weight-input" class="input-box" placeholder="0 KG">
-        <button class="btn-list" style="background:var(--neon); color:#000; justify-content:center; font-weight:900;" onclick="addExp()">ПОДТВЕРДИТЬ РЕЗУЛЬТАТ</button>
-        <div style="text-align:center; color:#444; margin-top:10px;" onclick="closeModal('weightModal')">ОТМЕНА</div>
-    </div>
-</div>
+<div id="catModal" class="overlay"><div class="modal"><h3 style="color:var(--neon); text-align:center;">ГРУППЫ</h3><div id="cat-list"></div><div style="text-align:center; color:#555; margin-top:15px;" onclick="closeModal('catModal')">ЗАКРЫТЬ</div></div></div>
+<div id="subModal" class="overlay"><div class="modal"><h3 id="sub-title" style="color:var(--neon); text-align:center;"></h3><div id="sub-list"></div><div style="text-align:center; color:#555; margin-top:15px;" onclick="openModal('catModal')">НАЗАД</div></div></div>
+<div id="exModal" class="overlay"><div class="modal"><h3 id="ex-title" style="color:var(--neon); text-align:center;"></h3><div id="ex-list"></div><div id="ex-back-btn" style="text-align:center; color:#555; margin-top:15px;">НАЗАД</div></div></div>
+<div id="weightModal" class="overlay"><div class="modal"><h3 id="final-ex-name" style="color:var(--neon); text-align:center;"></h3><input type="number" id="weight-input" class="input-box" placeholder="0 KG"><button class="btn-list" style="background:var(--neon); color:#000; justify-content:center; font-weight:900;" onclick="addExp()">ЗАРЕГИСТРИРОВАТЬ</button><div style="text-align:center; color:#555; margin-top:10px;" onclick="closeModal('weightModal')">ОТМЕНА</div></div></div>
 
 <script>
-    let db = JSON.parse(localStorage.getItem('SYSTEM_V12')) || { lvl: 1, exp: 0, records: {} };
+    let db = JSON.parse(localStorage.getItem('SYSTEM_V14')) || { lvl: 1, exp: 0, records: {} };
 
-    // Ссылки на картинки титулов (черепа и кулаки)
-    const titles = {
-        1: 'https://i.ibb.co/L9Pz8kY/skull1.png', // Bronze
-        10: 'https://i.ibb.co/vYy6X0L/skull2.png', // Silver
-        30: 'https://i.ibb.co/0V8xH1p/skull3.png', // Gold
-        50: 'https://i.ibb.co/H4M0G0p/skull4.png', // Platinum
-        100: 'https://i.ibb.co/pP9Y4yL/skull5.png' // SSS
-    };
-
-    const exercises = {
-        'ГРУДЬ': ['Жим лежа', 'Жим гантелей', 'Брусья', 'Разводка'],
-        'СПИНА': ['Становая тяга', 'Подтягивания', 'Тяга в наклоне', 'Гиперэкстензия'],
-        'НОГИ': ['Приседания', 'Жим ногами', 'Мертвая тяга', 'Выпады'],
-        'РУКИ': ['Бицепс штанга', 'Трицепс блок', 'Молотки', 'Французский жим'],
-        'ШЕЯ': ['Борцовский мост', 'Шраги', 'Подъемы головы']
+    const trainingData = {
+        'ГРУДЬ': {
+            'ВЕРХ ГРУДИ': ['Жим штанги (наклон)', 'Жим гантелей (наклон)', 'Разводка (наклон)', 'Сведение в кроссовере (снизу)'],
+            'НИЗ ГРУДИ': ['Жим головой вниз', 'Брусья (грудной стиль)', 'Сведение в кроссовере (сверху)'],
+            'СЕРЕДИНА': ['Жим лежа классика', 'Жим гантелей лежа', 'Пек-Дек (бабочка)']
+        },
+        'СПИНА': {
+            'ШИРИНА (LATS)': ['Подтягивания широким хватом', 'Тяга верхнего блока', 'Тяга за голову', 'Пуловер'],
+            'ТОЛЩИНА': ['Тяга штанги в наклоне', 'Тяга гантели одной рукой', 'Тяга Т-грифа', 'Тяга нижнего блока'],
+            'ПОЯСНИЦА': ['Становая тяга', 'Гиперэкстензия', 'Лодочка']
+        },
+        'НОГИ': {
+            'КВАДРИЦЕПС': ['Приседания', 'Жим ногами', 'Разгибания в тренажере', 'Гакк-приседания'],
+            'БИЦЕПС БЕДРА': ['Мертвая тяга', 'Сгибания лежа', 'Сгибания сидя'],
+            'ИКРЫ': ['Подъемы на носки стоя', 'Подъемы на носки сидя'],
+            'ЯГОДИЦЫ': ['Ягодичный мостик', 'Выпады', 'Отведения ноги']
+        },
+        'РУКИ': {
+            'БИЦЕПС': ['ПШН (штанга)', 'Молотки', 'Концентрированные сгибания', 'Скамья Скотта'],
+            'ТРИЦЕПС': ['Жим узким хватом', 'Французский жим', 'Разгибания на блоке', 'Разгибание из-за головы'],
+            'ПРЕДПЛЕЧЬЯ': ['Сгибания кистей', 'Обратный хват ПШН']
+        }
     };
 
     function openModal(id) {
@@ -110,17 +86,47 @@
     }
     function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
-    function showEx(cat) {
-        document.getElementById('cat-title').innerText = cat;
+    // Главные категории
+    function initCats() {
+        const list = document.getElementById('cat-list');
+        list.innerHTML = '';
+        Object.keys(trainingData).forEach(cat => {
+            let b = document.createElement('button');
+            b.className = 'btn-list';
+            b.innerHTML = `${cat} <span>></span>`;
+            b.onclick = () => showSubs(cat);
+            list.appendChild(b);
+        });
+    }
+
+    // Подгруппы (Верх/низ и т.д.)
+    function showSubs(cat) {
+        document.getElementById('sub-title').innerText = cat;
+        const list = document.getElementById('sub-list');
+        list.innerHTML = '';
+        Object.keys(trainingData[cat]).forEach(sub => {
+            let b = document.createElement('button');
+            b.className = 'btn-list';
+            b.innerHTML = `${sub} <span>></span>`;
+            b.onclick = () => showEx(cat, sub);
+            list.appendChild(b);
+        });
+        openModal('subModal');
+    }
+
+    // Список упражнений
+    function showEx(cat, sub) {
+        document.getElementById('ex-title').innerText = sub;
         const list = document.getElementById('ex-list');
         list.innerHTML = '';
-        exercises[cat].forEach(ex => {
+        trainingData[cat][sub].forEach(ex => {
             let b = document.createElement('button');
             b.className = 'btn-list';
             b.innerHTML = `${ex} <span>${db.records[ex] || 0} KG</span>`;
-            b.onclick = () => { window.currentEx = ex; document.getElementById('ex-name').innerText = ex; openModal('weightModal'); };
+            b.onclick = () => { window.currentEx = ex; document.getElementById('final-ex-name').innerText = ex; openModal('weightModal'); };
             list.appendChild(b);
         });
+        document.getElementById('ex-back-btn').onclick = () => showSubs(cat);
         openModal('exModal');
     }
 
@@ -128,31 +134,27 @@
         const val = parseFloat(document.getElementById('weight-input').value);
         if(!val) return;
         db.records[window.currentEx] = Math.max(val, db.records[window.currentEx] || 0);
-        db.exp += 25;
+        db.exp += 20;
         if(db.exp >= 100) { db.lvl++; db.exp = 0; }
         save(); update(); closeModal('weightModal');
         document.getElementById('weight-input').value = '';
     }
 
-    function save() { localStorage.setItem('SYSTEM_V12', JSON.stringify(db)); }
-
+    function save() { localStorage.setItem('SYSTEM_V14', JSON.stringify(db)); }
     function update() {
         document.getElementById('current-lvl').innerText = db.lvl;
         document.getElementById('exp-bar').style.width = db.exp + '%';
         document.getElementById('exp-bar').innerText = db.exp + '%';
-        
-        let rank = "BRONZE E", color = "#cd7f32", img = titles[1];
-        if(db.lvl >= 10) { rank = "SILVER C"; color = "#c0c0c0"; img = titles[10]; }
-        if(db.lvl >= 30) { rank = "GOLD B"; color = "#ffd700"; img = titles[30]; }
-        if(db.lvl >= 50) { rank = "PLATINUM A"; color = "#00d4ff"; img = titles[50]; }
-        if(db.lvl >= 100) { rank = "SSS MONARCH"; color = "#ff0044"; img = titles[100]; }
-        
+        let rank = "BRONZE E", color = "#ff7b00", path = "M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM15.5 13.5L14 15.5H10L8.5 13.5V10.5L10 8.5H14L15.5 10.5V13.5Z";
+        if(db.lvl >= 5) { rank = "SILVER C"; color = "#c0c0c0"; path = "M12 2C7.03 2 3 6.03 3 11C3 15.11 5.75 18.57 9.5 19.64V21H10.5V19.97C11 20 11.5 20 12 20C12.5 20 13 20 13.5 19.97V21H14.5V19.64C18.25 18.57 21 15.11 21 11C21 6.03 16.97 2 12 2ZM9 13H7V11H9V13ZM17 13H15V11H17V13Z"; }
+        if(db.lvl >= 20) { rank = "GOLD B"; color = "#ffd700"; }
+        if(db.lvl >= 50) { rank = "SSS MONARCH"; color = "#ff0044"; }
         document.getElementById('rank-name').innerText = rank;
         document.getElementById('rank-name').style.color = color;
-        document.getElementById('title-img').style.backgroundImage = `url('${img}')`;
+        document.getElementById('svg-path').setAttribute('d', path);
         document.documentElement.style.setProperty('--neon', color);
     }
-    update();
+    initCats(); update();
 </script>
 </body>
 </html>
