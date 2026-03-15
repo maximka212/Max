@@ -3,168 +3,165 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SYSTEM: HYBRID EVOLUTION</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <title>SYSTEM: EVOLUTION V7</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&display=swap" rel="stylesheet">
     <style>
-        :root { --bg: #000; --panel: #0a0a0c; --border: #1a1a1f; --neon: #00d4ff; }
+        :root { --bg: #000; --neon: #00d4ff; --panel: #0a0a0c; --border: #1a1a1f; }
+        body { background: var(--bg); color: #eee; font-family: sans-serif; margin: 0; padding: 15px; overflow: hidden; height: 100vh; position: relative; }
         
-        body { background: var(--bg); color: #eee; font-family: 'Inter', sans-serif; margin: 0; padding: 10px; overflow-x: hidden; }
+        /* Главная панель */
+        .status-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; z-index: 5; position: relative; }
+        #rank { font-family: 'Orbitron'; font-size: 1.4em; font-weight: 900; color: var(--neon); text-shadow: 0 0 10px var(--neon); }
         
-        /* Блоки в стиле старых RPG интерфейсов */
-        .window { background: var(--panel); border: 1px solid var(--border); border-radius: 4px; padding: 15px; margin-bottom: 10px; position: relative; box-shadow: inset 0 0 10px rgba(0,0,0,0.5); }
-        .window::before { content: ''; position: absolute; top: -1px; left: 10px; right: 10px; height: 1px; background: var(--neon); opacity: 0.3; }
+        /* Кнопка Меню как на схеме */
+        .menu-btn { width: 50px; height: 50px; background: var(--panel); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 5px; cursor: pointer; }
+        .menu-btn div { width: 25px; height: 2px; background: var(--neon); box-shadow: 0 0 5px var(--neon); }
 
-        .header-title { font-family: 'Orbitron'; font-size: 0.7em; color: var(--neon); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px; opacity: 0.8; }
+        /* Карта мышц на весь экран */
+        .map-container { display: flex; justify-content: center; gap: 10px; margin-top: 20px; height: 50vh; opacity: 0.8; }
+        .map-svg { height: 100%; }
+        .m-grp { fill: #111; stroke: #252525; stroke-width: 0.5; transition: 0.4s; }
+        .m-grp.active { fill: currentColor !important; filter: drop-shadow(0 0 12px currentColor); stroke: #fff; }
 
-        /* Ранг и Лвл */
-        .rank-row { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 5px; }
-        #title { font-family: 'Orbitron'; font-size: 1.6em; font-weight: 900; text-shadow: 0 0 10px currentColor; }
-        .lvl-tag { font-family: 'Orbitron'; font-size: 0.9em; color: #666; }
+        /* Модальные окна (Слои как на схеме) */
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 100; display: none; flex-direction: column; align-items: center; justify-content: center; }
+        .modal { width: 85%; background: var(--panel); border: 1px solid var(--neon); border-radius: 12px; padding: 20px; box-shadow: 0 0 30px rgba(0,212,255,0.2); }
+        .modal-title { font-family: 'Orbitron'; color: var(--neon); text-align: center; margin-bottom: 20px; font-size: 0.8em; letter-spacing: 2px; }
 
-        /* Твоя шкала (Синий фон + динамический цвет) */
-        .exp-bar { height: 4px; background: #001a4d; margin: 10px 0; border-radius: 2px; overflow: hidden; }
-        .exp-fill { height: 100%; width: 0%; transition: 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+        .list-btn { width: 100%; padding: 15px; background: #050505; border: 1px solid #1a1a1f; color: #fff; margin-bottom: 10px; border-radius: 6px; font-family: 'Orbitron'; text-align: left; font-size: 14px; }
+        .list-btn:active { background: var(--neon); color: #000; }
 
-        /* Параметры тела */
-        .bio-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; text-align: center; }
-        .bio-box { border-right: 1px solid #151515; }
-        .bio-box:last-child { border: none; }
-        .bio-val { display: block; font-size: 1.1em; font-weight: bold; color: #fff; margin-top: 3px; }
-        .bio-label { font-size: 0.5em; color: #444; text-transform: uppercase; }
+        .close-btn { color: #555; font-size: 0.7em; text-align: center; margin-top: 15px; text-transform: uppercase; letter-spacing: 1px; }
 
-        /* Карта мышц */
-        .map-container { display: flex; justify-content: space-around; padding: 10px 0; }
-        .map-view { width: 45%; }
-        .muscle-group { fill: #111; stroke: #222; stroke-width: 0.5; transition: 0.3s; }
-        .muscle-group.active { fill: currentColor !important; filter: drop-shadow(0 0 5px currentColor); stroke: #fff; }
-
-        /* Ввод данных */
-        select, .input-v { width: 100%; background: #000; border: 1px solid var(--border); color: #fff; padding: 15px; border-radius: 4px; font-family: 'Orbitron'; font-size: 14px; margin-bottom: 8px; outline: none; }
-        select:focus { border-color: var(--neon); }
-        
-        .action-btn { width: 100%; padding: 18px; background: #fff; color: #000; border: none; font-family: 'Orbitron'; font-weight: 900; border-radius: 4px; text-transform: uppercase; letter-spacing: 1px; }
-        .action-btn:active { transform: scale(0.98); opacity: 0.9; }
-
-        /* Список последних */
-        .history { font-size: 0.75em; color: #555; }
-        .h-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #111; }
+        /* Ввод веса */
+        .weight-input-box { display: flex; gap: 10px; margin-top: 10px; }
+        .w-in { flex: 1; background: #000; border: 1px solid var(--neon); color: #fff; padding: 15px; border-radius: 6px; font-family: 'Orbitron'; text-align: center; font-size: 1.2em; }
     </style>
 </head>
 <body>
 
-<div class="window">
-    <div class="header-title">Status Dashboard</div>
-    <div class="rank-row">
-        <div id="title">BRONZE E</div>
-        <div class="lvl-tag">LVL <span id="lvl" style="color:#fff">1</span></div>
+<div class="status-header">
+    <div>
+        <div id="rank">BRONZE E</div>
+        <div style="font-size: 0.7em; color: #444; font-family: 'Orbitron';">LVL <span id="lvl">1</span></div>
     </div>
-    <div class="exp-bar"><div id="exp-fill" class="exp-fill"></div></div>
-    
-    <div class="bio-row">
-        <div class="bio-box"><span class="bio-label">Weight</span><input type="number" id="uW" value="75" class="bio-val" style="width:100%; background:none; border:none; text-align:center;"></div>
-        <div class="bio-box"><span class="bio-label">Height</span><input type="number" id="uH" value="180" class="bio-val" style="width:100%; background:none; border:none; text-align:center;"></div>
-        <div class="bio-box"><span class="bio-label">Age</span><input type="number" id="uA" value="25" class="bio-val" style="width:100%; background:none; border:none; text-align:center;"></div>
+    <div class="menu-btn" onclick="openModal('groupModal')">
+        <div></div><div></div><div></div>
     </div>
 </div>
 
-<div class="window">
-    <div class="header-title">Anatomy Analysis</div>
-    <div class="map-container" id="mapTheme">
-        <div class="map-view">
-            <svg viewBox="0 0 100 200">
-                <path id="f-neck" class="muscle-group" d="M42 30 L58 30 L58 38 L42 38 Z" />
-                <path id="f-chest" class="muscle-group" d="M30 40 Q50 35 70 40 L70 55 Q50 50 30 55 Z" />
-                <path id="f-abs" class="muscle-group" d="M40 58 L60 58 L58 100 L42 100 Z" />
-                <path id="f-quads" class="muscle-group" d="M30 110 L48 110 L48 150 L30 150 Z M52 110 L70 110 L70 150 L52 150 Z" />
-                <path id="f-biceps" class="muscle-group" d="M15 58 L25 58 L25 90 L15 90 Z M85 58 L75 58 L75 90 L85 90 Z" />
-            </svg>
-        </div>
-        <div class="map-view">
-            <svg viewBox="0 0 100 200">
-                <path id="b-lats" class="muscle-group" d="M25 50 Q50 45 75 50 L70 105 Q50 100 30 105 Z" />
-                <path id="b-glutes" class="muscle-group" d="M30 110 L70 110 L75 125 L25 125 Z" />
-                <path id="b-hams" class="muscle-group" d="M30 130 L48 130 L48 165 L30 165 Z M52 130 L70 130 L70 165 L52 165 Z" />
-            </svg>
-        </div>
+<div class="map-container" id="theme">
+    <svg class="map-svg" viewBox="0 0 100 200">
+        <path id="f-neck" class="m-grp" d="M42 28 L58 28 L60 38 L40 38 Z" />
+        <path id="f-chest" class="m-grp" d="M30 42 Q50 38 70 42 L72 58 Q50 54 28 58 Z" />
+        <path id="f-abs" class="m-grp" d="M40 60 L60 60 L58 100 L42 100 Z" />
+        <path id="f-quads" class="m-grp" d="M30 110 L48 110 L48 160 L32 160 Z M52 110 L70 110 L68 160 L52 160 Z" />
+        <path id="f-biceps" class="m-grp" d="M12 60 L24 60 L24 95 L12 95 Z M88 60 L76 60 L76 95 L88 95 Z" />
+    </svg>
+    <svg class="map-svg" viewBox="0 0 100 200">
+        <path id="b-lats" class="m-grp" d="M25 50 Q50 45 75 50 L72 105 Q50 100 28 105 Z" />
+        <path id="b-glutes" class="m-grp" d="M30 108 L70 108 L75 130 L25 130 Z" />
+        <path id="b-hams" class="m-grp" d="M30 135 L48 135 L48 175 L30 175 Z M52 135 L70 135 L70 175 L52 175 Z" />
+    </svg>
+</div>
+
+<div id="groupModal" class="overlay">
+    <div class="modal">
+        <div class="modal-title">SELECT CATEGORY</div>
+        <button class="list-btn" onclick="showExercises('СПИНА')">СПИНА</button>
+        <button class="list-btn" onclick="showExercises('НОГИ')">НОГИ</button>
+        <button class="list-btn" onclick="showExercises('ШЕЯ')">ШЕЯ</button>
+        <button class="list-btn" onclick="showExercises('ГРУДЬ')">ГРУДЬ</button>
+        <button class="list-btn" onclick="showExercises('РУКИ')">РУКИ</button>
+        <div class="close-btn" onclick="closeModal('groupModal')">CANCEL</div>
     </div>
 </div>
 
-<div class="window">
-    <div class="header-title">Registration</div>
-    <select id="ex" onchange="h()">
-        <option value="1.0" d="f-chest">Жим штанги лежа</option>
-        <option value="1.5" d="b-lats,b-glutes">Становая тяга</option>
-        <option value="1.3" d="f-quads,b-glutes">Приседания</option>
-        <option value="0.7" d="f-neck">Тренировка шеи</option>
-        <option value="0.5" d="f-biceps">Бицепс штанга</option>
-    </select>
-    <input type="number" id="lW" class="input-v" placeholder="Вес снаряда (кг)">
-    <button class="action-btn" onclick="reg()">Execute</button>
+<div id="exModal" class="overlay">
+    <div class="modal">
+        <div class="modal-title" id="currentGroupTitle">EXERCISES</div>
+        <div id="exList"></div>
+        <div class="close-btn" onclick="openModal('groupModal')">BACK</div>
+    </div>
 </div>
 
-<div class="window">
-    <div class="header-title">Recent Records</div>
-    <div id="hist" class="history"></div>
+<div id="weightModal" class="overlay">
+    <div class="modal">
+        <div class="modal-title" id="currentExTitle">RECORD WEIGHT</div>
+        <input type="number" id="finalWeight" class="w-in" placeholder="0 KG">
+        <button class="list-btn" style="margin-top:20px; background:var(--neon); color:#000; text-align:center;" onclick="finishReg()">CONFIRM</button>
+        <div class="close-btn" onclick="closeModal('weightModal')">CANCEL</div>
+    </div>
 </div>
 
 <script>
-    let d = JSON.parse(localStorage.getItem('SL_HYBRID')) || { lvl: 1, exp: 0, h: [] };
+    let d = JSON.parse(localStorage.getItem('SOLO_V7')) || { lvl: 1, exp: 0 };
+    let selectedEx = null;
 
-    function h() {
-        document.querySelectorAll('.muscle-group').forEach(m => m.classList.remove('active'));
-        const s = document.getElementById('ex');
-        const ids = s.options[s.selectedIndex].getAttribute('d').split(',');
-        ids.forEach(id => { if(document.getElementById(id)) document.getElementById(id).classList.add('active'); });
+    const exercises = {
+        'СПИНА': [{n:'Становая тяга', d:'b-lats,b-glutes'}, {n:'Подтягивания', d:'b-lats'}, {n:'Тяга к поясу', d:'b-lats'}],
+        'НОГИ': [{n:'Приседания', d:'f-quads,b-glutes'}, {n:'Жим ногами', d:'f-quads'}, {n:'Мертвая тяга', d:'b-hams'}],
+        'ШЕЯ': [{n:'Подъемы головы', d:'f-neck'}, {n:'Шраги', d:'f-neck,b-lats'}],
+        'ГРУДЬ': [{n:'Жим лежа', d:'f-chest'}, {n:'Отжимания', d:'f-chest'}],
+        'РУКИ': [{n:'Бицепс штанга', d:'f-biceps'}, {n:'Трицепс блок', d:'f-chest'}]
+    };
+
+    function openModal(id) {
+        document.querySelectorAll('.overlay').forEach(o => o.style.display = 'none');
+        document.getElementById(id).style.display = 'flex';
     }
 
-    function reg() {
-        const lw = parseFloat(document.getElementById('lW').value);
-        const uw = parseFloat(document.getElementById('uW').value);
-        if(!lw || !uw) return;
+    function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
-        // Формула: чем ближе поднятый вес к весу тела, тем больше опыта
-        let powerRatio = lw / uw;
-        let gain = Math.floor(powerRatio * 25);
-        d.exp += Math.max(5, gain);
+    function showExercises(group) {
+        document.getElementById('currentGroupTitle').innerText = group;
+        const list = document.getElementById('exList');
+        list.innerHTML = '';
+        exercises[group].forEach(ex => {
+            let btn = document.createElement('button');
+            btn.className = 'list-btn';
+            btn.innerText = ex.n;
+            btn.onclick = () => {
+                selectedEx = ex;
+                document.getElementById('currentExTitle').innerText = ex.n;
+                openModal('weightModal');
+                highlight(ex.d);
+            };
+            list.appendChild(btn);
+        });
+        openModal('exModal');
+    }
 
+    function highlight(ids) {
+        document.querySelectorAll('.m-grp').forEach(m => m.classList.remove('active'));
+        ids.split(',').forEach(id => {
+            let el = document.getElementById(id);
+            if(el) el.classList.add('active');
+        });
+    }
+
+    function finishReg() {
+        const w = parseFloat(document.getElementById('finalWeight').value);
+        if(!w) return;
+        d.exp += 25;
         if(d.exp >= 100) { d.lvl++; d.exp = 0; }
-        
-        d.h.unshift({ n: document.getElementById('ex').options[document.getElementById('ex').selectedIndex].text, w: lw });
-        if(d.h.length > 5) d.h.pop();
-        
-        save(); u();
+        localStorage.setItem('SOLO_V7', JSON.stringify(d));
+        u();
+        closeModal('weightModal');
+        document.getElementById('finalWeight').value = '';
     }
 
-    function save() { localStorage.setItem('SL_HYBRID', JSON.stringify(d)); }
-    
     function u() {
         document.getElementById('lvl').innerText = d.lvl;
-        const fill = document.getElementById('exp-fill');
-        fill.style.width = d.exp + '%';
-        
-        // Цвета шкалы: Красный -> Желтый -> Зеленый
-        if (d.exp < 35) fill.style.backgroundColor = '#ff4444';
-        else if (d.exp < 80) fill.style.backgroundColor = '#ffbb33';
-        else fill.style.backgroundColor = '#00c851';
-
-        // Ранги
-        let title = "BRONZE", r = "E", c = "#cd7f32";
-        if(d.lvl > 10) { title = "SILVER"; r = "C"; c = "#c0c0c0"; }
-        if(d.lvl > 30) { title = "GOLD"; r = "B"; c = "#ffd700"; }
-        if(d.lvl > 60) { title = "PLATINUM"; r = "A"; c = "#e5e4e2"; }
-        if(d.lvl > 100) { title = "DIAMOND"; r = "S"; c = "#00f2ff"; }
-        if(d.lvl > 150) { title = "MASTER"; r = "SS"; c = "#ff00ea"; }
-        if(d.lvl > 200) { title = "GRANDMASTER"; r = "SSS+"; c = "#ff0044"; }
-
-        const t = document.getElementById('title');
-        t.innerText = `${title} ${r}`;
-        t.style.color = c;
-        document.getElementById('mapTheme').style.color = c;
-
-        document.getElementById('hist').innerHTML = d.h.map(i => `<div class="h-row"><span>${i.n}</span><b>${i.w} кг</b></div>`).join('');
+        let t = "BRONZE", r = "E", c = "#cd7f32";
+        if(d.lvl > 10) { t = "SILVER"; r = "C"; c = "#c0c0c0"; }
+        if(d.lvl > 50) { t = "GOLD"; r = "B"; c = "#ffd700"; }
+        if(d.lvl > 150) { t = "SSS"; r = "MAX"; c = "#ff0044"; }
+        const rElem = document.getElementById('rank');
+        rElem.innerText = `${t} ${r}`; rElem.style.color = c;
+        document.getElementById('theme').style.color = c;
     }
-
-    h(); u();
+    u();
 </script>
 </body>
 </html>
