@@ -3,175 +3,186 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SYSTEM: EVOLUTION V9</title>
+    <title>SYSTEM: EVO ELITE (Mono)</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        :root { --bg: #000; --neon: #00d4ff; --panel: #0a0a0c; --border: #1a1a1f; }
-        body { background: var(--bg); color: #eee; font-family: 'Orbitron', sans-serif; margin: 0; padding: 15px; overflow-x: hidden; }
+        :root { --bg: #000; --neon: #00d4ff; --panel: #0d0d0f; --border: #1a1a22; }
+        body { background: var(--bg); color: #eee; font-family: 'Orbitron', sans-serif; margin: 0; padding: 15px; overflow: hidden; height: 100vh; }
         
-        .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
-        #rank { font-size: 1.4em; font-weight: 900; color: var(--neon); text-shadow: 0 0 10px var(--neon); }
-        .lvl-text { font-size: 0.7em; color: #555; }
+        /* Статус-бар */
+        .status-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
+        #rank { font-size: 1.5em; font-weight: 900; color: var(--neon); text-shadow: 0 0 15px var(--neon); }
+        .lvl-tag { font-size: 0.8em; color: #555; }
 
-        .nav-btns { display: flex; gap: 8px; }
-        .icon-btn { width: 40px; height: 40px; background: var(--panel); border: 1px solid var(--border); border-radius: 6px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 4px; cursor: pointer; }
-        .icon-btn div { width: 18px; height: 2px; background: var(--neon); }
-        .prof-btn { font-size: 0.6em; color: var(--neon); border: 1px solid var(--border); padding: 8px; border-radius: 6px; background: var(--panel); cursor: pointer; }
+        /* Навигация */
+        .top-nav { display: flex; gap: 10px; margin-bottom: 20px; }
+        .menu-icon { width: 45px; height: 45px; background: var(--panel); border: 1px solid var(--border); border-radius: 10px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 5px; cursor: pointer; }
+        .menu-icon div { width: 24px; height: 2px; background: var(--neon); box-shadow: 0 0 8px var(--neon); }
+        .prof-link { flex-grow: 1; background: var(--panel); border: 1px solid var(--border); border-radius: 10px; color: var(--neon); display: flex; align-items: center; justify-content: center; font-size: 0.7em; text-decoration: none; text-transform: uppercase; letter-spacing: 2px; }
 
-        /* ДЕТАЛИЗИРОВАННЫЙ АТЛЕТ */
-        .map-box { display: flex; justify-content: center; gap: 5px; height: 50vh; margin: 15px 0; }
-        .map-svg { height: 100%; filter: drop-shadow(0 0 5px rgba(0,0,0,0.5)); }
-        .m-grp { fill: #0a0a0a; stroke: #333; stroke-width: 0.4; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-        .m-grp.active { fill: currentColor !important; filter: drop-shadow(0 0 12px currentColor); stroke: #fff; stroke-width: 0.6; }
-
-        /* Окна */
-        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 100; display: none; flex-direction: column; align-items: center; justify-content: center; }
-        .modal { width: 90%; max-height: 85vh; background: var(--panel); border: 1px solid var(--neon); border-radius: 12px; padding: 20px; overflow-y: auto; box-shadow: 0 0 40px rgba(0,212,255,0.1); }
-        .modal-title { color: var(--neon); text-align: center; margin-bottom: 20px; font-size: 0.9em; letter-spacing: 3px; }
-
-        .list-btn { width: 100%; padding: 15px; background: #050505; border: 1px solid #1a1a1f; color: #fff; margin-bottom: 8px; border-radius: 8px; font-family: 'Orbitron'; font-size: 11px; text-align: left; display: flex; justify-content: space-between; }
-        .list-btn:active { background: var(--neon); color: #000; }
+        /* АНАТОМИЯ (ЧЕРНО-БЕЛАЯ ПО УМОЛЧАНИЮ) */
+        .anatomy-box { display: flex; justify-content: center; gap: 10px; height: 55vh; }
+        .body-svg { height: 100%; filter: drop-shadow(0 0 10px rgba(0,0,0,1)); }
         
-        .w-in { width: 100%; background: #000; border: 1px solid var(--neon); color: #fff; padding: 14px; border-radius: 8px; font-family: 'Orbitron'; box-sizing: border-box; font-size: 1.2em; text-align: center; }
-        .label { font-size: 0.6em; color: #444; text-transform: uppercase; margin-bottom: 5px; display: block; }
+        /* Черно-белый стиль для мышц */
+        .m-part { 
+            fill: #0d0d0f; /* Глубокий темно-серый */
+            stroke: #2a2a30; /* Чуть светлее для контуров */
+            stroke-width: 0.5; 
+            transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1); 
+        }
+
+        /* Стиль для активных мышц (Наливаются цветом ранга) */
+        .m-part.active { 
+            fill: currentColor !important; 
+            filter: drop-shadow(0 0 20px currentColor); 
+            stroke: #fff; 
+            stroke-width: 0.7; 
+        }
+
+        /* Модалки */
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); z-index: 100; display: none; flex-direction: column; align-items: center; justify-content: center; }
+        .modal { width: 88%; max-height: 80vh; background: #050507; border: 1px solid var(--neon); border-radius: 15px; padding: 25px; overflow-y: auto; box-shadow: 0 0 50px rgba(0,212,255,0.15); }
+        .modal-title { color: var(--neon); text-align: center; margin-bottom: 25px; font-size: 1em; letter-spacing: 4px; font-weight: 900; }
+
+        .btn-item { width: 100%; padding: 18px; background: #0c0c0e; border: 1px solid #1a1a1f; color: #fff; margin-bottom: 12px; border-radius: 10px; font-family: 'Orbitron'; font-size: 12px; text-align: left; display: flex; justify-content: space-between; align-items: center; }
+        .btn-item:active { background: var(--neon); color: #000; border-color: #fff; }
+        
+        .input-f { width: 100%; background: #000; border: 1px solid var(--neon); color: #fff; padding: 15px; border-radius: 10px; font-family: 'Orbitron'; font-size: 1.3em; text-align: center; margin-bottom: 20px; box-sizing: border-box; }
+        .hint { font-size: 0.6em; color: #444; text-transform: uppercase; margin-bottom: 8px; display: block; text-align: center; }
     </style>
 </head>
 <body>
 
-<div class="header">
+<div class="status-row">
     <div>
         <div id="rank">BRONZE E</div>
-        <div class="lvl-text">LEVEL <span id="lvl">1</span> | EXP <span id="exp">0</span>%</div>
-    </div>
-    <div class="nav-btns">
-        <div class="prof-btn" onclick="openModal('profModal')">PROFILE</div>
-        <div class="icon-btn" onclick="openModal('groupModal')"><div></div><div></div><div></div></div>
+        <div class="lvl-tag">LVL <span id="lvl" style="color:#fff">1</span> | EXP <span id="exp" style="color:#fff">0</span>%</div>
     </div>
 </div>
 
-<div class="map-box" id="theme">
-    <svg class="map-svg" viewBox="0 0 100 220">
-        <path id="f-neck" class="m-grp" d="M42 25 Q50 20 58 25 L60 35 Q50 38 40 35 Z" />
-        <path id="f-chest" class="m-grp" d="M32 40 Q50 35 68 40 L72 65 Q50 60 28 65 Z" />
-        <path id="f-chest2" class="m-grp" d="M35 45 L65 45 L64 55 L36 55 Z" style="opacity:0.3"/>
-        <path id="f-abs" class="m-grp" d="M42 68 L58 68 L57 80 L43 80 Z M42 82 L58 82 L57 94 L43 94 Z M42 96 L58 96 L57 110 L43 110 Z" />
-        <path id="f-biceps" class="m-grp" d="M15 50 Q25 45 28 65 L25 100 L12 90 Z M85 50 Q75 45 72 65 L75 100 L88 90 Z" />
-        <path id="f-quads" class="m-grp" d="M30 115 Q40 110 48 115 L46 170 L30 170 Z M70 115 Q60 110 52 115 L54 170 L70 170 Z" />
+<div class="top-nav">
+    <div class="prof-link" onclick="openModal('profPop')">PLAYER PROFILE</div>
+    <div class="menu-icon" onclick="openModal('catPop')"><div></div><div></div><div></div></div>
+</div>
+
+<div class="anatomy-box" id="theme-color">
+    <svg class="body-svg" viewBox="0 0 100 220">
+        <path id="f-neck" class="m-part" d="M42 22 Q50 18 58 22 L62 35 Q50 38 38 35 Z" />
+        <path id="f-chest" class="m-part" d="M30 40 Q50 34 70 40 L74 65 Q50 60 26 65 Z" />
+        <path id="f-abs" class="m-part" d="M40 70 L60 70 L58 110 L42 110 Z M42 75 L58 75 M42 85 L58 85 M42 95 L58 95" />
+        <path id="f-arms" class="m-part" d="M12 45 Q25 40 28 65 L24 105 L10 95 Z M88 45 Q75 40 72 65 L76 105 L90 95 Z" />
+        <path id="f-legs" class="m-part" d="M28 115 Q40 110 48 115 L46 180 L25 180 Z M72 115 Q60 110 52 115 L54 180 L75 180 Z" />
     </svg>
-    <svg class="map-svg" viewBox="0 0 100 220">
-        <path id="b-lats" class="m-grp" d="M25 45 Q50 35 75 45 L70 110 Q50 100 30 110 Z" />
-        <path id="b-lower" class="m-grp" d="M35 112 L65 112 L63 125 L37 125 Z" />
-        <path id="b-glutes" class="m-grp" d="M30 128 Q50 120 70 128 L75 150 Q50 160 25 150 Z" />
-        <path id="b-hams" class="m-grp" d="M30 155 L48 155 L46 190 L30 190 Z M52 155 L70 155 L70 190 L54 190 Z" />
+    <svg class="body-svg" viewBox="0 0 100 220">
+        <path id="b-back" class="m-part" d="M25 42 Q50 32 75 42 L72 105 Q50 95 28 105 Z" />
+        <path id="b-lower" class="m-part" d="M35 108 L65 108 L62 125 L38 125 Z" />
+        <path id="b-glutes" class="m-part" d="M28 128 Q50 120 72 128 L78 155 Q50 165 22 155 Z" />
+        <path id="b-hams" class="m-part" d="M28 160 L48 160 L45 200 L25 200 Z M52 160 L72 160 L75 200 L55 200 Z" />
     </svg>
 </div>
 
-<div id="profModal" class="overlay">
+<div id="profPop" class="overlay">
     <div class="modal">
-        <div class="modal-title">EDIT PROFILE</div>
-        <span class="label">Вес тела (кг)</span>
-        <input type="number" id="pW" class="w-in" placeholder="75">
-        <br><br>
-        <span class="label">Рост (см)</span>
-        <input type="number" id="pH" class="w-in" placeholder="180">
-        <br><br>
-        <button class="list-btn" style="background:var(--neon); color:#000; justify-content:center;" onclick="saveP()">SAVE DATA</button>
-        <div style="text-align:center; margin-top:15px; color:#444;" onclick="closeModal('profModal')">CLOSE</div>
+        <div class="modal-title">PROFILE DATA</div>
+        <span class="hint">Ваш вес (кг)</span>
+        <input type="number" id="inW" class="input-f">
+        <span class="hint">Ваш рост (см)</span>
+        <input type="number" id="inH" class="input-f">
+        <button class="btn-item" style="background:var(--neon); color:#000; justify-content:center; font-weight:900;" onclick="saveProf()">UPDATE SYSTEM</button>
+        <div style="text-align:center; color:#444; font-size:0.7em;" onclick="closeModal('profPop')">CANCEL</div>
     </div>
 </div>
 
-<div id="groupModal" class="overlay">
+<div id="catPop" class="overlay">
     <div class="modal">
         <div class="modal-title">CATEGORIES</div>
-        <button class="list-btn" onclick="showEx('ГРУДЬ')">ГРУДЬ <span>></span></button>
-        <button class="list-btn" onclick="showEx('СПИНА')">СПИНА <span>></span></button>
-        <button class="list-btn" onclick="showEx('НОГИ')">НОГИ <span>></span></button>
-        <button class="list-btn" onclick="showEx('РУКИ')">РУКИ <span>></span></button>
-        <button class="list-btn" onclick="showEx('ПЛЕЧИ/ШЕЯ')">ПЛЕЧИ / ШЕЯ <span>></span></button>
-        <div style="text-align:center; margin-top:20px; color:#444;" onclick="closeModal('groupModal')">BACK</div>
+        <button class="btn-item" onclick="openEx('ГРУДЬ')">CHEST / ГРУДНЫЕ <span>></span></button>
+        <button class="btn-item" onclick="openEx('СПИНА')">BACK / СПИНА <span>></span></button>
+        <button class="btn-item" onclick="openEx('НОГИ')">LEGS / НОГИ <span>></span></button>
+        <button class="btn-item" onclick="openEx('РУКИ')">ARMS / РУКИ <span>></span></button>
+        <button class="btn-item" onclick="openEx('ШЕЯ')">NECK / ШЕЯ <span>></span></button>
+        <div style="text-align:center; color:#444; margin-top:10px;" onclick="closeModal('catPop')">BACK</div>
     </div>
 </div>
 
-<div id="exModal" class="overlay">
+<div id="exPop" class="overlay">
     <div class="modal">
-        <div class="modal-title" id="exT">EXERCISES</div>
-        <div id="exL"></div>
-        <div style="text-align:center; margin-top:20px; color:#444;" onclick="openModal('groupModal')">BACK</div>
+        <div class="modal-title" id="exTitle">EXERCISES</div>
+        <div id="exList"></div>
+        <div style="text-align:center; color:#444; margin-top:10px;" onclick="openModal('catPop')">BACK</div>
     </div>
 </div>
 
-<div id="weightModal" class="overlay">
+<div id="weightPop" class="overlay">
     <div class="modal">
-        <div class="modal-title" id="wT">SET WEIGHT</div>
-        <span class="label">Твой результат (кг)</span>
-        <input type="number" id="wVal" class="w-in" placeholder="0">
-        <br><br>
-        <button class="list-btn" style="background:var(--neon); color:#000; justify-content:center;" onclick="regEx()">CONFIRM RECORD</button>
-        <div style="text-align:center; margin-top:15px; color:#444;" onclick="closeModal('weightModal')">CANCEL</div>
+        <div class="modal-title">SET WEIGHT</div>
+        <span class="hint" id="activeExName">Упражнение</span>
+        <input type="number" id="wVal" class="input-f" placeholder="0 KG">
+        <button class="btn-item" style="background:var(--neon); color:#000; justify-content:center; font-weight:900;" onclick="confirmRecord()">REGISTER</button>
+        <div style="text-align:center; color:#444; margin-top:10px;" onclick="closeModal('weightPop')">CANCEL</div>
     </div>
 </div>
 
 <script>
-    let s = JSON.parse(localStorage.getItem('SOLO_V9')) || { 
-        lvl:1, exp:0, w:75, h:180, best:{} 
-    };
+    let state = JSON.parse(localStorage.getItem('EVO_ELITE_MONO')) || { lvl:1, exp:0, w:75, h:180, records:{} };
 
-    const exData = {
-        'ГРУДЬ': [{n:'Жим штанги лежа', d:'f-chest'}, {n:'Жим гантелей под углом', d:'f-chest'}, {n:'Разводка гантелей', d:'f-chest'}, {n:'Отжимания широкие', d:'f-chest'}],
-        'СПИНА': [{n:'Становая тяга', d:'b-lats,b-glutes,b-lower'}, {n:'Подтягивания (вес)', d:'b-lats'}, {n:'Тяга в наклоне', d:'b-lats'}, {n:'Гиперэкстензия', d:'b-lower'}],
-        'НОГИ': [{n:'Приседания', d:'f-quads,b-glutes'}, {n:'Жим ногами', d:'f-quads'}, {n:'Мертвая тяга', d:'b-hams,b-glutes'}, {n:'Выпады', d:'f-quads'}],
-        'РУКИ': [{n:'Подъем штанги (Бицепс)', d:'f-biceps'}, {n:'Молотки', d:'f-biceps'}, {n:'Брусья (Трицепс)', d:'f-chest'}, {n:'Жим узким хватом', d:'f-chest'}],
-        'ПЛЕЧИ/ШЕЯ': [{n:'Армейский жим', d:'f-chest'}, {n:'Махи в стороны', d:'f-chest'}, {n:'Борцовский мост (Шея)', d:'f-neck'}, {n:'Шраги', d:'f-neck'}]
+    const data = {
+        'ГРУДЬ': [{n:'Жим лежа', d:'f-chest,f-arms'}, {n:'Жим гантелей', d:'f-chest'}, {n:'Брусья', d:'f-chest,f-arms'}],
+        'СПИНА': [{n:'Становая тяга', d:'b-back,b-glutes,b-lower'}, {n:'Подтягивания', d:'b-back,f-arms'}, {n:'Тяга в наклоне', d:'b-back'}],
+        'НОГИ': [{n:'Приседания', d:'f-legs,b-glutes'}, {n:'Жим ногами', d:'f-legs'}, {n:'Мертвая тяга', d:'b-hams,b-glutes'}],
+        'РУКИ': [{n:'Бицепс штанга', d:'f-arms'}, {n:'Трицепс блок', d:'f-arms'}, {n:'Молотки', d:'f-arms'}],
+        'ШЕЯ': [{n:'Борцовский мост', d:'f-neck'}, {n:'Подъемы головы', d:'f-neck'}]
     };
 
     function openModal(id) {
         document.querySelectorAll('.overlay').forEach(o => o.style.display = 'none');
         document.getElementById(id).style.display = 'flex';
-        if(id==='profModal'){ document.getElementById('pW').value=s.w; document.getElementById('pH').value=s.h; }
+        if(id === 'profPop') { document.getElementById('inW').value = state.w; document.getElementById('inH').value = state.h; }
     }
     function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-    function saveP() { s.w=document.getElementById('pW').value; s.h=document.getElementById('pH').value; save(); closeModal('profModal'); }
+    function saveProf() { state.w = document.getElementById('inW').value; state.h = document.getElementById('inH').value; save(); closeModal('profPop'); }
 
-    function showEx(cat) {
-        document.getElementById('exT').innerText = cat;
-        const l = document.getElementById('exL'); l.innerHTML = '';
-        exData[cat].forEach(e => {
+    function openEx(cat) {
+        document.getElementById('exTitle').innerText = cat;
+        const list = document.getElementById('exList'); list.innerHTML = '';
+        data[cat].forEach(e => {
             let b = document.createElement('button');
-            b.className = 'list-btn';
-            b.innerHTML = `${e.n} <span>${s.best[e.n] || 0} кг</span>`;
-            b.onclick = () => { window.cur = e; document.getElementById('wT').innerText = e.n; hl(e.d); openModal('weightModal'); };
-            l.appendChild(b);
+            b.className = 'btn-item';
+            b.innerHTML = `${e.n} <span>${state.records[e.n] || 0} KG</span>`;
+            b.onclick = () => { window.currentEx = e; document.getElementById('activeExName').innerText = e.n; highlight(e.d); openModal('weightPop'); };
+            list.appendChild(b);
         });
-        openModal('exModal');
+        openModal('exPop');
     }
 
-    function hl(ids) {
-        document.querySelectorAll('.m-grp').forEach(m => m.classList.remove('active'));
+    function highlight(ids) {
+        document.querySelectorAll('.m-part').forEach(m => m.classList.remove('active'));
         ids.split(',').forEach(id => document.getElementById(id)?.classList.add('active'));
     }
 
-    function regEx() {
+    function confirmRecord() {
         const v = parseFloat(document.getElementById('wVal').value);
         if(!v) return;
-        if(!s.best[window.cur.n] || v > s.best[window.cur.n]) s.best[window.cur.n] = v;
-        s.exp += 20; if(s.exp>=100){ s.lvl++; s.exp=0; }
-        save(); up(); closeModal('weightModal');
+        state.records[window.currentEx.n] = Math.max(v, state.records[window.currentEx.n] || 0);
+        state.exp += 20; if(state.exp >= 100) { state.lvl++; state.exp = 0; }
+        save(); render(); closeModal('weightPop');
         document.getElementById('wVal').value = '';
     }
 
-    function save() { localStorage.setItem('SOLO_V9', JSON.stringify(s)); }
-    function up() {
-        document.getElementById('lvl').innerText = s.lvl;
-        document.getElementById('exp').innerText = s.exp;
+    function save() { localStorage.setItem('EVO_ELITE_MONO', JSON.stringify(state)); }
+    function render() {
+        document.getElementById('lvl').innerText = state.lvl;
+        document.getElementById('exp').innerText = state.exp;
         let t="BRONZE", r="E", c="#cd7f32";
-        if(s.lvl>10){ t="SILVER"; r="C"; c="#c0c0c0"; }
-        if(s.lvl>30){ t="GOLD"; r="B"; c="#ffd700"; }
-        if(s.lvl>100){ t="SSS"; r="MAX"; c="#ff0044"; }
+        if(state.lvl > 10){ t="SILVER"; r="C"; c="#c0c0c0"; }
+        if(state.lvl > 30){ t="GOLD"; r="B"; c="#ffd700"; }
+        if(state.lvl > 100){ t="SSS"; r="MAX"; c="#ff0044"; }
         document.getElementById('rank').innerText = `${t} ${r}`;
         document.getElementById('rank').style.color = c;
-        document.getElementById('theme').style.color = c;
+        document.getElementById('theme-color').style.color = c;
     }
-    up();
+    render();
 </script>
 </body>
 </html>
