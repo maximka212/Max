@@ -3,115 +3,112 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SYSTEM: ASCENSION SSS</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;600;900&family=Orbitron:wght@900&display=swap" rel="stylesheet">
+    <title>SYSTEM: HYBRID EVOLUTION</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        :root { --bg: #000; --text: #eee; --deep-blue: #001a4d; }
-        body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; margin: 0; padding: 15px; overflow-x: hidden; }
+        :root { --bg: #000; --panel: #0a0a0c; --border: #1a1a1f; --neon: #00d4ff; }
         
-        .header-panel { text-align: center; padding: 10px 0 20px; border-bottom: 1px solid #111; }
-        .lvl-box { font-size: 0.7em; color: #444; letter-spacing: 3px; font-family: 'Orbitron'; }
-        .lvl-num { color: #fff; font-size: 1.2em; }
+        body { background: var(--bg); color: #eee; font-family: 'Inter', sans-serif; margin: 0; padding: 10px; overflow-x: hidden; }
         
-        .rank-display { margin: 10px 0; }
-        #title { font-family: 'Orbitron'; font-size: 1.6em; font-weight: 900; letter-spacing: 1px; }
-        #letter-rank { font-family: 'Orbitron'; font-size: 2.2em; font-weight: 900; margin-left: 10px; text-shadow: 0 0 15px currentColor; }
+        /* Блоки в стиле старых RPG интерфейсов */
+        .window { background: var(--panel); border: 1px solid var(--border); border-radius: 4px; padding: 15px; margin-bottom: 10px; position: relative; box-shadow: inset 0 0 10px rgba(0,0,0,0.5); }
+        .window::before { content: ''; position: absolute; top: -1px; left: 10px; right: 10px; height: 1px; background: var(--neon); opacity: 0.3; }
 
-        /* Твоя кастомная шкала */
-        .exp-bar { height: 8px; background: var(--deep-blue); margin: 20px 0; border-radius: 4px; overflow: hidden; border: 1px solid #0a0a0a; }
-        .exp-fill { height: 100%; width: 0%; transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.4s; }
+        .header-title { font-family: 'Orbitron'; font-size: 0.7em; color: var(--neon); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px; opacity: 0.8; }
 
-        .stats-row { display: flex; justify-content: space-between; padding: 10px; background: #050505; border-radius: 8px; margin-bottom: 20px; }
-        .stat-item { text-align: center; flex: 1; }
-        .stat-label { font-size: 0.6em; color: #444; text-transform: uppercase; margin-bottom: 5px; }
-        .stat-val { font-size: 1.1em; color: #fff; font-weight: 600; }
+        /* Ранг и Лвл */
+        .rank-row { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 5px; }
+        #title { font-family: 'Orbitron'; font-size: 1.6em; font-weight: 900; text-shadow: 0 0 10px currentColor; }
+        .lvl-tag { font-family: 'Orbitron'; font-size: 0.9em; color: #666; }
 
-        .muscle-container { display: flex; justify-content: center; gap: 10px; margin-bottom: 25px; }
-        .map-view { width: 48%; }
-        .muscle-group { fill: #0d0d0d; stroke: #222; stroke-width: 0.5; transition: 0.3s; }
-        .muscle-group.active { fill: currentColor !important; filter: drop-shadow(0 0 8px currentColor); stroke: #fff; }
+        /* Твоя шкала (Синий фон + динамический цвет) */
+        .exp-bar { height: 4px; background: #001a4d; margin: 10px 0; border-radius: 2px; overflow: hidden; }
+        .exp-fill { height: 100%; width: 0%; transition: 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
 
-        select, input { width: 100%; padding: 16px; background: #08080a; border: 1px solid #1a1a1a; color: #fff; border-radius: 8px; margin-bottom: 10px; font-size: 16px; outline: none; }
-        .btn { width: 100%; padding: 20px; background: #fff; border: none; color: #000; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; cursor: pointer; border-radius: 8px; font-family: 'Orbitron'; }
-        .btn:active { transform: scale(0.97); opacity: 0.8; }
+        /* Параметры тела */
+        .bio-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; text-align: center; }
+        .bio-box { border-right: 1px solid #151515; }
+        .bio-box:last-child { border: none; }
+        .bio-val { display: block; font-size: 1.1em; font-weight: bold; color: #fff; margin-top: 3px; }
+        .bio-label { font-size: 0.5em; color: #444; text-transform: uppercase; }
 
-        .history { margin-top: 20px; font-size: 0.8em; color: #555; }
-        .h-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #0a0a0a; }
+        /* Карта мышц */
+        .map-container { display: flex; justify-content: space-around; padding: 10px 0; }
+        .map-view { width: 45%; }
+        .muscle-group { fill: #111; stroke: #222; stroke-width: 0.5; transition: 0.3s; }
+        .muscle-group.active { fill: currentColor !important; filter: drop-shadow(0 0 5px currentColor); stroke: #fff; }
+
+        /* Ввод данных */
+        select, .input-v { width: 100%; background: #000; border: 1px solid var(--border); color: #fff; padding: 15px; border-radius: 4px; font-family: 'Orbitron'; font-size: 14px; margin-bottom: 8px; outline: none; }
+        select:focus { border-color: var(--neon); }
+        
+        .action-btn { width: 100%; padding: 18px; background: #fff; color: #000; border: none; font-family: 'Orbitron'; font-weight: 900; border-radius: 4px; text-transform: uppercase; letter-spacing: 1px; }
+        .action-btn:active { transform: scale(0.98); opacity: 0.9; }
+
+        /* Список последних */
+        .history { font-size: 0.75em; color: #555; }
+        .h-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #111; }
     </style>
 </head>
 <body>
 
-<div class="header-panel">
-    <div class="lvl-box">LEVEL <span id="lvl" class="lvl-num">1</span></div>
-    <div class="rank-display">
-        <span id="title">BRONZE</span>
-        <span id="letter-rank">E</span>
+<div class="window">
+    <div class="header-title">Status Dashboard</div>
+    <div class="rank-row">
+        <div id="title">BRONZE E</div>
+        <div class="lvl-tag">LVL <span id="lvl" style="color:#fff">1</span></div>
     </div>
     <div class="exp-bar"><div id="exp-fill" class="exp-fill"></div></div>
-</div>
-
-<div class="stats-row">
-    <div class="stat-item">
-        <div class="stat-label">BODY</div>
-        <input type="number" id="uW" value="75" style="width:50px; background:none; border:none; color:#fff; text-align:center; font-weight:bold;">
-    </div>
-    <div class="stat-item">
-        <div class="stat-label">TOTAL LIFTED</div>
-        <div id="total" class="stat-val">0</div>
+    
+    <div class="bio-row">
+        <div class="bio-box"><span class="bio-label">Weight</span><input type="number" id="uW" value="75" class="bio-val" style="width:100%; background:none; border:none; text-align:center;"></div>
+        <div class="bio-box"><span class="bio-label">Height</span><input type="number" id="uH" value="180" class="bio-val" style="width:100%; background:none; border:none; text-align:center;"></div>
+        <div class="bio-box"><span class="bio-label">Age</span><input type="number" id="uA" value="25" class="bio-val" style="width:100%; background:none; border:none; text-align:center;"></div>
     </div>
 </div>
 
-<div class="muscle-container" id="mapTheme">
-    <div class="map-view">
-        <svg viewBox="0 0 100 200">
-            <path id="f-chest" class="muscle-group" d="M30 40 Q50 35 70 40 L70 55 Q50 50 30 55 Z" />
-            <path id="f-abs" class="muscle-group" d="M40 58 L60 58 L58 100 L42 100 Z" />
-            <path id="f-quads" class="muscle-group" d="M30 110 L48 110 L48 155 L30 155 Z M52 110 L70 110 L70 155 L52 155 Z" />
-            <path id="f-biceps" class="muscle-group" d="M15 58 L25 58 L25 90 L15 90 Z M85 58 L75 58 L75 90 L85 90 Z" />
-            <path id="f-neck" class="muscle-group" d="M42 28 L58 28 L58 38 L42 38 Z" />
-        </svg>
-    </div>
-    <div class="map-view">
-        <svg viewBox="0 0 100 200">
-            <path id="b-lats" class="muscle-group" d="M25 50 Q50 45 75 50 L72 100 Q50 95 28 100 Z" />
-            <path id="b-glutes" class="muscle-group" d="M30 105 L70 105 L75 125 L25 125 Z" />
-            <path id="b-hams" class="muscle-group" d="M30 130 L48 130 L48 170 L30 170 Z M52 130 L70 130 L70 170 L52 170 Z" />
-            <path id="b-triceps" class="muscle-group" d="M15 58 L25 58 L22 95 L12 95 Z M85 58 L75 58 L78 95 L88 95 Z" />
-        </svg>
+<div class="window">
+    <div class="header-title">Anatomy Analysis</div>
+    <div class="map-container" id="mapTheme">
+        <div class="map-view">
+            <svg viewBox="0 0 100 200">
+                <path id="f-neck" class="muscle-group" d="M42 30 L58 30 L58 38 L42 38 Z" />
+                <path id="f-chest" class="muscle-group" d="M30 40 Q50 35 70 40 L70 55 Q50 50 30 55 Z" />
+                <path id="f-abs" class="muscle-group" d="M40 58 L60 58 L58 100 L42 100 Z" />
+                <path id="f-quads" class="muscle-group" d="M30 110 L48 110 L48 150 L30 150 Z M52 110 L70 110 L70 150 L52 150 Z" />
+                <path id="f-biceps" class="muscle-group" d="M15 58 L25 58 L25 90 L15 90 Z M85 58 L75 58 L75 90 L85 90 Z" />
+            </svg>
+        </div>
+        <div class="map-view">
+            <svg viewBox="0 0 100 200">
+                <path id="b-lats" class="muscle-group" d="M25 50 Q50 45 75 50 L70 105 Q50 100 30 105 Z" />
+                <path id="b-glutes" class="muscle-group" d="M30 110 L70 110 L75 125 L25 125 Z" />
+                <path id="b-hams" class="muscle-group" d="M30 130 L48 130 L48 165 L30 165 Z M52 130 L70 130 L70 165 L52 165 Z" />
+            </svg>
+        </div>
     </div>
 </div>
 
-<select id="ex" onchange="h()">
-    <optgroup label="ГРУДЬ">
-        <option value="1.0" d="f-chest,b-triceps">Жим штанги лежа</option>
-        <option value="1.2" d="f-chest">Жим гантелей (30°/45°)</option>
-    </optgroup>
-    <optgroup label="СПИНА">
-        <option value="1.5" d="b-lats,b-glutes,b-hams">Становая тяга</option>
-        <option value="1.1" d="b-lats,f-biceps">Подтягивания (с весом)</option>
-        <option value="1.0" d="b-lats">Тяга штанги в наклоне</option>
-    </optgroup>
-    <optgroup label="НОГИ">
-        <option value="1.3" d="f-quads,b-glutes">Приседания со штангой</option>
-        <option value="2.0" d="f-quads,b-glutes">Жим ногами</option>
-    </optgroup>
-    <optgroup label="ШЕЯ / ПЛЕЧИ">
+<div class="window">
+    <div class="header-title">Registration</div>
+    <select id="ex" onchange="h()">
+        <option value="1.0" d="f-chest">Жим штанги лежа</option>
+        <option value="1.5" d="b-lats,b-glutes">Становая тяга</option>
+        <option value="1.3" d="f-quads,b-glutes">Приседания</option>
         <option value="0.7" d="f-neck">Тренировка шеи</option>
-        <option value="0.9" d="f-shoulders,b-triceps">Армейский жим</option>
-    </optgroup>
-    <optgroup label="РУКИ">
-        <option value="0.5" d="f-biceps">Бицепс (штанга/гантели)</option>
-        <option value="0.6" d="b-triceps">Трицепс (блок/французский)</option>
-    </optgroup>
-</select>
+        <option value="0.5" d="f-biceps">Бицепс штанга</option>
+    </select>
+    <input type="number" id="lW" class="input-v" placeholder="Вес снаряда (кг)">
+    <button class="action-btn" onclick="reg()">Execute</button>
+</div>
 
-<input type="number" id="lW" placeholder="Введи вес (кг)">
-<button class="btn" onclick="reg()">REGISTER</button>
-
-<div class="history" id="hist"></div>
+<div class="window">
+    <div class="header-title">Recent Records</div>
+    <div id="hist" class="history"></div>
+</div>
 
 <script>
-    let d = JSON.parse(localStorage.getItem('SL_SSS_FINAL')) || { lvl: 1, exp: 0, t: 0, h: [] };
+    let d = JSON.parse(localStorage.getItem('SL_HYBRID')) || { lvl: 1, exp: 0, h: [] };
 
     function h() {
         document.querySelectorAll('.muscle-group').forEach(m => m.classList.remove('active'));
@@ -122,46 +119,49 @@
 
     function reg() {
         const lw = parseFloat(document.getElementById('lW').value);
-        if(!lw) return;
-        d.t += lw; d.exp += 20; 
+        const uw = parseFloat(document.getElementById('uW').value);
+        if(!lw || !uw) return;
+
+        // Формула: чем ближе поднятый вес к весу тела, тем больше опыта
+        let powerRatio = lw / uw;
+        let gain = Math.floor(powerRatio * 25);
+        d.exp += Math.max(5, gain);
+
         if(d.exp >= 100) { d.lvl++; d.exp = 0; }
+        
         d.h.unshift({ n: document.getElementById('ex').options[document.getElementById('ex').selectedIndex].text, w: lw });
-        if(d.h.length > 3) d.h.pop();
+        if(d.h.length > 5) d.h.pop();
+        
         save(); u();
     }
 
-    function save() { localStorage.setItem('SL_SSS_FINAL', JSON.stringify(d)); }
+    function save() { localStorage.setItem('SL_HYBRID', JSON.stringify(d)); }
     
     function u() {
         document.getElementById('lvl').innerText = d.lvl;
-        document.getElementById('total').innerText = d.t.toFixed(0);
-        
         const fill = document.getElementById('exp-fill');
         fill.style.width = d.exp + '%';
         
-        // Цвета шкалы по твоему ТЗ
+        // Цвета шкалы: Красный -> Желтый -> Зеленый
         if (d.exp < 35) fill.style.backgroundColor = '#ff4444';
         else if (d.exp < 80) fill.style.backgroundColor = '#ffbb33';
         else fill.style.backgroundColor = '#00c851';
 
-        // Система рангов E -> SSS
-        let title = "BRONZE", rank = "E", color = "#cd7f32";
-        if(d.lvl > 5) rank = "D";
-        if(d.lvl > 10) { title = "SILVER"; rank = "C"; color = "#c0c0c0"; }
-        if(d.lvl > 20) rank = "B";
-        if(d.lvl > 35) { title = "GOLD"; rank = "A"; color = "#ffd700"; }
-        if(d.lvl > 55) { title = "PLATINUM"; rank = "S"; color = "#e5e4e2"; }
-        if(d.lvl > 80) { title = "DIAMOND"; rank = "SS"; color = "#00f2ff"; }
-        if(d.lvl > 110) { title = "MASTER"; rank = "SSS"; color = "#ff00ea"; }
-        if(d.lvl > 150) { title = "GRANDMASTER"; rank = "SSS+"; color = "#ff0044"; }
+        // Ранги
+        let title = "BRONZE", r = "E", c = "#cd7f32";
+        if(d.lvl > 10) { title = "SILVER"; r = "C"; c = "#c0c0c0"; }
+        if(d.lvl > 30) { title = "GOLD"; r = "B"; c = "#ffd700"; }
+        if(d.lvl > 60) { title = "PLATINUM"; r = "A"; c = "#e5e4e2"; }
+        if(d.lvl > 100) { title = "DIAMOND"; r = "S"; c = "#00f2ff"; }
+        if(d.lvl > 150) { title = "MASTER"; r = "SS"; c = "#ff00ea"; }
+        if(d.lvl > 200) { title = "GRANDMASTER"; r = "SSS+"; c = "#ff0044"; }
 
         const t = document.getElementById('title');
-        const r = document.getElementById('letter-rank');
-        t.innerText = title; t.style.color = color;
-        r.innerText = rank; r.style.color = color;
-        document.getElementById('mapTheme').style.color = color;
+        t.innerText = `${title} ${r}`;
+        t.style.color = c;
+        document.getElementById('mapTheme').style.color = c;
 
-        document.getElementById('hist').innerHTML = d.h.map(i => `<div class="h-item"><span>${i.n}</span><b>${i.w} кг</b></div>`).join('');
+        document.getElementById('hist').innerHTML = d.h.map(i => `<div class="h-row"><span>${i.n}</span><b>${i.w} кг</b></div>`).join('');
     }
 
     h(); u();
