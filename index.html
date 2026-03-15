@@ -3,161 +3,175 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SYSTEM: EVOLUTION V7.2</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&display=swap" rel="stylesheet">
+    <title>SYSTEM: EVOLUTION V9</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         :root { --bg: #000; --neon: #00d4ff; --panel: #0a0a0c; --border: #1a1a1f; }
-        body { background: var(--bg); color: #eee; font-family: 'Orbitron', sans-serif; margin: 0; padding: 15px; overflow: hidden; height: 100vh; }
+        body { background: var(--bg); color: #eee; font-family: 'Orbitron', sans-serif; margin: 0; padding: 15px; overflow-x: hidden; }
         
-        /* Шапка */
-        .status-header { display: flex; justify-content: space-between; align-items: center; z-index: 5; position: relative; }
-        #rank { font-size: 1.2em; font-weight: 900; color: var(--neon); text-shadow: 0 0 10px var(--neon); }
-        
-        /* Твоя иконка меню */
-        .menu-btn { width: 45px; height: 45px; background: var(--panel); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 5px; cursor: pointer; }
-        .menu-btn div { width: 22px; height: 2px; background: var(--neon); box-shadow: 0 0 5px var(--neon); }
+        .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+        #rank { font-size: 1.4em; font-weight: 900; color: var(--neon); text-shadow: 0 0 10px var(--neon); }
+        .lvl-text { font-size: 0.7em; color: #555; }
 
-        /* Анатомия */
-        .map-container { display: flex; justify-content: center; gap: 10px; margin-top: 30px; height: 55vh; }
-        .map-svg { height: 100%; }
-        .m-grp { fill: #111; stroke: #252525; stroke-width: 0.5; transition: 0.4s; }
-        .m-grp.active { fill: currentColor !important; filter: drop-shadow(0 0 15px currentColor); stroke: #fff; }
+        .nav-btns { display: flex; gap: 8px; }
+        .icon-btn { width: 40px; height: 40px; background: var(--panel); border: 1px solid var(--border); border-radius: 6px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 4px; cursor: pointer; }
+        .icon-btn div { width: 18px; height: 2px; background: var(--neon); }
+        .prof-btn { font-size: 0.6em; color: var(--neon); border: 1px solid var(--border); padding: 8px; border-radius: 6px; background: var(--panel); cursor: pointer; }
 
-        /* Окна по твоей схеме */
+        /* ДЕТАЛИЗИРОВАННЫЙ АТЛЕТ */
+        .map-box { display: flex; justify-content: center; gap: 5px; height: 50vh; margin: 15px 0; }
+        .map-svg { height: 100%; filter: drop-shadow(0 0 5px rgba(0,0,0,0.5)); }
+        .m-grp { fill: #0a0a0a; stroke: #333; stroke-width: 0.4; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .m-grp.active { fill: currentColor !important; filter: drop-shadow(0 0 12px currentColor); stroke: #fff; stroke-width: 0.6; }
+
+        /* Окна */
         .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 100; display: none; flex-direction: column; align-items: center; justify-content: center; }
-        .modal { width: 85%; background: var(--panel); border: 1px solid var(--neon); border-radius: 12px; padding: 20px; box-shadow: 0 0 30px rgba(0,212,255,0.3); }
-        .modal-title { color: var(--neon); text-align: center; margin-bottom: 20px; font-size: 0.7em; letter-spacing: 2px; }
+        .modal { width: 90%; max-height: 85vh; background: var(--panel); border: 1px solid var(--neon); border-radius: 12px; padding: 20px; overflow-y: auto; box-shadow: 0 0 40px rgba(0,212,255,0.1); }
+        .modal-title { color: var(--neon); text-align: center; margin-bottom: 20px; font-size: 0.9em; letter-spacing: 3px; }
 
-        .list-btn { width: 100%; padding: 15px; background: #080808; border: 1px solid #1a1a1f; color: #fff; margin-bottom: 10px; border-radius: 6px; font-family: 'Orbitron'; text-align: center; font-size: 13px; }
+        .list-btn { width: 100%; padding: 15px; background: #050505; border: 1px solid #1a1a1f; color: #fff; margin-bottom: 8px; border-radius: 8px; font-family: 'Orbitron'; font-size: 11px; text-align: left; display: flex; justify-content: space-between; }
         .list-btn:active { background: var(--neon); color: #000; }
-
-        .close-btn { color: #444; font-size: 0.6em; text-align: center; margin-top: 15px; cursor: pointer; }
-
-        .w-in { width: 100%; background: #000; border: 1px solid var(--neon); color: #fff; padding: 15px; border-radius: 6px; font-family: 'Orbitron'; text-align: center; font-size: 1.5em; box-sizing: border-box; }
+        
+        .w-in { width: 100%; background: #000; border: 1px solid var(--neon); color: #fff; padding: 14px; border-radius: 8px; font-family: 'Orbitron'; box-sizing: border-box; font-size: 1.2em; text-align: center; }
+        .label { font-size: 0.6em; color: #444; text-transform: uppercase; margin-bottom: 5px; display: block; }
     </style>
 </head>
 <body>
 
-<div class="status-header">
+<div class="header">
     <div>
         <div id="rank">BRONZE E</div>
-        <div style="font-size: 0.6em; color: #555;">LEVEL <span id="lvl">1</span></div>
+        <div class="lvl-text">LEVEL <span id="lvl">1</span> | EXP <span id="exp">0</span>%</div>
     </div>
-    <div class="menu-btn" onclick="openModal('groupModal')">
-        <div></div><div></div><div></div>
+    <div class="nav-btns">
+        <div class="prof-btn" onclick="openModal('profModal')">PROFILE</div>
+        <div class="icon-btn" onclick="openModal('groupModal')"><div></div><div></div><div></div></div>
     </div>
 </div>
 
-<div class="map-container" id="theme">
-    <svg class="map-svg" viewBox="0 0 100 200">
-        <path id="f-neck" class="m-grp" d="M42 28 L58 28 L60 38 L40 38 Z" />
-        <path id="f-chest" class="m-grp" d="M30 42 Q50 38 70 42 L72 58 Q50 54 28 58 Z" />
-        <path id="f-abs" class="m-grp" d="M40 60 L60 60 L58 100 L42 100 Z" />
-        <path id="f-quads" class="m-grp" d="M30 110 L48 110 L48 160 L32 160 Z M52 110 L70 110 L68 160 L52 160 Z" />
-        <path id="f-biceps" class="m-grp" d="M12 60 L24 60 L24 95 L12 95 Z M88 60 L76 60 L76 95 L88 95 Z" />
+<div class="map-box" id="theme">
+    <svg class="map-svg" viewBox="0 0 100 220">
+        <path id="f-neck" class="m-grp" d="M42 25 Q50 20 58 25 L60 35 Q50 38 40 35 Z" />
+        <path id="f-chest" class="m-grp" d="M32 40 Q50 35 68 40 L72 65 Q50 60 28 65 Z" />
+        <path id="f-chest2" class="m-grp" d="M35 45 L65 45 L64 55 L36 55 Z" style="opacity:0.3"/>
+        <path id="f-abs" class="m-grp" d="M42 68 L58 68 L57 80 L43 80 Z M42 82 L58 82 L57 94 L43 94 Z M42 96 L58 96 L57 110 L43 110 Z" />
+        <path id="f-biceps" class="m-grp" d="M15 50 Q25 45 28 65 L25 100 L12 90 Z M85 50 Q75 45 72 65 L75 100 L88 90 Z" />
+        <path id="f-quads" class="m-grp" d="M30 115 Q40 110 48 115 L46 170 L30 170 Z M70 115 Q60 110 52 115 L54 170 L70 170 Z" />
     </svg>
-    <svg class="map-svg" viewBox="0 0 100 200">
-        <path id="b-lats" class="m-grp" d="M25 50 Q50 45 75 50 L72 105 Q50 100 28 105 Z" />
-        <path id="b-glutes" class="m-grp" d="M30 108 L70 108 L75 130 L25 130 Z" />
-        <path id="b-hams" class="m-grp" d="M30 135 L48 135 L48 175 L30 175 Z M52 135 L70 135 L70 175 L52 175 Z" />
+    <svg class="map-svg" viewBox="0 0 100 220">
+        <path id="b-lats" class="m-grp" d="M25 45 Q50 35 75 45 L70 110 Q50 100 30 110 Z" />
+        <path id="b-lower" class="m-grp" d="M35 112 L65 112 L63 125 L37 125 Z" />
+        <path id="b-glutes" class="m-grp" d="M30 128 Q50 120 70 128 L75 150 Q50 160 25 150 Z" />
+        <path id="b-hams" class="m-grp" d="M30 155 L48 155 L46 190 L30 190 Z M52 155 L70 155 L70 190 L54 190 Z" />
     </svg>
+</div>
+
+<div id="profModal" class="overlay">
+    <div class="modal">
+        <div class="modal-title">EDIT PROFILE</div>
+        <span class="label">Вес тела (кг)</span>
+        <input type="number" id="pW" class="w-in" placeholder="75">
+        <br><br>
+        <span class="label">Рост (см)</span>
+        <input type="number" id="pH" class="w-in" placeholder="180">
+        <br><br>
+        <button class="list-btn" style="background:var(--neon); color:#000; justify-content:center;" onclick="saveP()">SAVE DATA</button>
+        <div style="text-align:center; margin-top:15px; color:#444;" onclick="closeModal('profModal')">CLOSE</div>
+    </div>
 </div>
 
 <div id="groupModal" class="overlay">
     <div class="modal">
-        <div class="modal-title">НАЖИМАЕШЬ ГРУППУ</div>
-        <button class="list-btn" onclick="showExercises('СПИНА')">СПИНА</button>
-        <button class="list-btn" onclick="showExercises('НОГИ')">НОГИ</button>
-        <button class="list-btn" onclick="showExercises('ШЕЯ')">ШЕЯ</button>
-        <button class="list-btn" onclick="showExercises('ГРУДЬ')">ГРУДЬ</button>
-        <button class="list-btn" onclick="showExercises('РУКИ')">РУКИ</button>
-        <div class="close-btn" onclick="closeModal('groupModal')">ЗАКРЫТЬ</div>
+        <div class="modal-title">CATEGORIES</div>
+        <button class="list-btn" onclick="showEx('ГРУДЬ')">ГРУДЬ <span>></span></button>
+        <button class="list-btn" onclick="showEx('СПИНА')">СПИНА <span>></span></button>
+        <button class="list-btn" onclick="showEx('НОГИ')">НОГИ <span>></span></button>
+        <button class="list-btn" onclick="showEx('РУКИ')">РУКИ <span>></span></button>
+        <button class="list-btn" onclick="showEx('ПЛЕЧИ/ШЕЯ')">ПЛЕЧИ / ШЕЯ <span>></span></button>
+        <div style="text-align:center; margin-top:20px; color:#444;" onclick="closeModal('groupModal')">BACK</div>
     </div>
 </div>
 
 <div id="exModal" class="overlay">
     <div class="modal">
-        <div class="modal-title" id="currentGroupTitle">СПИСОК</div>
-        <div id="exList"></div>
-        <div class="close-btn" onclick="openModal('groupModal')">НАЗАД</div>
+        <div class="modal-title" id="exT">EXERCISES</div>
+        <div id="exL"></div>
+        <div style="text-align:center; margin-top:20px; color:#444;" onclick="openModal('groupModal')">BACK</div>
     </div>
 </div>
 
 <div id="weightModal" class="overlay">
     <div class="modal">
-        <div class="modal-title" id="currentExTitle">ВЕС СНАРЯДА</div>
-        <input type="number" id="finalWeight" class="w-in" placeholder="0 KG">
-        <button class="list-btn" style="margin-top:20px; background:var(--neon); color:#000;" onclick="finishReg()">ПОДТВЕРДИТЬ</button>
-        <div class="close-btn" onclick="closeModal('weightModal')">ОТМЕНА</div>
+        <div class="modal-title" id="wT">SET WEIGHT</div>
+        <span class="label">Твой результат (кг)</span>
+        <input type="number" id="wVal" class="w-in" placeholder="0">
+        <br><br>
+        <button class="list-btn" style="background:var(--neon); color:#000; justify-content:center;" onclick="regEx()">CONFIRM RECORD</button>
+        <div style="text-align:center; margin-top:15px; color:#444;" onclick="closeModal('weightModal')">CANCEL</div>
     </div>
 </div>
 
 <script>
-    let d = JSON.parse(localStorage.getItem('SOLO_FINAL')) || { lvl: 1, exp: 0 };
-    
-    const exercises = {
-        'СПИНА': [{n:'Становая тяга', d:'b-lats,b-glutes'}, {n:'Тяга к поясу', d:'b-lats'}],
-        'НОГИ': [{n:'Приседания', d:'f-quads,b-glutes'}, {n:'Мертвая тяга', d:'b-hams'}],
-        'ШЕЯ': [{n:'Подъемы шеи', d:'f-neck'}, {n:'Шраги', d:'f-neck'}],
-        'ГРУДЬ': [{n:'Жим лежа', d:'f-chest'}, {n:'Разводка', d:'f-chest'}],
-        'РУКИ': [{n:'Бицепс', d:'f-biceps'}, {n:'Трицепс', d:'f-chest'}]
+    let s = JSON.parse(localStorage.getItem('SOLO_V9')) || { 
+        lvl:1, exp:0, w:75, h:180, best:{} 
+    };
+
+    const exData = {
+        'ГРУДЬ': [{n:'Жим штанги лежа', d:'f-chest'}, {n:'Жим гантелей под углом', d:'f-chest'}, {n:'Разводка гантелей', d:'f-chest'}, {n:'Отжимания широкие', d:'f-chest'}],
+        'СПИНА': [{n:'Становая тяга', d:'b-lats,b-glutes,b-lower'}, {n:'Подтягивания (вес)', d:'b-lats'}, {n:'Тяга в наклоне', d:'b-lats'}, {n:'Гиперэкстензия', d:'b-lower'}],
+        'НОГИ': [{n:'Приседания', d:'f-quads,b-glutes'}, {n:'Жим ногами', d:'f-quads'}, {n:'Мертвая тяга', d:'b-hams,b-glutes'}, {n:'Выпады', d:'f-quads'}],
+        'РУКИ': [{n:'Подъем штанги (Бицепс)', d:'f-biceps'}, {n:'Молотки', d:'f-biceps'}, {n:'Брусья (Трицепс)', d:'f-chest'}, {n:'Жим узким хватом', d:'f-chest'}],
+        'ПЛЕЧИ/ШЕЯ': [{n:'Армейский жим', d:'f-chest'}, {n:'Махи в стороны', d:'f-chest'}, {n:'Борцовский мост (Шея)', d:'f-neck'}, {n:'Шраги', d:'f-neck'}]
     };
 
     function openModal(id) {
         document.querySelectorAll('.overlay').forEach(o => o.style.display = 'none');
         document.getElementById(id).style.display = 'flex';
+        if(id==='profModal'){ document.getElementById('pW').value=s.w; document.getElementById('pH').value=s.h; }
     }
-
     function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+    function saveP() { s.w=document.getElementById('pW').value; s.h=document.getElementById('pH').value; save(); closeModal('profModal'); }
 
-    function showExercises(group) {
-        document.getElementById('currentGroupTitle').innerText = group;
-        const list = document.getElementById('exList');
-        list.innerHTML = '';
-        exercises[group].forEach(ex => {
-            let btn = document.createElement('button');
-            btn.className = 'list-btn';
-            btn.innerText = ex.n;
-            btn.onclick = () => {
-                document.getElementById('currentExTitle').innerText = ex.n;
-                highlight(ex.d);
-                openModal('weightModal');
-            };
-            list.appendChild(btn);
+    function showEx(cat) {
+        document.getElementById('exT').innerText = cat;
+        const l = document.getElementById('exL'); l.innerHTML = '';
+        exData[cat].forEach(e => {
+            let b = document.createElement('button');
+            b.className = 'list-btn';
+            b.innerHTML = `${e.n} <span>${s.best[e.n] || 0} кг</span>`;
+            b.onclick = () => { window.cur = e; document.getElementById('wT').innerText = e.n; hl(e.d); openModal('weightModal'); };
+            l.appendChild(b);
         });
         openModal('exModal');
     }
 
-    function highlight(ids) {
+    function hl(ids) {
         document.querySelectorAll('.m-grp').forEach(m => m.classList.remove('active'));
-        ids.split(',').forEach(id => {
-            let el = document.getElementById(id);
-            if(el) el.classList.add('active');
-        });
+        ids.split(',').forEach(id => document.getElementById(id)?.classList.add('active'));
     }
 
-    function finishReg() {
-        const w = parseFloat(document.getElementById('finalWeight').value);
-        if(!w) return;
-        d.exp += 25;
-        if(d.exp >= 100) { d.lvl++; d.exp = 0; }
-        localStorage.setItem('SOLO_FINAL', JSON.stringify(d));
-        u();
-        closeModal('weightModal');
-        document.getElementById('finalWeight').value = '';
+    function regEx() {
+        const v = parseFloat(document.getElementById('wVal').value);
+        if(!v) return;
+        if(!s.best[window.cur.n] || v > s.best[window.cur.n]) s.best[window.cur.n] = v;
+        s.exp += 20; if(s.exp>=100){ s.lvl++; s.exp=0; }
+        save(); up(); closeModal('weightModal');
+        document.getElementById('wVal').value = '';
     }
 
-    function u() {
-        document.getElementById('lvl').innerText = d.lvl;
-        let t = "BRONZE", r = "E", c = "#cd7f32";
-        if(d.lvl > 5) { t = "SILVER"; r = "C"; c = "#c0c0c0"; }
-        if(d.lvl > 20) { t = "GOLD"; r = "B"; c = "#ffd700"; }
-        if(d.lvl > 50) { t = "SSS"; r = "MAX"; c = "#ff0044"; }
-        const rElem = document.getElementById('rank');
-        rElem.innerText = `${t} ${r}`; rElem.style.color = c;
+    function save() { localStorage.setItem('SOLO_V9', JSON.stringify(s)); }
+    function up() {
+        document.getElementById('lvl').innerText = s.lvl;
+        document.getElementById('exp').innerText = s.exp;
+        let t="BRONZE", r="E", c="#cd7f32";
+        if(s.lvl>10){ t="SILVER"; r="C"; c="#c0c0c0"; }
+        if(s.lvl>30){ t="GOLD"; r="B"; c="#ffd700"; }
+        if(s.lvl>100){ t="SSS"; r="MAX"; c="#ff0044"; }
+        document.getElementById('rank').innerText = `${t} ${r}`;
+        document.getElementById('rank').style.color = c;
         document.getElementById('theme').style.color = c;
     }
-    u();
+    up();
 </script>
 </body>
 </html>
