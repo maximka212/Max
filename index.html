@@ -3,39 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SYSTEM: EVOLUTION V7</title>
+    <title>SYSTEM: EVOLUTION V7.2</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&display=swap" rel="stylesheet">
     <style>
         :root { --bg: #000; --neon: #00d4ff; --panel: #0a0a0c; --border: #1a1a1f; }
-        body { background: var(--bg); color: #eee; font-family: sans-serif; margin: 0; padding: 15px; overflow: hidden; height: 100vh; position: relative; }
+        body { background: var(--bg); color: #eee; font-family: 'Orbitron', sans-serif; margin: 0; padding: 15px; overflow: hidden; height: 100vh; }
         
-        /* Главная панель */
-        .status-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; z-index: 5; position: relative; }
-        #rank { font-family: 'Orbitron'; font-size: 1.4em; font-weight: 900; color: var(--neon); text-shadow: 0 0 10px var(--neon); }
+        /* Шапка */
+        .status-header { display: flex; justify-content: space-between; align-items: center; z-index: 5; position: relative; }
+        #rank { font-size: 1.2em; font-weight: 900; color: var(--neon); text-shadow: 0 0 10px var(--neon); }
         
-        /* Кнопка Меню как на схеме */
-        .menu-btn { width: 50px; height: 50px; background: var(--panel); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 5px; cursor: pointer; }
-        .menu-btn div { width: 25px; height: 2px; background: var(--neon); box-shadow: 0 0 5px var(--neon); }
+        /* Твоя иконка меню */
+        .menu-btn { width: 45px; height: 45px; background: var(--panel); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 5px; cursor: pointer; }
+        .menu-btn div { width: 22px; height: 2px; background: var(--neon); box-shadow: 0 0 5px var(--neon); }
 
-        /* Карта мышц на весь экран */
-        .map-container { display: flex; justify-content: center; gap: 10px; margin-top: 20px; height: 50vh; opacity: 0.8; }
+        /* Анатомия */
+        .map-container { display: flex; justify-content: center; gap: 10px; margin-top: 30px; height: 55vh; }
         .map-svg { height: 100%; }
         .m-grp { fill: #111; stroke: #252525; stroke-width: 0.5; transition: 0.4s; }
-        .m-grp.active { fill: currentColor !important; filter: drop-shadow(0 0 12px currentColor); stroke: #fff; }
+        .m-grp.active { fill: currentColor !important; filter: drop-shadow(0 0 15px currentColor); stroke: #fff; }
 
-        /* Модальные окна (Слои как на схеме) */
-        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 100; display: none; flex-direction: column; align-items: center; justify-content: center; }
-        .modal { width: 85%; background: var(--panel); border: 1px solid var(--neon); border-radius: 12px; padding: 20px; box-shadow: 0 0 30px rgba(0,212,255,0.2); }
-        .modal-title { font-family: 'Orbitron'; color: var(--neon); text-align: center; margin-bottom: 20px; font-size: 0.8em; letter-spacing: 2px; }
+        /* Окна по твоей схеме */
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 100; display: none; flex-direction: column; align-items: center; justify-content: center; }
+        .modal { width: 85%; background: var(--panel); border: 1px solid var(--neon); border-radius: 12px; padding: 20px; box-shadow: 0 0 30px rgba(0,212,255,0.3); }
+        .modal-title { color: var(--neon); text-align: center; margin-bottom: 20px; font-size: 0.7em; letter-spacing: 2px; }
 
-        .list-btn { width: 100%; padding: 15px; background: #050505; border: 1px solid #1a1a1f; color: #fff; margin-bottom: 10px; border-radius: 6px; font-family: 'Orbitron'; text-align: left; font-size: 14px; }
+        .list-btn { width: 100%; padding: 15px; background: #080808; border: 1px solid #1a1a1f; color: #fff; margin-bottom: 10px; border-radius: 6px; font-family: 'Orbitron'; text-align: center; font-size: 13px; }
         .list-btn:active { background: var(--neon); color: #000; }
 
-        .close-btn { color: #555; font-size: 0.7em; text-align: center; margin-top: 15px; text-transform: uppercase; letter-spacing: 1px; }
+        .close-btn { color: #444; font-size: 0.6em; text-align: center; margin-top: 15px; cursor: pointer; }
 
-        /* Ввод веса */
-        .weight-input-box { display: flex; gap: 10px; margin-top: 10px; }
-        .w-in { flex: 1; background: #000; border: 1px solid var(--neon); color: #fff; padding: 15px; border-radius: 6px; font-family: 'Orbitron'; text-align: center; font-size: 1.2em; }
+        .w-in { width: 100%; background: #000; border: 1px solid var(--neon); color: #fff; padding: 15px; border-radius: 6px; font-family: 'Orbitron'; text-align: center; font-size: 1.5em; box-sizing: border-box; }
     </style>
 </head>
 <body>
@@ -43,7 +41,7 @@
 <div class="status-header">
     <div>
         <div id="rank">BRONZE E</div>
-        <div style="font-size: 0.7em; color: #444; font-family: 'Orbitron';">LVL <span id="lvl">1</span></div>
+        <div style="font-size: 0.6em; color: #555;">LEVEL <span id="lvl">1</span></div>
     </div>
     <div class="menu-btn" onclick="openModal('groupModal')">
         <div></div><div></div><div></div>
@@ -67,43 +65,42 @@
 
 <div id="groupModal" class="overlay">
     <div class="modal">
-        <div class="modal-title">SELECT CATEGORY</div>
+        <div class="modal-title">НАЖИМАЕШЬ ГРУППУ</div>
         <button class="list-btn" onclick="showExercises('СПИНА')">СПИНА</button>
         <button class="list-btn" onclick="showExercises('НОГИ')">НОГИ</button>
         <button class="list-btn" onclick="showExercises('ШЕЯ')">ШЕЯ</button>
         <button class="list-btn" onclick="showExercises('ГРУДЬ')">ГРУДЬ</button>
         <button class="list-btn" onclick="showExercises('РУКИ')">РУКИ</button>
-        <div class="close-btn" onclick="closeModal('groupModal')">CANCEL</div>
+        <div class="close-btn" onclick="closeModal('groupModal')">ЗАКРЫТЬ</div>
     </div>
 </div>
 
 <div id="exModal" class="overlay">
     <div class="modal">
-        <div class="modal-title" id="currentGroupTitle">EXERCISES</div>
+        <div class="modal-title" id="currentGroupTitle">СПИСОК</div>
         <div id="exList"></div>
-        <div class="close-btn" onclick="openModal('groupModal')">BACK</div>
+        <div class="close-btn" onclick="openModal('groupModal')">НАЗАД</div>
     </div>
 </div>
 
 <div id="weightModal" class="overlay">
     <div class="modal">
-        <div class="modal-title" id="currentExTitle">RECORD WEIGHT</div>
+        <div class="modal-title" id="currentExTitle">ВЕС СНАРЯДА</div>
         <input type="number" id="finalWeight" class="w-in" placeholder="0 KG">
-        <button class="list-btn" style="margin-top:20px; background:var(--neon); color:#000; text-align:center;" onclick="finishReg()">CONFIRM</button>
-        <div class="close-btn" onclick="closeModal('weightModal')">CANCEL</div>
+        <button class="list-btn" style="margin-top:20px; background:var(--neon); color:#000;" onclick="finishReg()">ПОДТВЕРДИТЬ</button>
+        <div class="close-btn" onclick="closeModal('weightModal')">ОТМЕНА</div>
     </div>
 </div>
 
 <script>
-    let d = JSON.parse(localStorage.getItem('SOLO_V7')) || { lvl: 1, exp: 0 };
-    let selectedEx = null;
-
+    let d = JSON.parse(localStorage.getItem('SOLO_FINAL')) || { lvl: 1, exp: 0 };
+    
     const exercises = {
-        'СПИНА': [{n:'Становая тяга', d:'b-lats,b-glutes'}, {n:'Подтягивания', d:'b-lats'}, {n:'Тяга к поясу', d:'b-lats'}],
-        'НОГИ': [{n:'Приседания', d:'f-quads,b-glutes'}, {n:'Жим ногами', d:'f-quads'}, {n:'Мертвая тяга', d:'b-hams'}],
-        'ШЕЯ': [{n:'Подъемы головы', d:'f-neck'}, {n:'Шраги', d:'f-neck,b-lats'}],
-        'ГРУДЬ': [{n:'Жим лежа', d:'f-chest'}, {n:'Отжимания', d:'f-chest'}],
-        'РУКИ': [{n:'Бицепс штанга', d:'f-biceps'}, {n:'Трицепс блок', d:'f-chest'}]
+        'СПИНА': [{n:'Становая тяга', d:'b-lats,b-glutes'}, {n:'Тяга к поясу', d:'b-lats'}],
+        'НОГИ': [{n:'Приседания', d:'f-quads,b-glutes'}, {n:'Мертвая тяга', d:'b-hams'}],
+        'ШЕЯ': [{n:'Подъемы шеи', d:'f-neck'}, {n:'Шраги', d:'f-neck'}],
+        'ГРУДЬ': [{n:'Жим лежа', d:'f-chest'}, {n:'Разводка', d:'f-chest'}],
+        'РУКИ': [{n:'Бицепс', d:'f-biceps'}, {n:'Трицепс', d:'f-chest'}]
     };
 
     function openModal(id) {
@@ -122,10 +119,9 @@
             btn.className = 'list-btn';
             btn.innerText = ex.n;
             btn.onclick = () => {
-                selectedEx = ex;
                 document.getElementById('currentExTitle').innerText = ex.n;
-                openModal('weightModal');
                 highlight(ex.d);
+                openModal('weightModal');
             };
             list.appendChild(btn);
         });
@@ -145,7 +141,7 @@
         if(!w) return;
         d.exp += 25;
         if(d.exp >= 100) { d.lvl++; d.exp = 0; }
-        localStorage.setItem('SOLO_V7', JSON.stringify(d));
+        localStorage.setItem('SOLO_FINAL', JSON.stringify(d));
         u();
         closeModal('weightModal');
         document.getElementById('finalWeight').value = '';
@@ -154,9 +150,9 @@
     function u() {
         document.getElementById('lvl').innerText = d.lvl;
         let t = "BRONZE", r = "E", c = "#cd7f32";
-        if(d.lvl > 10) { t = "SILVER"; r = "C"; c = "#c0c0c0"; }
-        if(d.lvl > 50) { t = "GOLD"; r = "B"; c = "#ffd700"; }
-        if(d.lvl > 150) { t = "SSS"; r = "MAX"; c = "#ff0044"; }
+        if(d.lvl > 5) { t = "SILVER"; r = "C"; c = "#c0c0c0"; }
+        if(d.lvl > 20) { t = "GOLD"; r = "B"; c = "#ffd700"; }
+        if(d.lvl > 50) { t = "SSS"; r = "MAX"; c = "#ff0044"; }
         const rElem = document.getElementById('rank');
         rElem.innerText = `${t} ${r}`; rElem.style.color = c;
         document.getElementById('theme').style.color = c;
