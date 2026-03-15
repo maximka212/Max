@@ -3,185 +3,164 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SYSTEM: ASCENSION</title>
+    <title>SYSTEM: ASCENSION RANKED</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;600;900&family=Orbitron:wght@900&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&display=swap');
-        :root { --blue: #00d4ff; --red: #ff0055; --gold: #ffcc00; --bg: #050508; --card: #101015; }
+        :root { --bg: #000; --text: #eee; --bronz: #cd7f32; --silver: #c0c0c0; --gold: #ffd700; --dia: #00f2ff; --master: #ff00ea; --gm: #ff0044; }
         
-        body { background: var(--bg); color: #fff; font-family: 'Orbitron', sans-serif; margin: 0; padding: 10px; overflow-x: hidden; }
+        body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; margin: 0; padding: 15px; overflow-x: hidden; }
         
-        /* Анимация пульсации для ранга */
-        @keyframes pulse { 0% { opacity: 0.8; } 50% { opacity: 1; text-shadow: 0 0 15px var(--red); } 100% { opacity: 0.8; } }
+        /* Панель Титула */
+        .rank-header { text-align: center; padding: 20px 0; border-bottom: 1px solid #111; }
+        .title-text { font-family: 'Orbitron'; font-size: 1.8em; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; margin-top: 5px; }
+        
+        .lvl-box { font-size: 0.8em; color: #555; letter-spacing: 4px; }
+        .lvl-num { color: #fff; font-size: 1.5em; font-family: 'Orbitron'; }
 
-        .window { border: 1px solid #222; background: var(--card); padding: 15px; border-radius: 15px; margin-bottom: 12px; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .system-border { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 1px solid var(--blue); border-radius: 15px; opacity: 0.2; pointer-events: none; }
-        
-        .header { font-size: 0.7em; letter-spacing: 3px; color: var(--blue); margin-bottom: 10px; border-bottom: 1px solid rgba(0,212,255,0.2); padding-bottom: 5px; }
-        
+        /* Прогресс бар */
+        .exp-bar { height: 2px; background: #111; margin: 20px 0; position: relative; }
+        .exp-fill { height: 100%; width: 0%; transition: 1s cubic-bezier(0.1, 0, 0, 1); box-shadow: 0 0 15px currentColor; }
+
         /* Статы */
-        .stat-main { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 10px; }
-        .lvl-big { font-size: 3em; font-weight: 900; line-height: 1; color: #fff; }
-        .rank-big { font-size: 2.5em; font-weight: 900; color: var(--red); animation: pulse 2s infinite; }
+        .stats { display: flex; justify-content: space-around; margin-bottom: 30px; }
+        .stat-item { text-align: center; }
+        .stat-label { font-size: 0.6em; color: #444; text-transform: uppercase; letter-spacing: 1px; }
+        .stat-val { font-size: 1.1em; color: #fff; font-weight: 600; }
+
+        /* Карта */
+        .muscle-map { display: flex; justify-content: center; gap: 10px; margin-bottom: 30px; opacity: 0.7; }
+        .map-view { width: 45%; }
+        .muscle-group { fill: #111; stroke: #222; stroke-width: 0.5; transition: 0.3s; }
+        .muscle-group.active { fill: currentColor !important; filter: drop-shadow(0 0 5px currentColor); }
+
+        /* Ввод данных */
+        select, input { width: 100%; padding: 18px; background: #08080a; border: 1px solid #151515; color: #fff; border-radius: 4px; margin-bottom: 10px; font-family: 'Inter'; font-size: 16px; box-sizing: border-box; outline: none; transition: 0.3s; }
+        input:focus { border-color: #333; }
         
-        .exp-container { height: 6px; background: #111; border-radius: 3px; margin: 10px 0; overflow: hidden; border: 1px solid #222; }
-        .exp-fill { height: 100%; background: linear-gradient(90deg, var(--blue), #0055ff); width: 0%; transition: width 0.6s cubic-bezier(0.17, 0.67, 0.83, 0.67); }
+        .btn { width: 100%; padding: 20px; background: #fff; border: none; color: #000; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; cursor: pointer; border-radius: 4px; }
+        .btn:active { transform: scale(0.98); background: #ccc; }
 
-        /* Сетка параметров */
-        .params { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
-        .param-box { background: rgba(255,255,255,0.03); padding: 8px; border-radius: 8px; border-left: 2px solid var(--blue); }
-        .param-label { font-size: 0.6em; color: #666; display: block; }
-        .param-val { font-size: 0.9em; color: #ddd; }
-
-        /* Форма */
-        select, input { width: 100%; padding: 14px; background: #16161c; border: 1px solid #333; color: #fff; border-radius: 10px; margin-top: 5px; font-family: 'Orbitron'; font-size: 14px; box-sizing: border-box; }
-        .btn { width: 100%; padding: 18px; background: var(--blue); border: none; color: #000; font-weight: 900; border-radius: 10px; margin-top: 15px; font-family: 'Orbitron'; text-transform: uppercase; letter-spacing: 1px; }
-        .btn:active { transform: scale(0.97); background: #fff; }
-
-        /* Таймер */
-        .timer-btn { background: #1a1a20; color: var(--blue); border: 1px solid var(--blue); padding: 10px; margin-top: 10px; font-size: 0.8em; }
-        
-        /* Лог */
-        .log-item { background: rgba(255,255,255,0.02); padding: 10px; border-radius: 8px; margin-bottom: 5px; display: flex; justify-content: space-between; align-items: center; border-right: 2px solid transparent; }
-        .rank-tag { font-size: 0.7em; padding: 2px 6px; border-radius: 4px; font-weight: bold; }
+        /* История */
+        .log { margin-top: 30px; border-top: 1px solid #111; padding-top: 10px; }
+        .log-item { display: flex; justify-content: space-between; padding: 10px 0; font-size: 0.8em; color: #666; border-bottom: 1px solid #080808; }
     </style>
 </head>
 <body>
 
-<div class="window">
-    <div class="system-border"></div>
-    <div class="header">STATUS WINDOW</div>
-    <div class="stat-main">
-        <div><span class="param-label">LEVEL</span><span id="lvl" class="lvl-big">1</span></div>
-        <div style="text-align: right;"><span class="param-label">RANK</span><span id="rank" class="rank-big">E</span></div>
+<div class="rank-header">
+    <div class="lvl-box">LEVEL <span id="lvl" class="lvl-num">1</span></div>
+    <div id="title" class="title-text">BRONZE</div>
+    <div class="exp-bar"><div id="exp-fill" class="exp-fill"></div></div>
+</div>
+
+<div class="stats">
+    <div class="stat-item">
+        <div class="stat-label">Body (KG)</div>
+        <input type="number" id="uW" value="75" style="width:60px; padding:5px; margin:0; border:none; background:none; text-align:center;">
     </div>
-    <div class="exp-container"><div id="exp-fill" class="exp-fill"></div></div>
-    
-    <div class="params">
-        <div class="param-box"><span class="param-label">BODY WEIGHT</span><input type="number" id="uW" value="75" style="padding:2px; margin:0; border:none; background:none; font-size:1em;"></div>
-        <div class="param-box"><span class="param-label">TOTAL LIFTED</span><span id="totalLift" class="param-val">0</span> kg</div>
+    <div class="stat-item">
+        <div class="stat-label">Total (KG)</div>
+        <div id="total" class="stat-val">0</div>
     </div>
 </div>
 
-<div class="window">
-    <div class="header">DAILY QUEST: STRENGTH</div>
-    <label class="param-label">SELECT CATEGORY</label>
-    <select id="ex">
-        <optgroup label="БАЗА">
-            <option value="1.5">Становая тяга</option>
-            <option value="1.2">Приседания</option>
-            <option value="1.0">Жим лежа</option>
-        </optgroup>
-        <optgroup label="ВЕРХ">
-            <option value="0.7">Армейский жим</option>
-            <option value="0.8">Жим гантелей</option>
-            <option value="0.9">Тяга в наклоне</option>
-            <option value="1.0">Подтягивания</option>
-        </optgroup>
-        <optgroup label="ИЗОЛЯЦИЯ">
-            <option value="0.5">Бицепс штанга</option>
-            <option value="0.4">Трицепс блок</option>
-            <option value="2.0">Жим ногами</option>
-        </optgroup>
-    </select>
-    
-    <label class="param-label" style="margin-top:10px;">ENTER WEIGHT (KG)</label>
-    <input type="number" id="lW" placeholder="0.0">
-    
-    <button class="btn" onclick="register()">REGISTER RECORD</button>
-    <button id="timerBtn" class="btn timer-btn" onclick="startTimer()">REST TIMER (60s)</button>
+<div class="muscle-map" id="mapCont">
+    <div class="map-view">
+        <svg viewBox="0 0 100 200">
+            <path id="f-chest" class="muscle-group" d="M32 42 Q50 38 68 42 L68 55 Q50 58 32 55 Z" />
+            <path id="f-abs" class="muscle-group" d="M40 60 L60 60 L58 95 L42 95 Z" />
+            <path id="f-quads" class="muscle-group" d="M30 105 L48 105 L48 150 L30 150 Z M52 105 L70 105 L70 150 L52 150 Z" />
+            <path id="f-biceps" class="muscle-group" d="M15 60 L25 60 L25 90 L15 90 Z M85 60 L75 60 L75 90 L85 90 Z" />
+            <path id="f-shoulders" class="muscle-group" d="M22 40 Q15 45 25 55 L30 45 Z M78 40 Q85 45 75 55 L70 45 Z" />
+            <path id="f-neck" class="muscle-group" d="M42 30 L58 30 L58 38 L42 38 Z" />
+        </svg>
+    </div>
+    <div class="map-view">
+        <svg viewBox="0 0 100 200">
+            <path id="b-lats" class="muscle-group" d="M25 50 L75 50 L70 90 L30 90 Z" />
+            <path id="b-glutes" class="muscle-group" d="M30 95 L70 95 L75 120 L25 120 Z" />
+            <path id="b-hams" class="muscle-group" d="M30 125 L48 125 L48 160 L30 160 Z M52 125 L70 125 L70 160 L52 160 Z" />
+            <path id="b-triceps" class="muscle-group" d="M15 60 L25 60 L22 90 L12 90 Z M85 60 L75 60 L78 90 L88 90 Z" />
+        </svg>
+    </div>
 </div>
 
-<div class="window">
-    <div class="header">SYSTEM LOG</div>
-    <div id="log"></div>
-</div>
+<select id="ex" onchange="h()">
+    <optgroup label="ГРУДЬ">
+        <option value="1.0" d="f-chest,b-triceps">Жим штанги лежа</option>
+        <option value="1.1" d="f-chest,f-shoulders">Жим гантелей (30°)</option>
+        <option value="1.2" d="f-chest,f-shoulders">Жим гантелей (45°)</option>
+    </optgroup>
+    <optgroup label="СПИНА">
+        <option value="1.5" d="b-lats,b-glutes,b-hams">Становая тяга</option>
+        <option value="1.1" d="b-lats,f-biceps">Подтягивания с весом</option>
+        <option value="1.0" d="b-lats,f-biceps">Тяга штанги</option>
+    </optgroup>
+    <optgroup label="НОГИ">
+        <option value="1.3" d="f-quads,b-glutes">Приседания</option>
+        <option value="2.0" d="f-quads,b-glutes">Жим ногами</option>
+    </optgroup>
+    <optgroup label="ПЛЕЧИ / ШЕЯ">
+        <option value="0.9" d="f-shoulders,b-triceps">Армейский жим</option>
+        <option value="0.6" d="f-neck,f-abs">Тренировка шеи</option>
+    </optgroup>
+    <optgroup label="РУКИ">
+        <option value="0.5" d="f-biceps">Бицепс штанга</option>
+        <option value="0.6" d="b-triceps">Французский жим</option>
+    </optgroup>
+</select>
+
+<input type="number" id="lW" placeholder="Вес снаряда (кг)">
+<button class="btn" onclick="reg()">Зарегистрировать</button>
+
+<div class="log" id="hist"></div>
 
 <script>
-    let data = JSON.parse(localStorage.getItem('soloLevelingX')) || { lvl: 1, exp: 0, total: 0, log: [] };
+    let d = JSON.parse(localStorage.getItem('SL_RANKED')) || { lvl: 1, exp: 0, t: 0, h: [] };
 
-    function register() {
-        const uW = parseFloat(document.getElementById('uW').value);
-        const lW = parseFloat(document.getElementById('lW').value);
-        const exS = document.getElementById('ex');
-        const exName = exS.options[exS.selectedIndex].text;
-        const coef = parseFloat(exS.value);
+    function h() {
+        document.querySelectorAll('.muscle-group').forEach(m => m.classList.remove('active'));
+        const s = document.getElementById('ex');
+        const ids = s.options[s.selectedIndex].getAttribute('d').split(',');
+        ids.forEach(id => { if(document.getElementById(id)) document.getElementById(id).classList.add('active'); });
+    }
 
-        if (!lW || !uW) return;
-
-        // Расчет ранга
-        const ratio = lW / uW / coef;
-        let r = "E"; let c = "#666";
-        if (ratio > 0.6) { r = "D"; c = "#4e9"; }
-        if (ratio > 1.0) { r = "C"; c = "#0af"; }
-        if (ratio > 1.4) { r = "B"; c = "#f05"; }
-        if (ratio > 1.8) { r = "A"; c = "#f90"; }
-        if (ratio > 2.2) { r = "S"; c = "#fff"; }
-
-        // Эффекты
-        data.total += lW;
-        data.exp += 25;
+    function reg() {
+        const lw = parseFloat(document.getElementById('lW').value);
+        if(!lw) return;
+        d.t += lw; d.exp += 20;
+        if(d.exp >= 100) { d.lvl++; d.exp = 0; }
         
-        const entry = { name: exName, weight: lW, rank: r, color: c, date: new Date().toLocaleTimeString() };
-        data.log.unshift(entry);
-        if(data.log.length > 5) data.log.pop();
-
-        if (data.exp >= 100) {
-            data.lvl++;
-            data.exp = 0;
-            alert("LEVEL UP! ВАШИ СИЛЫ ВОЗРОСЛИ.");
-        }
-
-        save();
-        update();
+        d.h.unshift({ n: document.getElementById('ex').options[document.getElementById('ex').selectedIndex].text, w: lw });
+        if(d.h.length > 3) d.h.pop();
+        save(); u();
     }
 
-    function startTimer() {
-        let sec = 60;
-        const btn = document.getElementById('timerBtn');
-        btn.disabled = true;
-        const t = setInterval(() => {
-            sec--;
-            btn.innerText = `RESTING... ${sec}s`;
-            if (sec <= 0) {
-                clearInterval(t);
-                btn.innerText = "REST TIMER (60s)";
-                btn.disabled = false;
-                alert("ОТДЫХ ЗАВЕРШЕН. ВЕРНИСЬ В СТРОЙ!");
-            }
-        }, 1000);
-    }
-
-    function save() { localStorage.setItem('soloLevelingX', JSON.stringify(data)); }
-
-    function update() {
-        document.getElementById('lvl').innerText = data.lvl;
-        document.getElementById('exp-fill').style.width = data.exp + '%';
-        document.getElementById('totalLift').innerText = data.total;
+    function save() { localStorage.setItem('SL_RANKED', JSON.stringify(d)); }
+    function u() {
+        document.getElementById('lvl').innerText = d.lvl;
+        document.getElementById('total').innerText = d.t.toFixed(0);
+        document.getElementById('exp-fill').style.width = d.exp + '%';
         
-        let rTitle = "E";
-        if(data.lvl > 5) rTitle = "D";
-        if(data.lvl > 15) rTitle = "C";
-        if(data.lvl > 30) rTitle = "B";
-        if(data.lvl > 50) rTitle = "A";
-        if(data.lvl > 100) rTitle = "S";
-        document.getElementById('rank').innerText = rTitle;
+        let title = "BRONZE", color = "var(--bronz)";
+        if(d.lvl > 10) { title = "SILVER"; color = "var(--silver)"; }
+        if(d.lvl > 25) { title = "GOLD"; color = "var(--gold)"; }
+        if(d.lvl > 45) { title = "PLATINUM"; color = "#e5e4e2"; }
+        if(d.lvl > 70) { title = "DIAMOND"; color = "var(--dia)"; }
+        if(d.lvl > 100) { title = "MASTER"; color = "var(--master)"; }
+        if(d.lvl > 150) { title = "GRANDMASTER"; color = "var(--gm)"; }
 
-        document.getElementById('log').innerHTML = data.log.map(i => `
-            <div class="log-item" style="border-right-color:${i.color}">
-                <div>
-                    <div style="font-size:0.8em; color:#fff">${i.name}</div>
-                    <div style="font-size:0.6em; color:#555">${i.date}</div>
-                </div>
-                <div style="text-align:right">
-                    <div style="font-weight:bold">${i.weight} kg</div>
-                    <span class="rank-tag" style="background:${i.color}; color:#000">${i.rank}-RANK</span>
-                </div>
-            </div>
-        `).join('');
+        const t = document.getElementById('title');
+        t.innerText = title;
+        t.style.color = color;
+        t.style.textShadow = `0 0 20px ${color}55`;
+        document.getElementById('exp-fill').style.color = color;
+        document.getElementById('mapCont').style.color = color;
+
+        document.getElementById('hist').innerHTML = d.h.map(i => `<div class="log-item"><span>${i.n}</span><b>${i.w} кг</b></div>`).join('');
     }
 
-    update();
+    h(); u();
 </script>
-
 </body>
 </html>
