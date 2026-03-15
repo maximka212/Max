@@ -3,93 +3,184 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SYSTEM: SOLO LEVELING</title>
+    <title>SYSTEM: ASCENSION</title>
     <style>
-        :root { --blue: #00d4ff; --red: #ff0055; --bg: #0a0a0c; }
-        body { background: var(--bg); color: #fff; font-family: 'Courier New', monospace; margin: 0; padding: 20px; overflow-x: hidden; }
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&display=swap');
+        :root { --blue: #00d4ff; --red: #ff0055; --gold: #ffcc00; --bg: #050508; --card: #101015; }
         
-        /* Стиль Системы */
-        .window { border: 2px solid var(--blue); background: rgba(0, 212, 255, 0.05); padding: 15px; border-radius: 5px; box-shadow: 0 0 20px rgba(0, 212, 255, 0.2); margin-bottom: 20px; }
-        .header { text-align: center; border-bottom: 1px solid var(--blue); margin-bottom: 15px; letter-spacing: 3px; }
+        body { background: var(--bg); color: #fff; font-family: 'Orbitron', sans-serif; margin: 0; padding: 10px; overflow-x: hidden; }
         
-        .stat-row { display: flex; justify-content: space-between; margin: 12px 0; font-size: 1.1em; }
-        .lvl-text { color: var(--blue); font-weight: bold; font-size: 1.4em; }
-        
-        .exp-bar { width: 100%; height: 8px; background: #222; border-radius: 4px; overflow: hidden; }
-        .exp-fill { height: 100%; background: var(--blue); transition: width 0.5s; box-shadow: 0 0 10px var(--blue); }
+        /* Анимация пульсации для ранга */
+        @keyframes pulse { 0% { opacity: 0.8; } 50% { opacity: 1; text-shadow: 0 0 15px var(--red); } 100% { opacity: 0.8; } }
 
-        .quest-box { border-left: 3px solid var(--red); background: #161618; padding: 15px; }
-        .quest-title { color: var(--red); margin: 0 0 10px 0; font-size: 1em; text-transform: uppercase; }
+        .window { border: 1px solid #222; background: var(--card); padding: 15px; border-radius: 15px; margin-bottom: 12px; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .system-border { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 1px solid var(--blue); border-radius: 15px; opacity: 0.2; pointer-events: none; }
         
-        .btn-upgrade { width: 100%; padding: 15px; background: none; border: 1px solid var(--blue); color: var(--blue); font-weight: bold; margin-top: 20px; cursor: pointer; text-transform: uppercase; }
-        .btn-upgrade:active { background: var(--blue); color: #000; }
+        .header { font-size: 0.7em; letter-spacing: 3px; color: var(--blue); margin-bottom: 10px; border-bottom: 1px solid rgba(0,212,255,0.2); padding-bottom: 5px; }
         
-        .log { font-size: 0.8em; color: #666; margin-top: 10px; text-align: center; }
+        /* Статы */
+        .stat-main { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 10px; }
+        .lvl-big { font-size: 3em; font-weight: 900; line-height: 1; color: #fff; }
+        .rank-big { font-size: 2.5em; font-weight: 900; color: var(--red); animation: pulse 2s infinite; }
+        
+        .exp-container { height: 6px; background: #111; border-radius: 3px; margin: 10px 0; overflow: hidden; border: 1px solid #222; }
+        .exp-fill { height: 100%; background: linear-gradient(90deg, var(--blue), #0055ff); width: 0%; transition: width 0.6s cubic-bezier(0.17, 0.67, 0.83, 0.67); }
+
+        /* Сетка параметров */
+        .params { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
+        .param-box { background: rgba(255,255,255,0.03); padding: 8px; border-radius: 8px; border-left: 2px solid var(--blue); }
+        .param-label { font-size: 0.6em; color: #666; display: block; }
+        .param-val { font-size: 0.9em; color: #ddd; }
+
+        /* Форма */
+        select, input { width: 100%; padding: 14px; background: #16161c; border: 1px solid #333; color: #fff; border-radius: 10px; margin-top: 5px; font-family: 'Orbitron'; font-size: 14px; box-sizing: border-box; }
+        .btn { width: 100%; padding: 18px; background: var(--blue); border: none; color: #000; font-weight: 900; border-radius: 10px; margin-top: 15px; font-family: 'Orbitron'; text-transform: uppercase; letter-spacing: 1px; }
+        .btn:active { transform: scale(0.97); background: #fff; }
+
+        /* Таймер */
+        .timer-btn { background: #1a1a20; color: var(--blue); border: 1px solid var(--blue); padding: 10px; margin-top: 10px; font-size: 0.8em; }
+        
+        /* Лог */
+        .log-item { background: rgba(255,255,255,0.02); padding: 10px; border-radius: 8px; margin-bottom: 5px; display: flex; justify-content: space-between; align-items: center; border-right: 2px solid transparent; }
+        .rank-tag { font-size: 0.7em; padding: 2px 6px; border-radius: 4px; font-weight: bold; }
     </style>
 </head>
 <body>
 
 <div class="window">
-    <div class="header">ИНФОРМАЦИЯ ОБ ИГРОКЕ</div>
-    <div class="stat-row">
-        <span>УРОВЕНЬ: <span id="lvl" class="lvl-text">1</span></span>
-        <span id="rank" style="color: #888;">РАНГ: E</span>
+    <div class="system-border"></div>
+    <div class="header">STATUS WINDOW</div>
+    <div class="stat-main">
+        <div><span class="param-label">LEVEL</span><span id="lvl" class="lvl-big">1</span></div>
+        <div style="text-align: right;"><span class="param-label">RANK</span><span id="rank" class="rank-big">E</span></div>
     </div>
-    <div class="exp-bar"><div id="exp-fill" class="exp-fill" style="width: 0%"></div></div>
-    <div class="log">EXP: <span id="exp-val">0</span> / 100</div>
-
-    <div style="margin-top: 20px;">
-        <div class="stat-row"><span>СИЛА (STR):</span> <span id="str">10</span></div>
-        <div class="stat-row"><span>ВЫНОСЛ (VIT):</span> <span id="vit">10</span></div>
-    </div>
-</div>
-
-<div class="quest-box">
-    <div class="quest-title">Ежедневный квест: ПРЕДЕЛ ВОЗМОЖНОСТЕЙ</div>
-    <div id="tasks">
-        • Жим/Присед (Тяжелый): 5х5<br>
-        • Подтягивания: 3 до отказа<br>
-        • Планка: 2 минуты
+    <div class="exp-container"><div id="exp-fill" class="exp-fill"></div></div>
+    
+    <div class="params">
+        <div class="param-box"><span class="param-label">BODY WEIGHT</span><input type="number" id="uW" value="75" style="padding:2px; margin:0; border:none; background:none; font-size:1em;"></div>
+        <div class="param-box"><span class="param-label">TOTAL LIFTED</span><span id="totalLift" class="param-val">0</span> kg</div>
     </div>
 </div>
 
-<button class="btn-upgrade" onclick="gainExp(25)">Завершить тренировку (+25 EXP)</button>
-<button class="btn-upgrade" style="border-color: #666; color: #666; margin-top: 10px;" onclick="resetStats()">Сброс прогресса</button>
+<div class="window">
+    <div class="header">DAILY QUEST: STRENGTH</div>
+    <label class="param-label">SELECT CATEGORY</label>
+    <select id="ex">
+        <optgroup label="БАЗА">
+            <option value="1.5">Становая тяга</option>
+            <option value="1.2">Приседания</option>
+            <option value="1.0">Жим лежа</option>
+        </optgroup>
+        <optgroup label="ВЕРХ">
+            <option value="0.7">Армейский жим</option>
+            <option value="0.8">Жим гантелей</option>
+            <option value="0.9">Тяга в наклоне</option>
+            <option value="1.0">Подтягивания</option>
+        </optgroup>
+        <optgroup label="ИЗОЛЯЦИЯ">
+            <option value="0.5">Бицепс штанга</option>
+            <option value="0.4">Трицепс блок</option>
+            <option value="2.0">Жим ногами</option>
+        </optgroup>
+    </select>
+    
+    <label class="param-label" style="margin-top:10px;">ENTER WEIGHT (KG)</label>
+    <input type="number" id="lW" placeholder="0.0">
+    
+    <button class="btn" onclick="register()">REGISTER RECORD</button>
+    <button id="timerBtn" class="btn timer-btn" onclick="startTimer()">REST TIMER (60s)</button>
+</div>
+
+<div class="window">
+    <div class="header">SYSTEM LOG</div>
+    <div id="log"></div>
+</div>
 
 <script>
-    // Простейшая логика сохранения данных
-    let stats = JSON.parse(localStorage.getItem('soloStats')) || { lvl: 1, exp: 0, str: 10, vit: 10 };
+    let data = JSON.parse(localStorage.getItem('soloLevelingX')) || { lvl: 1, exp: 0, total: 0, log: [] };
 
-    function updateUI() {
-        document.getElementById('lvl').innerText = stats.lvl;
-        document.getElementById('exp-val').innerText = stats.exp;
-        document.getElementById('exp-fill').style.width = stats.exp + '%';
-        document.getElementById('str').innerText = stats.str;
-        document.getElementById('vit').innerText = stats.vit;
-        document.getElementById('rank').innerText = stats.lvl > 10 ? 'РАНГ: D' : 'РАНГ: E';
-        localStorage.setItem('soloStats', JSON.stringify(stats));
-    }
+    function register() {
+        const uW = parseFloat(document.getElementById('uW').value);
+        const lW = parseFloat(document.getElementById('lW').value);
+        const exS = document.getElementById('ex');
+        const exName = exS.options[exS.selectedIndex].text;
+        const coef = parseFloat(exS.value);
 
-    function gainExp(amount) {
-        stats.exp += amount;
-        if (stats.exp >= 100) {
-            stats.lvl++;
-            stats.exp = 0;
-            stats.str += 2;
-            stats.vit += 1;
-            alert("УРОВЕНЬ ПОВЫШЕН! Вы стали сильнее.");
+        if (!lW || !uW) return;
+
+        // Расчет ранга
+        const ratio = lW / uW / coef;
+        let r = "E"; let c = "#666";
+        if (ratio > 0.6) { r = "D"; c = "#4e9"; }
+        if (ratio > 1.0) { r = "C"; c = "#0af"; }
+        if (ratio > 1.4) { r = "B"; c = "#f05"; }
+        if (ratio > 1.8) { r = "A"; c = "#f90"; }
+        if (ratio > 2.2) { r = "S"; c = "#fff"; }
+
+        // Эффекты
+        data.total += lW;
+        data.exp += 25;
+        
+        const entry = { name: exName, weight: lW, rank: r, color: c, date: new Date().toLocaleTimeString() };
+        data.log.unshift(entry);
+        if(data.log.length > 5) data.log.pop();
+
+        if (data.exp >= 100) {
+            data.lvl++;
+            data.exp = 0;
+            alert("LEVEL UP! ВАШИ СИЛЫ ВОЗРОСЛИ.");
         }
-        updateUI();
+
+        save();
+        update();
     }
 
-    function resetStats() {
-        if(confirm("Сбросить весь прогресс?")) {
-            stats = { lvl: 1, exp: 0, str: 10, vit: 10 };
-            updateUI();
-        }
+    function startTimer() {
+        let sec = 60;
+        const btn = document.getElementById('timerBtn');
+        btn.disabled = true;
+        const t = setInterval(() => {
+            sec--;
+            btn.innerText = `RESTING... ${sec}s`;
+            if (sec <= 0) {
+                clearInterval(t);
+                btn.innerText = "REST TIMER (60s)";
+                btn.disabled = false;
+                alert("ОТДЫХ ЗАВЕРШЕН. ВЕРНИСЬ В СТРОЙ!");
+            }
+        }, 1000);
     }
 
-    updateUI();
+    function save() { localStorage.setItem('soloLevelingX', JSON.stringify(data)); }
+
+    function update() {
+        document.getElementById('lvl').innerText = data.lvl;
+        document.getElementById('exp-fill').style.width = data.exp + '%';
+        document.getElementById('totalLift').innerText = data.total;
+        
+        let rTitle = "E";
+        if(data.lvl > 5) rTitle = "D";
+        if(data.lvl > 15) rTitle = "C";
+        if(data.lvl > 30) rTitle = "B";
+        if(data.lvl > 50) rTitle = "A";
+        if(data.lvl > 100) rTitle = "S";
+        document.getElementById('rank').innerText = rTitle;
+
+        document.getElementById('log').innerHTML = data.log.map(i => `
+            <div class="log-item" style="border-right-color:${i.color}">
+                <div>
+                    <div style="font-size:0.8em; color:#fff">${i.name}</div>
+                    <div style="font-size:0.6em; color:#555">${i.date}</div>
+                </div>
+                <div style="text-align:right">
+                    <div style="font-weight:bold">${i.weight} kg</div>
+                    <span class="rank-tag" style="background:${i.color}; color:#000">${i.rank}-RANK</span>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    update();
 </script>
 
 </body>
