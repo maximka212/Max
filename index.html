@@ -3,98 +3,186 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SYSTEM: ULTIMATE DATABASE v19</title>
+    <title>SYSTEM: MONARCH ASCENSION v22</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        :root { --bg: #000; --neon: #00d4ff; --danger: #ff0044; --panel: #0a0a0c; }
+        :root { 
+            --bg: #000; 
+            --neon: #00d4ff; 
+            --danger: #ff0044; 
+            --panel: #0a0a0c; 
+        }
+        
         body { 
             background: var(--bg); 
             background-image: radial-gradient(circle at 50% 50%, #0a111a 0%, #000 90%);
             color: #eee; font-family: 'Orbitron', sans-serif; margin: 0; padding: 0 20px; 
-            overflow: hidden; height: 100vh; display: flex; flex-direction: column; transition: background 0.3s;
+            overflow: hidden; height: 100vh; display: flex; flex-direction: column;
         }
+        
+        /* HEADER */
         .header { display: flex; justify-content: space-between; align-items: center; margin-top: 45px; margin-bottom: 20px; }
-        .rank-container { font-size: 1.6em; font-weight: 900; text-transform: uppercase; }
+        .rank-container { font-size: 1.4em; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; }
         .rank-letter { color: var(--danger); text-shadow: 0 0 15px var(--danger); margin-left: 5px; }
+        
         .menu-btn { 
             width: 50px; height: 50px; background: rgba(0,212,255,0.05); border: 2px solid var(--neon); 
             border-radius: 12px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 5px; 
-            box-shadow: 0 0 15px rgba(0,212,255,0.2);
+            cursor: pointer;
         }
         .menu-btn div { width: 24px; height: 2px; background: var(--neon); box-shadow: 0 0 5px var(--neon); }
+
+        /* ЦЕНТР */
         .title-display { flex-grow: 1; display: flex; align-items: center; justify-content: center; }
-        .icon-svg { width: 200px; height: 200px; filter: drop-shadow(0 0 30px var(--neon)); fill: var(--neon); }
-        .lvl-zone { width: 100%; margin-top: auto; padding-bottom: 70px; }
-        .lvl-labels { display: flex; justify-content: space-between; margin-bottom: 12px; font-weight: 700; color: var(--neon); }
-        .progress-container { width: 100%; height: 35px; background: #050505; border: 2px solid var(--neon); border-radius: 10px; overflow: hidden; }
-        #exp-bar { height: 100%; width: 0%; background: linear-gradient(90deg, #005a77, #00d4ff, #fff); transition: 0.5s; display: flex; align-items: center; justify-content: center; font-size: 0.8em; color: #000; font-weight: 900; }
-        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.96); z-index: 100; display: none; flex-direction: column; align-items: center; justify-content: center; backdrop-filter: blur(8px); }
-        .modal { width: 85%; max-height: 80vh; background: #050507; border: 2px solid var(--neon); border-radius: 20px; padding: 20px; overflow-y: auto; }
-        .modal-title { color: var(--neon); text-align: center; margin-bottom: 20px; letter-spacing: 2px; font-weight: 900; text-shadow: 0 0 10px var(--neon); }
-        .btn-list { width: 100%; padding: 16px; background: rgba(255,255,255,0.03); border: 1px solid #1a1a22; color: #fff; margin-bottom: 10px; border-radius: 10px; font-family: 'Orbitron'; font-size: 11px; display: flex; justify-content: space-between; border-left: 4px solid var(--neon); }
+        .icon-circle {
+            width: 220px; height: 220px; border-radius: 50%; border: 4px solid var(--rank-color);
+            display: flex; align-items: center; justify-content: center;
+            filter: drop-shadow(0 0 25px var(--rank-color)); transition: 0.8s ease-in-out;
+        }
+        .icon-svg { width: 130px; height: 130px; fill: var(--rank-color); transition: 0.8s; }
+
+        /* НИЖНЯЯ ЗОНА */
+        .lvl-zone { width: 100%; margin-top: auto; padding-bottom: 80px; }
+        .lvl-labels { display: flex; justify-content: space-between; margin-bottom: 12px; font-weight: 700; color: var(--neon); font-size: 0.9em; }
+        #display-name { color: #fff; text-shadow: 0 0 10px var(--neon); text-transform: uppercase; }
+
+        .progress-container { width: 100%; height: 35px; background: #050505; border: 2px solid var(--neon); border-radius: 10px; overflow: hidden; box-shadow: 0 0 15px rgba(0,212,255,0.1); }
+        #exp-bar { height: 100%; width: 0%; background: linear-gradient(90deg, #005a77, var(--neon), #fff); transition: 0.5s; display: flex; align-items: center; justify-content: center; font-size: 0.8em; color: #000; font-weight: 900; }
+
+        /* МОДАЛКИ */
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.97); z-index: 100; display: none; flex-direction: column; align-items: center; justify-content: center; backdrop-filter: blur(12px); }
+        .modal { width: 88%; max-height: 80vh; background: #050507; border: 2px solid var(--neon); border-radius: 20px; padding: 25px; overflow-y: auto; }
+        .modal-title { color: var(--neon); text-align: center; margin-bottom: 25px; font-weight: 900; text-shadow: 0 0 10px var(--neon); text-transform: uppercase; letter-spacing: 2px; }
+        
+        .btn-list { width: 100%; padding: 18px; background: rgba(255,255,255,0.03); border: 1px solid #1a1a22; color: #fff; margin-bottom: 12px; border-radius: 12px; font-family: 'Orbitron'; font-size: 12px; display: flex; justify-content: space-between; border-left: 5px solid var(--neon); transition: 0.2s; align-items: center; }
         .btn-list:active { background: var(--neon); color: #000; }
-        .input-box { width: 100%; background: #000; border: 2px solid var(--danger); color: var(--danger); padding: 15px; border-radius: 10px; font-family: 'Orbitron'; font-size: 1.5em; text-align: center; margin-bottom: 15px; box-sizing: border-box; outline: none; }
-        .back-btn { text-align: center; color: #444; margin-top: 10px; cursor: pointer; font-size: 0.7em; }
-        .flash { animation: flash-blue 0.5s; }
-        @keyframes flash-blue { 0% { background: var(--neon); } 100% { background: var(--bg); } }
+
+        .input-box { width: 100%; background: #000; border: 1px solid var(--neon); color: #fff; padding: 15px; border-radius: 10px; font-family: 'Orbitron'; margin-bottom: 20px; box-sizing: border-box; text-align: center; outline: none; font-size: 1.1em; }
+        .back-btn { text-align: center; color: #666; margin-top: 20px; cursor: pointer; font-size: 0.8em; letter-spacing: 2px; text-transform: uppercase; }
+
+        .rank-item { display: flex; justify-content: space-between; padding: 12px; border-bottom: 1px solid #111; font-size: 0.85em; }
+        .profile-info { margin-bottom: 20px; border: 1px solid #222; padding: 15px; border-radius: 10px; background: #080808; }
     </style>
 </head>
-<body>
+<body style="--rank-color: #cd7f32;">
 
 <div class="header">
     <div class="rank-container"><span id="rank-word">BRONZE</span><span class="rank-letter" id="rank-let">E</span></div>
-    <div class="menu-btn" onclick="openModal('catModal')"><div></div><div></div><div></div></div>
+    <div class="menu-btn" onclick="openModal('mainMenu')"><div></div><div></div><div></div></div>
 </div>
 
 <div class="title-display">
-    <svg class="icon-svg" viewBox="0 0 24 24"><path id="svg-path" d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM15.5 13.5L14 15.5H10L8.5 13.5V10.5L10 8.5H14L15.5 10.5V13.5Z"/></svg>
+    <div class="icon-circle" id="main-circle">
+        <svg class="icon-svg" viewBox="0 0 24 24"><path id="svg-path" d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM15.5 13.5L14 15.5H10L8.5 13.5V10.5L10 8.5H14L15.5 10.5V13.5Z"/></svg>
+    </div>
 </div>
 
 <div class="lvl-zone">
-    <div class="lvl-labels"><span>LVL <span id="current-lvl">1</span></span><span>SOLO LEVELING</span></div>
+    <div class="lvl-labels"><span>LVL <span id="current-lvl">1</span></span><span id="display-name">PLAYER</span></div>
     <div class="progress-container"><div id="exp-bar">0%</div></div>
 </div>
 
-<div id="catModal" class="overlay"><div class="modal"><div class="modal-title">QUEST LOG</div><div id="cat-list"></div><div class="back-btn" onclick="closeModal('catModal')">[ CLOSE ]</div></div></div>
+<div id="mainMenu" class="overlay"><div class="modal">
+    <div class="modal-title">SYSTEM MENU</div>
+    <button class="btn-list" onclick="openModal('profileModal')">USER PROFILE <span>[OPEN]</span></button>
+    <button class="btn-list" onclick="openModal('ranksListModal')">RANK HIERARCHY <span>[VIEW]</span></button>
+    <button class="btn-list" onclick="openModal('catModal')">TRAINING LOG <span>[START]</span></button>
+    <div class="back-btn" onclick="closeModal('mainMenu')">[ CLOSE ]</div>
+</div></div>
+
+<div id="profileModal" class="overlay"><div class="modal">
+    <div class="modal-title">PLAYER PROFILE</div>
+    <input type="text" id="p-name" class="input-box" placeholder="NAME">
+    <input type="number" id="p-age" class="input-box" placeholder="AGE">
+    <input type="number" id="p-height" class="input-box" placeholder="HEIGHT (CM)">
+    <input type="number" id="p-weight" class="input-box" placeholder="WEIGHT (KG)">
+    <button class="btn-list" style="background:var(--neon); color:#000; justify-content:center; font-weight:900;" onclick="saveProfile()">UPDATE DATA</button>
+    <div class="back-btn" onclick="openModal('mainMenu')">[ BACK ]</div>
+</div></div>
+
+<div id="ranksListModal" class="overlay"><div class="modal">
+    <div class="modal-title">RANKING SYSTEM</div>
+    <div id="ranks-container"></div>
+    <div class="back-btn" onclick="openModal('mainMenu')">[ BACK ]</div>
+</div></div>
+
+<div id="catModal" class="overlay"><div class="modal"><div class="modal-title">SELECT CATEGORY</div><div id="cat-list"></div><div class="back-btn" onclick="openModal('mainMenu')">[ BACK ]</div></div></div>
 <div id="subModal" class="overlay"><div class="modal"><h3 id="sub-title" class="modal-title"></h3><div id="sub-list"></div><div class="back-btn" onclick="openModal('catModal')">[ BACK ]</div></div></div>
 <div id="exModal" class="overlay"><div class="modal"><h3 id="ex-title" class="modal-title"></h3><div id="ex-list"></div><div id="ex-back-btn" class="back-btn">[ BACK ]</div></div></div>
-<div id="weightModal" class="overlay"><div class="modal"><h3 id="final-ex-name" class="modal-title"></h3><input type="number" id="weight-input" class="input-box" placeholder="WEIGHT"><button class="btn-list" style="background:var(--danger); color:#fff; justify-content:center; border:none;" onclick="addExp()">CONFIRM</button><div class="back-btn" onclick="closeModal('weightModal')">[ CANCEL ]</div></div></div>
+<div id="weightModal" class="overlay"><div class="modal"><h3 id="final-ex-name" class="modal-title"></h3><input type="number" id="weight-input" class="input-box" style="border-color:var(--danger); color:var(--danger)" placeholder="WEIGHT KG"><button class="btn-list" style="background:var(--danger); color:#fff; justify-content:center; border:none; font-weight:900;" onclick="addExp()">REGISTER DATA</button><div class="back-btn" onclick="closeModal('weightModal')">[ CANCEL ]</div></div></div>
 
 <script>
-    let db = JSON.parse(localStorage.getItem('SYSTEM_V19')) || { lvl: 1, exp: 0, records: {} };
+    let db = JSON.parse(localStorage.getItem('SYSTEM_V22')) || { lvl: 1, exp: 0, records: {}, profile: {name:'PLAYER', age:'', height:'', weight:''} };
+
+    const rankData = [
+        { lvl: 1, name: "BRONZE", let: "E", col: "#cd7f32" },
+        { lvl: 5, name: "SILVER", let: "D", col: "#c0c0c0" },
+        { lvl: 15, name: "GOLD", let: "B", col: "#ffd700" },
+        { lvl: 30, name: "PLATINUM", let: "A", col: "#00d4ff" },
+        { lvl: 50, name: "MASTER", let: "S", col: "#a335ee" },
+        { lvl: 80, name: "GRAND MASTER", let: "SS", col: "#ff8000" },
+        { lvl: 100, name: "MONARCH", let: "SSS", col: "#ff0044" }
+    ];
+
     const trainingData = {
         'ГРУДЬ': {
-            'ВЕРХ': ['Жим штанги (наклон)', 'Жим гантелей (наклон)', 'Разводка (наклон)', 'Кроссовер снизу'],
-            'НИЗ': ['Жим штанги (вниз)', 'Брусья с весом', 'Кроссовер сверху', 'Отжимания от пола'],
-            'ЦЕНТР': ['Жим штанги лежа', 'Жим гантелей лежа', 'Тренажер Хаммер', 'Пуловер']
+            'ВЕРХ': ['Жим штанги наклон.', 'Жим гантелей наклон.', 'Разводка наклон.', 'Кроссовер снизу', 'Жим в Смите наклон.'],
+            'НИЗ': ['Жим головой вниз', 'Брусья с весом', 'Кроссовер сверху', 'Отжимания от пола'],
+            'ЦЕНТР': ['Жим штанги гориз.', 'Жим гантелей гориз.', 'Жим в Хаммере', 'Пек-Дек (бабочка)', 'Пуловер']
         },
         'СПИНА': {
-            'ШИРИНА': ['Подтягивания (широкий)', 'Тяга верхнего блока', 'Тяга за голову', 'Тяга к груди'],
-            'ТОЛЩИНА': ['Тяга штанги в наклоне', 'Тяга гантели', 'Тяга Т-грифа', 'Рычажная тяга'],
-            'НИЗ': ['Становая тяга', 'Гиперэкстензия', 'Тяга нижнего блока']
+            'ШИРИНА': ['Подтягивания шир.', 'Тяга верхнего блока', 'Тяга блока к груди', 'Пулловер на блоке', 'Тяга за голову'],
+            'ТОЛЩИНА': ['Тяга штанги накл.', 'Тяга гантели', 'Тяга Т-грифа', 'Рычажная тяга', 'Тяга блока к животу'],
+            'НИЗ': ['Становая тяга', 'Гиперэкстензия', 'Наклоны (Good Morning)']
         },
         'НОГИ': {
-            'ПЕРЕД': ['Приседания', 'Жим ногами', 'Разгибания ног', 'Гакк-присед'],
-            'ЗАД': ['Мертвая тяга', 'Сгибания лежа', 'Сгибания сидя'],
-            'ИКРЫ/ЯГОДИЦЫ': ['Икры стоя', 'Икры сидя', 'Ягодичный мостик', 'Выпады']
+            'ПЕРЕД': ['Приседания', 'Жим ногами', 'Разгибания ног', 'Гакк-присед', 'Выпады'],
+            'ЗАД': ['Мертвая тяга', 'Сгибания лежа', 'Сгибания сидя', 'Сгибания стоя'],
+            'ИКРЫ/ЯГОДИЦЫ': ['Икры стоя', 'Икры сидя', 'Ягодичный мостик', 'Махи назад', 'Приведения']
         },
         'РУКИ': {
-            'БИЦЕПС': ['ПШН (классика)', 'Молотки', 'Скамья Скотта', 'Гантели сидя'],
-            'ТРИЦЕПС': ['Французский жим', 'Узкий жим', 'Блок вниз', 'Отжимания (узко)'],
-            'ПЛЕЧИ': ['Жим гантелей вверх', 'Махи в стороны', 'Махи перед собой', 'Махи в наклоне']
+            'БИЦЕПС': ['ПШН стоя', 'Молотки', 'Скамья Скотта', 'Бицепс на блоке', 'Концентрир. подъем'],
+            'ТРИЦЕПС': ['Французский жим', 'Узкий жим', 'Блок вниз', 'Разгибания из-за головы', 'Брусья на трицепс'],
+            'ПЛЕЧИ': ['Жим гантелей вверх', 'Махи в стороны', 'Махи в наклоне (задняя)', 'Махи вперед', 'Жим Арнольда', 'Шраги'],
+            'ПРЕДПЛЕЧЬЯ': ['Сгибания кистей', 'Обратный хват ПШН', 'Удержание веса']
         },
         'ПРЕСС/ШЕЯ': {
-            'ПРЕСС': ['Скручивания', 'Подъем ног', 'Планка (сек)', 'Ролик'],
-            'ШЕЯ': ['Подъемы головы', 'Борцовский мост']
+            'ПРЕСС': ['Скручивания', 'Подъем ног в висе', 'Боковые наклоны', 'Колесо', 'Книжка'],
+            'ШЕЯ': ['Подъемы головы с диском', 'Борцовский мост', 'Боковые сопротивления']
         }
     };
+
     const icons = {
         fist: "M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM15.5 13.5L14 15.5H10L8.5 13.5V10.5L10 8.5H14L15.5 10.5V13.5Z",
         skull: "M12 2C7.03 2 3 6.03 3 11C3 15.11 5.75 18.57 9.5 19.64V21H10.5V19.97C11 20 11.5 20 12 20C12.5 20 13 20 13.5 19.97V21H14.5V19.64C18.25 18.57 21 15.11 21 11C21 6.03 16.97 2 12 2ZM9 13H7V11H9V13ZM17 13H15V11H17V13Z"
     };
 
-    function openModal(id) { document.querySelectorAll('.overlay').forEach(o => o.style.display='none'); document.getElementById(id).style.display='flex'; }
+    function openModal(id) { 
+        document.querySelectorAll('.overlay').forEach(o => o.style.display='none'); 
+        document.getElementById(id).style.display='flex';
+        if(id === 'ranksListModal') renderRanks();
+    }
     function closeModal(id) { document.getElementById(id).style.display='none'; }
+
+    function renderRanks() {
+        const cont = document.getElementById('ranks-container');
+        cont.innerHTML = '';
+        rankData.forEach(r => {
+            cont.innerHTML += `<div class="rank-item" style="color:${r.col}">
+                <span>${r.name} [${r.let}]</span>
+                <span>LVL ${r.lvl}</span>
+            </div>`;
+        });
+    }
+
+    function saveProfile() {
+        db.profile.name = document.getElementById('p-name').value || 'PLAYER';
+        db.profile.age = document.getElementById('p-age').value;
+        db.profile.height = document.getElementById('p-height').value;
+        db.profile.weight = document.getElementById('p-weight').value;
+        save(); update(); openModal('mainMenu');
+    }
+
     function initCats() {
         const list = document.getElementById('cat-list'); list.innerHTML = '';
         Object.keys(trainingData).forEach(cat => {
@@ -102,6 +190,7 @@
             b.onclick = () => showSubs(cat); list.appendChild(b);
         });
     }
+
     function showSubs(cat) {
         document.getElementById('sub-title').innerText = cat;
         const list = document.getElementById('sub-list'); list.innerHTML = '';
@@ -110,6 +199,7 @@
             b.onclick = () => showEx(cat, sub); list.appendChild(b);
         }); openModal('subModal');
     }
+
     function showEx(cat, sub) {
         document.getElementById('ex-title').innerText = sub;
         const list = document.getElementById('ex-list'); list.innerHTML = '';
@@ -119,31 +209,39 @@
             list.appendChild(b);
         }); document.getElementById('ex-back-btn').onclick = () => showSubs(cat); openModal('exModal');
     }
+
     function addExp() {
         const val = parseFloat(document.getElementById('weight-input').value);
-        if(val) { 
-            db.records[window.currentEx] = Math.max(val, db.records[window.currentEx] || 0); db.exp += 25; 
-            if(db.exp >= 100) { 
-                db.lvl++; db.exp = 0; 
-                document.body.classList.add('flash'); setTimeout(() => document.body.classList.remove('flash'), 500);
-            } 
-            save(); update(); closeModal('weightModal'); 
-        }
+        if(val) { db.records[window.currentEx] = Math.max(val, db.records[window.currentEx] || 0); db.exp += 25; if(db.exp >= 100) { db.lvl++; db.exp = 0; } save(); update(); closeModal('weightModal'); }
         document.getElementById('weight-input').value = '';
     }
-    function save() { localStorage.setItem('SYSTEM_V19', JSON.stringify(db)); }
+
+    function save() { localStorage.setItem('SYSTEM_V22', JSON.stringify(db)); }
+
     function update() {
         document.getElementById('current-lvl').innerText = db.lvl;
+        document.getElementById('display-name').innerText = db.profile.name;
         document.getElementById('exp-bar').style.width = db.exp + '%';
         document.getElementById('exp-bar').innerText = db.exp + '%';
-        let rank = "BRONZE", letter = "E", col = "#cd7f32", icon = icons.fist;
-        if(db.lvl >= 5) { rank = "SILVER"; letter = "C"; col = "#c0c0c0"; icon = icons.skull; }
-        if(db.lvl >= 20) { rank = "GOLD"; letter = "B"; col = "#ffd700"; }
-        document.getElementById('rank-word').innerText = rank;
-        document.getElementById('rank-word').style.color = col;
-        document.getElementById('rank-let').innerText = letter;
+        
+        document.getElementById('p-name').value = db.profile.name;
+        document.getElementById('p-age').value = db.profile.age;
+        document.getElementById('p-height').value = db.profile.height;
+        document.getElementById('p-weight').value = db.profile.weight;
+
+        let cur = rankData[0];
+        for(let r of rankData) { if(db.lvl >= r.lvl) cur = r; }
+
+        document.getElementById('rank-word').innerText = cur.name;
+        document.getElementById('rank-word').style.color = cur.col;
+        document.getElementById('rank-word').style.textShadow = `0 0 15px ${cur.col}`;
+        document.getElementById('rank-let').innerText = cur.let;
+        document.body.style.setProperty('--rank-color', cur.col);
+        
+        let icon = db.lvl >= 15 ? icons.skull : icons.fist;
         document.getElementById('svg-path').setAttribute('d', icon);
     }
+
     initCats(); update();
 </script>
 </body>
