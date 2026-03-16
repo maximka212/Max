@@ -3,258 +3,264 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SYSTEM: ASCENSION v23</title>
+    <title>SYSTEM: ASCENSION v26</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        :root { --bg: #000; --neon: #00d4ff; --danger: #ff0044; --panel: #0a0a0c; }
+        :root { --bg: #000; --neon: #00d4ff; --danger: #ff0044; --rank-color: #cd7f32; }
         body { 
             background: var(--bg); background-image: radial-gradient(circle at 50% 50%, #0a111a 0%, #000 90%);
-            color: #eee; font-family: 'Orbitron', sans-serif; margin: 0; padding: 0 20px; 
+            color: #eee; font-family: 'Orbitron', sans-serif; margin: 0; padding: 0; 
             overflow: hidden; height: 100vh; display: flex; flex-direction: column;
         }
         
         /* HEADER */
-        .header { display: flex; justify-content: space-between; align-items: center; margin-top: 45px; margin-bottom: 20px; }
-        .rank-container { font-size: 1.4em; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; }
-        .rank-letter { color: var(--danger); text-shadow: 0 0 15px var(--danger); margin-left: 5px; }
-        
-        .menu-btn { 
-            width: 50px; height: 50px; background: rgba(0,212,255,0.05); border: 2px solid var(--neon); 
-            border-radius: 12px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 5px; 
-        }
-        .menu-btn div { width: 24px; height: 2px; background: var(--neon); box-shadow: 0 0 5px var(--neon); }
+        .header { display: flex; flex-direction: column; align-items: center; margin-top: 40px; }
+        .rank-display { font-size: 1.5em; font-weight: 900; letter-spacing: 3px; margin-bottom: 5px; }
+        .sys-time { font-size: 0.7em; color: var(--neon); opacity: 0.7; letter-spacing: 2px; }
 
-        /* ЦЕНТР */
-        .title-display { flex-grow: 1; display: flex; align-items: center; justify-content: center; }
+        /* ОСНОВНОЙ КОНТЕНТ */
+        .main-content { flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; overflow-y: auto; width: 100%; box-sizing: border-box; }
+        
+        /* СЕКЦИИ (СКРЫТЫЕ ПО УМОЛЧАНИЮ) */
+        .page { display: none; width: 100%; flex-direction: column; align-items: center; animation: fadeIn 0.3s ease; }
+        .page.active { display: flex; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* ИКОНКА ГЛАВНОГО ЭКРАНА */
         .icon-circle {
-            width: 210px; height: 210px; border-radius: 50%; border: 4px solid var(--rank-color);
+            width: 220px; height: 220px; border-radius: 50%; border: 4px solid var(--rank-color);
             display: flex; align-items: center; justify-content: center;
-            filter: drop-shadow(0 0 25px var(--rank-color)); transition: 0.8s;
+            filter: drop-shadow(0 0 20px var(--rank-color)); margin-bottom: 30px;
         }
-        .icon-svg { width: 120px; height: 120px; fill: var(--rank-color); transition: 0.8s; }
+        .icon-svg { width: 120px; height: 120px; fill: var(--rank-color); }
 
-        /* НИЖНЯЯ ЗОНА */
-        .lvl-zone { width: 100%; margin-top: auto; padding-bottom: 70px; }
-        .lvl-labels { display: flex; justify-content: space-between; margin-bottom: 12px; font-weight: 700; color: var(--neon); font-size: 0.9em; }
-        #display-name { color: #fff; text-shadow: 0 0 10px var(--neon); text-transform: uppercase; }
+        /* LVL ZONE */
+        .lvl-container { width: 100%; max-width: 320px; margin-top: 20px; }
+        .lvl-labels { display: flex; justify-content: space-between; font-size: 0.8em; margin-bottom: 10px; color: var(--neon); }
+        .progress-bar { width: 100%; height: 25px; background: #080808; border: 1px solid var(--neon); border-radius: 5px; overflow: hidden; position: relative; }
+        #exp-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #005a77, var(--neon)); transition: 0.6s; }
 
-        .progress-container { width: 100%; height: 35px; background: #050505; border: 2px solid var(--neon); border-radius: 10px; overflow: hidden; }
-        #exp-bar { height: 100%; width: 0%; background: linear-gradient(90deg, #005a77, var(--neon), #fff); transition: 0.5s; display: flex; align-items: center; justify-content: center; font-size: 0.8em; color: #000; font-weight: 900; }
+        /* НИЖНЯЯ ПАНЕЛЬ НАВИГАЦИИ */
+        .nav-bar {
+            height: 75px; background: #050507; border-top: 2px solid #1a1a22;
+            display: grid; grid-template-columns: repeat(5, 1fr); align-items: center;
+            padding-bottom: 15px; box-shadow: 0 -10px 30px rgba(0,0,0,0.5);
+        }
+        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 5px; color: #444; font-size: 0.55em; cursor: pointer; transition: 0.3s; }
+        .nav-item.active { color: var(--neon); text-shadow: 0 0 10px var(--neon); }
+        .nav-icon { width: 22px; height: 22px; fill: currentColor; }
 
-        /* МОДАЛКИ */
-        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.97); z-index: 100; display: none; flex-direction: column; align-items: center; justify-content: center; backdrop-filter: blur(12px); }
-        .modal { width: 88%; max-height: 85vh; background: #050507; border: 2px solid var(--neon); border-radius: 20px; padding: 25px; overflow-y: auto; }
-        .modal-title { color: var(--neon); text-align: center; margin-bottom: 20px; font-weight: 900; text-shadow: 0 0 10px var(--neon); text-transform: uppercase; }
+        /* МОДАЛКИ (ДЛЯ ВВОДА ДАННЫХ) */
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 100; display: none; flex-direction: column; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
+        .modal { width: 85%; background: #08080a; border: 2px solid var(--neon); border-radius: 15px; padding: 20px; }
         
-        .btn-list { width: 100%; padding: 18px; background: rgba(255,255,255,0.03); border: 1px solid #1a1a22; color: #fff; margin-bottom: 12px; border-radius: 12px; font-family: 'Orbitron'; font-size: 11px; display: flex; justify-content: space-between; border-left: 4px solid var(--neon); transition: 0.2s; align-items: center; }
-        .btn-list:active { background: var(--neon); color: #000; }
-
-        .input-box { width: 100%; background: #000; border: 1px solid var(--neon); color: #fff; padding: 12px; border-radius: 8px; font-family: 'Orbitron'; margin-bottom: 15px; box-sizing: border-box; text-align: center; outline: none; }
+        /* СПИСКИ И КНОПКИ */
+        .list-item { width: 100%; padding: 16px; background: rgba(255,255,255,0.03); border: 1px solid #1a1a22; color: #fff; margin-bottom: 10px; border-radius: 10px; font-family: 'Orbitron'; font-size: 0.7em; display: flex; justify-content: space-between; align-items: center; box-sizing: border-box; }
+        .list-item.done { border-left: 4px solid #00ff88; color: #00ff88; }
+        .input-box { width: 100%; background: #000; border: 1px solid var(--neon); color: #fff; padding: 12px; border-radius: 8px; font-family: 'Orbitron'; margin-bottom: 10px; box-sizing: border-box; text-align: center; }
         
-        /* СЕТКА ДЛЯ ПОДХОДОВ */
-        .input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
-        .input-grid input { margin-bottom: 0; }
-        
-        .back-btn { text-align: center; color: #555; margin-top: 15px; cursor: pointer; font-size: 0.8em; letter-spacing: 2px; }
-        .rank-item { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #111; font-size: 0.85em; }
+        .pr-card { width: 100%; padding: 12px; border-bottom: 1px solid #111; display: flex; justify-content: space-between; font-size: 0.8em; }
+        .rank-row { width: 100%; padding: 10px; display: flex; justify-content: space-between; font-size: 0.8em; border-left: 3px solid transparent; }
     </style>
 </head>
-<body style="--rank-color: #cd7f32;">
+<body>
 
-<div class="header">
-    <div class="rank-container"><span id="rank-word">BRONZE</span><span class="rank-letter" id="rank-let">E</span></div>
-    <div class="menu-btn" onclick="openModal('mainMenu')"><div></div><div></div><div></div></div>
-</div>
-
-<div class="title-display">
-    <div class="icon-circle" id="main-circle">
-        <svg class="icon-svg" viewBox="0 0 24 24"><path id="svg-path" d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM15.5 13.5L14 15.5H10L8.5 13.5V10.5L10 8.5H14L15.5 10.5V13.5Z"/></svg>
+    <div class="header">
+        <div class="rank-display"><span id="rank-name" style="color:var(--rank-color)">BRONZE</span> <span style="color:var(--danger)">E</span></div>
+        <div class="sys-time" id="clock">00:00:00</div>
     </div>
-</div>
 
-<div class="lvl-zone">
-    <div class="lvl-labels"><span>LVL <span id="current-lvl">1</span></span><span id="display-name">PLAYER</span></div>
-    <div class="progress-container"><div id="exp-bar">0%</div></div>
-</div>
+    <div class="main-content">
+        
+        <div id="page-home" class="page active">
+            <div class="icon-circle">
+                <svg class="icon-svg" viewBox="0 0 24 24"><path id="svg-path" d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM15.5 13.5L14 15.5H10L8.5 13.5V10.5L10 8.5H14L15.5 10.5V13.5Z"/></svg>
+            </div>
+            <div class="lvl-container">
+                <div class="lvl-labels"><span id="p-display-name">PLAYER</span> <span>LVL <span id="lvl-num">1</span></span></div>
+                <div class="progress-bar"><div id="exp-fill"></div></div>
+                <div style="text-align: center; font-size: 0.6em; margin-top: 10px; color: #555;">DAILY PROGRESS: <span id="daily-count">0</span> COMPLETED</div>
+            </div>
+        </div>
 
-<div id="mainMenu" class="overlay"><div class="modal">
-    <div class="modal-title">SYSTEM MENU</div>
-    <button class="btn-list" onclick="openModal('profileModal')">USER PROFILE <span>[OPEN]</span></button>
-    <button class="btn-list" onclick="openModal('ranksListModal')">RANK HIERARCHY <span>[VIEW]</span></button>
-    <button class="btn-list" onclick="openModal('catModal')">TRAINING LOG <span>[START]</span></button>
-    <div class="back-btn" onclick="closeModal('mainMenu')">[ CLOSE ]</div>
-</div></div>
+        <div id="page-quests" class="page">
+            <h2 style="color:var(--neon); font-size: 1em;">DAILY QUESTS</h2>
+            <div id="quest-area" style="width:100%"></div>
+        </div>
 
-<div id="profileModal" class="overlay"><div class="modal">
-    <div class="modal-title">PLAYER PROFILE</div>
-    <input type="text" id="p-name" class="input-box" placeholder="NAME">
-    <input type="number" id="p-age" class="input-box" placeholder="AGE">
-    <input type="number" id="p-height" class="input-box" placeholder="HEIGHT (CM)">
-    <input type="number" id="p-weight" class="input-box" placeholder="WEIGHT (KG)">
-    <button class="btn-list" style="background:var(--neon); color:#000; justify-content:center; font-weight:900;" onclick="saveProfile()">UPDATE DATA</button>
-    <div class="back-btn" onclick="openModal('mainMenu')">[ BACK ]</div>
-</div></div>
+        <div id="page-records" class="page">
+            <h2 style="color:var(--neon); font-size: 1em;">HALL OF FAME</h2>
+            <div id="pr-area" style="width:100%"></div>
+        </div>
 
-<div id="ranksListModal" class="overlay"><div class="modal">
-    <div class="modal-title">RANKING SYSTEM</div>
-    <div id="ranks-container"></div>
-    <div class="back-btn" onclick="openModal('mainMenu')">[ BACK ]</div>
-</div></div>
+        <div id="page-ranks" class="page">
+            <h2 style="color:var(--neon); font-size: 1em;">RANK HIERARCHY</h2>
+            <div id="rank-area" style="width:100%"></div>
+        </div>
 
-<div id="catModal" class="overlay"><div class="modal"><div class="modal-title">CATEGORY</div><div id="cat-list"></div><div class="back-btn" onclick="openModal('mainMenu')">[ BACK ]</div></div></div>
-<div id="subModal" class="overlay"><div class="modal"><h3 id="sub-title" class="modal-title"></h3><div id="sub-list"></div><div class="back-btn" onclick="openModal('catModal')">[ BACK ]</div></div></div>
-<div id="exModal" class="overlay"><div class="modal"><h3 id="ex-title" class="modal-title"></h3><div id="ex-list"></div><div id="ex-back-btn" class="back-btn">[ BACK ]</div></div></div>
+        <div id="page-profile" class="page">
+            <h2 style="color:var(--neon); font-size: 1em;">CHARACTER SETTINGS</h2>
+            <input type="text" id="in-name" class="input-box" placeholder="NAME">
+            <input type="number" id="in-age" class="input-box" placeholder="AGE">
+            <input type="number" id="in-h" class="input-box" placeholder="HEIGHT">
+            <input type="number" id="in-w" class="input-box" placeholder="WEIGHT">
+            <button class="list-item" style="justify-content:center; background:var(--neon); color:#000; font-weight:900;" onclick="saveProfile()">UPDATE STATUS</button>
+        </div>
 
-<div id="weightModal" class="overlay"><div class="modal">
-    <h3 id="final-ex-name" class="modal-title"></h3>
-    <input type="number" id="w-val" class="input-box" style="border-color:var(--danger); color:var(--danger)" placeholder="WEIGHT (KG)">
-    <div class="input-grid">
-        <input type="number" id="s-val" class="input-box" placeholder="SETS">
-        <input type="number" id="r-val" class="input-box" placeholder="REPS">
     </div>
-    <button class="btn-list" style="background:var(--danger); color:#fff; justify-content:center; border:none; font-weight:900;" onclick="addExp()">REGISTER RESULT</button>
-    <div class="back-btn" onclick="closeModal('weightModal')">[ CANCEL ]</div>
-</div></div>
+
+    <div id="inputOverlay" class="overlay">
+        <div class="modal">
+            <h3 id="modal-ex-title" style="color:var(--neon); text-align:center; margin-bottom:15px; font-size:0.9em;"></h3>
+            <input type="number" id="input-w" class="input-box" placeholder="WEIGHT KG">
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                <input type="number" id="input-s" class="input-box" placeholder="SETS">
+                <input type="number" id="input-r" class="input-box" placeholder="REPS">
+            </div>
+            <button class="list-item" style="justify-content:center; background:var(--danger); border:none;" onclick="confirmQuest()">REGISTER</button>
+            <div style="text-align:center; color:#555; font-size:0.7em; margin-top:10px;" onclick="closeInput()">CANCEL</div>
+        </div>
+    </div>
+
+    <div class="nav-bar">
+        <div class="nav-item active" onclick="showPage('home', this)">
+            <svg class="nav-icon" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+            HOME
+        </div>
+        <div class="nav-item" onclick="showPage('quests', this)">
+            <svg class="nav-icon" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14l-5-5 1.41-1.41L12 14.17l7.59-7.59L21 8l-9 9z"/></svg>
+            QUESTS
+        </div>
+        <div class="nav-item" onclick="showPage('records', this)">
+            <svg class="nav-icon" viewBox="0 0 24 24"><path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94.63 1.5 1.98 2.63 3.61 2.96V19H7v2h10v-2h-4v-3.1c1.63-.33 2.98-1.46 3.61-2.96C19.08 11.63 21 9.55 21 8V7c0-1.1-.9-2-2-2z"/></svg>
+            PR
+        </div>
+        <div class="nav-item" onclick="showPage('ranks', this)">
+            <svg class="nav-icon" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14l-5-4.87 6.91-1.01L12 2z"/></svg>
+            RANK
+        </div>
+        <div class="nav-item" onclick="showPage('profile', this)">
+            <svg class="nav-icon" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+            USER
+        </div>
+    </div>
 
 <script>
-    let db = JSON.parse(localStorage.getItem('SYSTEM_V23')) || { lvl: 1, exp: 0, records: {}, profile: {name:'PLAYER'} };
+    let db = JSON.parse(localStorage.getItem('SYSTEM_V26')) || {
+        lvl: 1, exp: 0, pr: {}, daily: {}, dailyDoneCount: 0,
+        lastDate: new Date().toDateString(),
+        profile: {name:'PLAYER', age:'', h:'', w:''}
+    };
 
     const rankData = [
         { lvl: 1, name: "BRONZE", let: "E", col: "#cd7f32" },
-        { lvl: 5, name: "SILVER", let: "D", col: "#c0c0c0" },
-        { lvl: 15, name: "GOLD", let: "B", col: "#ffd700" },
-        { lvl: 30, name: "PLATINUM", let: "A", col: "#00d4ff" },
-        { lvl: 50, name: "MASTER", let: "S", col: "#a335ee" },
-        { lvl: 80, name: "GRAND MASTER", let: "SS", col: "#ff8000" },
-        { lvl: 100, name: "MONARCH", let: "SSS", col: "#ff0044" }
+        { lvl: 10, name: "SILVER", let: "D", col: "#c0c0c0" },
+        { lvl: 25, name: "GOLD", let: "B", col: "#ffd700" },
+        { lvl: 50, name: "PLATINUM", let: "A", col: "#00d4ff" },
+        { lvl: 75, name: "MASTER", let: "S", col: "#a335ee" },
+        { lvl: 100, name: "GRAND MASTER", let: "SS", col: "#ff4400" }
     ];
 
-    const trainingData = {
-        'ГРУДЬ': {
-            'ВЕРХ': ['Жим штанги накл.', 'Жим гантелей накл.', 'Разводка накл.', 'Кроссовер снизу'],
-            'НИЗ': ['Жим головой вниз', 'Брусья с весом', 'Кроссовер сверху'],
-            'ЦЕНТР': ['Жим лежа', 'Жим гантелей гориз.', 'Хаммер', 'Бабочка', 'Пуловер']
-        },
-        'СПИНА': {
-            'ШИРИНА': ['Подтягивания', 'Верхний блок', 'Тяга к груди', 'Пулловер на блоке'],
-            'ТОЛЩИНА': ['Тяга штанги накл.', 'Тяга гантели', 'Тяга Т-грифа', 'Рычажная тяга'],
-            'НИЗ': ['Становая тяга', 'Гиперэкстензия']
-        },
-        'НОГИ': {
-            'ПЕРЕД': ['Приседания', 'Жим ногами', 'Разгибания ног', 'Гакк-присед', 'Выпады'],
-            'ЗАД': ['Мертвая тяга', 'Сгибания ног'],
-            'ИКРЫ/ЯГОДИЦЫ': ['Икры стоя', 'Икры сидя', 'Ягодичный мостик']
-        },
-        'РУКИ': {
-            'БИЦЕПС': ['ПШН стоя', 'Молотки', 'Скамья Скотта', 'Концентрир. подъем'],
-            'ТРИЦЕПС': ['Французский жим', 'Узкий жим', 'Блок вниз', 'Брусья на трицепс'],
-            'ПЛЕЧИ': ['Жим гантелей вверх', 'Махи в стороны', 'Махи в наклоне', 'Махи вперед'],
-            'ПРЕДПЛЕЧЬЯ': ['Сгибания кистей', 'Обратный хват']
-        },
-        'ПРЕСС/ШЕЯ': {
-            'ПРЕСС': ['Скручивания', 'Подъем ног', 'Колесо', 'Книжка'],
-            'ШЕЯ': ['Подъемы головы', 'Мост']
-        }
-    };
+    const exercises = ["Жим лежа", "Приседания", "Становая тяга", "Подтягивания", "Жим накл.", "Брусья", "Бицепс", "Махи"];
 
-    const icons = {
-        fist: "M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM15.5 13.5L14 15.5H10L8.5 13.5V10.5L10 8.5H14L15.5 10.5V13.5Z",
-        skull: "M12 2C7.03 2 3 6.03 3 11C3 15.11 5.75 18.57 9.5 19.64V21H10.5V19.97C11 20 11.5 20 12 20C12.5 20 13 20 13.5 19.97V21H14.5V19.64C18.25 18.57 21 15.11 21 11C21 6.03 16.97 2 12 2ZM9 13H7V11H9V13ZM17 13H15V11H17V13Z"
-    };
-
-    function openModal(id) { 
-        document.querySelectorAll('.overlay').forEach(o => o.style.display='none'); 
-        document.getElementById(id).style.display='flex';
-        if(id === 'ranksListModal') renderRanks();
+    function showPage(pageId, el) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById('page-' + pageId).classList.add('active');
+        document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+        el.classList.add('active');
+        if(pageId === 'quests') renderQuests();
+        if(pageId === 'records') renderPR();
+        if(pageId === 'ranks') renderRanks();
     }
-    function closeModal(id) { document.getElementById(id).style.display='none'; }
+
+    function renderQuests() {
+        const area = document.getElementById('quest-area'); area.innerHTML = '';
+        exercises.forEach(ex => {
+            let done = db.daily[ex];
+            area.innerHTML += `<div class="list-item ${done?'done':''}" onclick="openInput('${ex}')">
+                <span>${ex}</span> <span>${done?'[COMPLETED]':'[OPEN]'}</span>
+            </div>`;
+        });
+    }
+
+    function renderPR() {
+        const area = document.getElementById('pr-area'); area.innerHTML = '';
+        if(Object.keys(db.pr).length === 0) area.innerHTML = '<div style="color:#333; text-align:center">NO RECORDS</div>';
+        for(let ex in db.pr) {
+            let r = db.pr[ex];
+            area.innerHTML += `<div class="pr-card"><span>${ex}</span> <b>${r.w}KG | ${r.s}x${r.r}</b></div>`;
+        }
+    }
 
     function renderRanks() {
-        const cont = document.getElementById('ranks-container');
-        cont.innerHTML = '';
+        const area = document.getElementById('rank-area'); area.innerHTML = '';
         rankData.forEach(r => {
-            cont.innerHTML += `<div class="rank-item" style="color:${r.col}"><span>${r.name} [${r.let}]</span><span>LVL ${r.lvl}</span></div>`;
+            let isReached = db.lvl >= r.lvl;
+            area.innerHTML += `<div class="rank-row" style="color:${isReached?r.col:'#222'}; border-left-color:${isReached?r.col:'transparent'}">
+                <span>${r.name} [${r.let}]</span> <span>LVL ${r.lvl}</span>
+            </div>`;
         });
+    }
+
+    function openInput(ex) {
+        window.currentEx = ex;
+        document.getElementById('modal-ex-title').innerText = ex;
+        document.getElementById('inputOverlay').style.display = 'flex';
+    }
+
+    function closeInput() { document.getElementById('inputOverlay').style.display = 'none'; }
+
+    function confirmQuest() {
+        const w = parseFloat(document.getElementById('input-w').value) || 0;
+        const s = parseInt(document.getElementById('input-s').value) || 0;
+        const r = parseInt(document.getElementById('input-r').value) || 0;
+
+        if(w > 0) {
+            if(!db.pr[window.currentEx] || w > db.pr[window.currentEx].w) db.pr[window.currentEx] = {w,s,r};
+            if(!db.daily[window.currentEx]) {
+                db.daily[window.currentEx] = true;
+                db.dailyDoneCount++;
+                db.exp += 20;
+                if(db.dailyDoneCount === 3) db.exp += 50;
+                if(db.dailyDoneCount === 5) db.exp += 100;
+            }
+            while(db.exp >= 100) { db.lvl++; db.exp -= 100; }
+            save(); update(); closeInput(); renderQuests();
+        }
     }
 
     function saveProfile() {
-        db.profile.name = document.getElementById('p-name').value || 'PLAYER';
-        db.profile.age = document.getElementById('p-age').value;
-        db.profile.height = document.getElementById('p-height').value;
-        db.profile.weight = document.getElementById('p-weight').value;
-        save(); update(); openModal('mainMenu');
+        db.profile.name = document.getElementById('in-name').value || 'PLAYER';
+        db.profile.age = document.getElementById('in-age').value;
+        db.profile.h = document.getElementById('in-h').value;
+        db.profile.w = document.getElementById('in-w').value;
+        save(); update(); alert("PROFILE UPDATED");
     }
 
-    function initCats() {
-        const list = document.getElementById('cat-list'); list.innerHTML = '';
-        Object.keys(trainingData).forEach(cat => {
-            let b = document.createElement('button'); b.className = 'btn-list'; b.innerHTML = cat + ' <span>>></span>';
-            b.onclick = () => showSubs(cat); list.appendChild(b);
-        });
-    }
-
-    function showSubs(cat) {
-        document.getElementById('sub-title').innerText = cat;
-        const list = document.getElementById('sub-list'); list.innerHTML = '';
-        Object.keys(trainingData[cat]).forEach(sub => {
-            let b = document.createElement('button'); b.className = 'btn-list'; b.innerHTML = sub + ' <span>>></span>';
-            b.onclick = () => showEx(cat, sub); list.appendChild(b);
-        }); openModal('subModal');
-    }
-
-    function showEx(cat, sub) {
-        document.getElementById('ex-title').innerText = sub;
-        const list = document.getElementById('ex-list'); list.innerHTML = '';
-        trainingData[cat][sub].forEach(ex => {
-            let rec = db.records[ex] || {w:0, s:0, r:0};
-            let displayText = rec.w > 0 ? `${rec.w}KG | ${rec.s}x${rec.r}` : "0 KG";
-            let b = document.createElement('button'); b.className = 'btn-list'; b.innerHTML = `<span>${ex}</span> <span style="color:var(--neon)">${displayText}</span>`;
-            b.onclick = () => { window.currentEx = ex; document.getElementById('final-ex-name').innerText = ex; openModal('weightModal'); };
-            list.appendChild(b);
-        }); document.getElementById('ex-back-btn').onclick = () => showSubs(cat); openModal('exModal');
-    }
-
-    function addExp() {
-        const w = parseFloat(document.getElementById('w-val').value) || 0;
-        const s = parseInt(document.getElementById('s-val').value) || 0;
-        const r = parseInt(document.getElementById('r-val').value) || 0;
-        
-        if(w > 0) { 
-            db.records[window.currentEx] = {w, s, r}; 
-            db.exp += 25; 
-            if(db.exp >= 100) { db.lvl++; db.exp = 0; } 
-            save(); update(); closeModal('weightModal'); 
-        }
-        document.getElementById('w-val').value = ''; document.getElementById('s-val').value = ''; document.getElementById('r-val').value = '';
-    }
-
-    function save() { localStorage.setItem('SYSTEM_V23', JSON.stringify(db)); }
+    function save() { localStorage.setItem('SYSTEM_V26', JSON.stringify(db)); }
 
     function update() {
-        document.getElementById('current-lvl').innerText = db.lvl;
-        document.getElementById('display-name').innerText = db.profile.name;
-        document.getElementById('exp-bar').style.width = db.exp + '%';
-        document.getElementById('exp-bar').innerText = db.exp + '%';
-        
-        document.getElementById('p-name').value = db.profile.name || '';
-        document.getElementById('p-age').value = db.profile.age || '';
-        document.getElementById('p-height').value = db.profile.height || '';
-        document.getElementById('p-weight').value = db.profile.weight || '';
+        const now = new Date();
+        document.getElementById('clock').innerText = now.toLocaleTimeString();
+        if(db.lastDate !== now.toDateString()) {
+            db.daily = {}; db.dailyDoneCount = 0; db.lastDate = now.toDateString(); save();
+        }
+
+        document.getElementById('lvl-num').innerText = db.lvl;
+        document.getElementById('p-display-name').innerText = db.profile.name;
+        document.getElementById('daily-count').innerText = db.dailyDoneCount;
+        document.getElementById('exp-fill').style.width = db.exp + '%';
 
         let cur = rankData[0];
-        for(let r of rankData) { if(db.lvl >= r.lvl) cur = r; }
-
-        document.getElementById('rank-word').innerText = cur.name;
-        document.getElementById('rank-word').style.color = cur.col;
-        document.getElementById('rank-word').style.textShadow = `0 0 15px ${cur.col}`;
-        document.getElementById('rank-let').innerText = cur.let;
+        for(let r of rankData) if(db.lvl >= r.lvl) cur = r;
+        document.getElementById('rank-name').innerText = cur.name;
         document.body.style.setProperty('--rank-color', cur.col);
-        
-        let icon = db.lvl >= 15 ? icons.skull : icons.fist;
-        document.getElementById('svg-path').setAttribute('d', icon);
+        document.getElementById('svg-path').setAttribute('d', db.lvl >= 15 ? "M12 2C7.03 2 3 6.03 3 11C3 15.11 5.75 18.57 9.5 19.64V21H10.5V19.97C11 20 11.5 20 12 20C12.5 20 13 20 13.5 19.97V21H14.5V19.64C18.25 18.57 21 15.11 21 11C21 6.03 16.97 2 12 2ZM9 13H7V11H9V13ZM17 13H15V11H17V13Z" : "M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM15.5 13.5L14 15.5H10L8.5 13.5V10.5L10 8.5H14L15.5 10.5V13.5Z");
     }
 
-    initCats(); update();
+    setInterval(update, 1000);
+    update();
 </script>
 </body>
 </html>
