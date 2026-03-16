@@ -3,19 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SYSTEM: MONARCH ASCENSION v22</title>
+    <title>SYSTEM: ASCENSION v23</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        :root { 
-            --bg: #000; 
-            --neon: #00d4ff; 
-            --danger: #ff0044; 
-            --panel: #0a0a0c; 
-        }
-        
+        :root { --bg: #000; --neon: #00d4ff; --danger: #ff0044; --panel: #0a0a0c; }
         body { 
-            background: var(--bg); 
-            background-image: radial-gradient(circle at 50% 50%, #0a111a 0%, #000 90%);
+            background: var(--bg); background-image: radial-gradient(circle at 50% 50%, #0a111a 0%, #000 90%);
             color: #eee; font-family: 'Orbitron', sans-serif; margin: 0; padding: 0 20px; 
             overflow: hidden; height: 100vh; display: flex; flex-direction: column;
         }
@@ -28,40 +21,42 @@
         .menu-btn { 
             width: 50px; height: 50px; background: rgba(0,212,255,0.05); border: 2px solid var(--neon); 
             border-radius: 12px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 5px; 
-            cursor: pointer;
         }
         .menu-btn div { width: 24px; height: 2px; background: var(--neon); box-shadow: 0 0 5px var(--neon); }
 
         /* ЦЕНТР */
         .title-display { flex-grow: 1; display: flex; align-items: center; justify-content: center; }
         .icon-circle {
-            width: 220px; height: 220px; border-radius: 50%; border: 4px solid var(--rank-color);
+            width: 210px; height: 210px; border-radius: 50%; border: 4px solid var(--rank-color);
             display: flex; align-items: center; justify-content: center;
-            filter: drop-shadow(0 0 25px var(--rank-color)); transition: 0.8s ease-in-out;
+            filter: drop-shadow(0 0 25px var(--rank-color)); transition: 0.8s;
         }
-        .icon-svg { width: 130px; height: 130px; fill: var(--rank-color); transition: 0.8s; }
+        .icon-svg { width: 120px; height: 120px; fill: var(--rank-color); transition: 0.8s; }
 
         /* НИЖНЯЯ ЗОНА */
-        .lvl-zone { width: 100%; margin-top: auto; padding-bottom: 80px; }
+        .lvl-zone { width: 100%; margin-top: auto; padding-bottom: 70px; }
         .lvl-labels { display: flex; justify-content: space-between; margin-bottom: 12px; font-weight: 700; color: var(--neon); font-size: 0.9em; }
         #display-name { color: #fff; text-shadow: 0 0 10px var(--neon); text-transform: uppercase; }
 
-        .progress-container { width: 100%; height: 35px; background: #050505; border: 2px solid var(--neon); border-radius: 10px; overflow: hidden; box-shadow: 0 0 15px rgba(0,212,255,0.1); }
+        .progress-container { width: 100%; height: 35px; background: #050505; border: 2px solid var(--neon); border-radius: 10px; overflow: hidden; }
         #exp-bar { height: 100%; width: 0%; background: linear-gradient(90deg, #005a77, var(--neon), #fff); transition: 0.5s; display: flex; align-items: center; justify-content: center; font-size: 0.8em; color: #000; font-weight: 900; }
 
         /* МОДАЛКИ */
         .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.97); z-index: 100; display: none; flex-direction: column; align-items: center; justify-content: center; backdrop-filter: blur(12px); }
-        .modal { width: 88%; max-height: 80vh; background: #050507; border: 2px solid var(--neon); border-radius: 20px; padding: 25px; overflow-y: auto; }
-        .modal-title { color: var(--neon); text-align: center; margin-bottom: 25px; font-weight: 900; text-shadow: 0 0 10px var(--neon); text-transform: uppercase; letter-spacing: 2px; }
+        .modal { width: 88%; max-height: 85vh; background: #050507; border: 2px solid var(--neon); border-radius: 20px; padding: 25px; overflow-y: auto; }
+        .modal-title { color: var(--neon); text-align: center; margin-bottom: 20px; font-weight: 900; text-shadow: 0 0 10px var(--neon); text-transform: uppercase; }
         
-        .btn-list { width: 100%; padding: 18px; background: rgba(255,255,255,0.03); border: 1px solid #1a1a22; color: #fff; margin-bottom: 12px; border-radius: 12px; font-family: 'Orbitron'; font-size: 12px; display: flex; justify-content: space-between; border-left: 5px solid var(--neon); transition: 0.2s; align-items: center; }
+        .btn-list { width: 100%; padding: 18px; background: rgba(255,255,255,0.03); border: 1px solid #1a1a22; color: #fff; margin-bottom: 12px; border-radius: 12px; font-family: 'Orbitron'; font-size: 11px; display: flex; justify-content: space-between; border-left: 4px solid var(--neon); transition: 0.2s; align-items: center; }
         .btn-list:active { background: var(--neon); color: #000; }
 
-        .input-box { width: 100%; background: #000; border: 1px solid var(--neon); color: #fff; padding: 15px; border-radius: 10px; font-family: 'Orbitron'; margin-bottom: 20px; box-sizing: border-box; text-align: center; outline: none; font-size: 1.1em; }
-        .back-btn { text-align: center; color: #666; margin-top: 20px; cursor: pointer; font-size: 0.8em; letter-spacing: 2px; text-transform: uppercase; }
-
-        .rank-item { display: flex; justify-content: space-between; padding: 12px; border-bottom: 1px solid #111; font-size: 0.85em; }
-        .profile-info { margin-bottom: 20px; border: 1px solid #222; padding: 15px; border-radius: 10px; background: #080808; }
+        .input-box { width: 100%; background: #000; border: 1px solid var(--neon); color: #fff; padding: 12px; border-radius: 8px; font-family: 'Orbitron'; margin-bottom: 15px; box-sizing: border-box; text-align: center; outline: none; }
+        
+        /* СЕТКА ДЛЯ ПОДХОДОВ */
+        .input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
+        .input-grid input { margin-bottom: 0; }
+        
+        .back-btn { text-align: center; color: #555; margin-top: 15px; cursor: pointer; font-size: 0.8em; letter-spacing: 2px; }
+        .rank-item { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #111; font-size: 0.85em; }
     </style>
 </head>
 <body style="--rank-color: #cd7f32;">
@@ -106,13 +101,23 @@
     <div class="back-btn" onclick="openModal('mainMenu')">[ BACK ]</div>
 </div></div>
 
-<div id="catModal" class="overlay"><div class="modal"><div class="modal-title">SELECT CATEGORY</div><div id="cat-list"></div><div class="back-btn" onclick="openModal('mainMenu')">[ BACK ]</div></div></div>
+<div id="catModal" class="overlay"><div class="modal"><div class="modal-title">CATEGORY</div><div id="cat-list"></div><div class="back-btn" onclick="openModal('mainMenu')">[ BACK ]</div></div></div>
 <div id="subModal" class="overlay"><div class="modal"><h3 id="sub-title" class="modal-title"></h3><div id="sub-list"></div><div class="back-btn" onclick="openModal('catModal')">[ BACK ]</div></div></div>
 <div id="exModal" class="overlay"><div class="modal"><h3 id="ex-title" class="modal-title"></h3><div id="ex-list"></div><div id="ex-back-btn" class="back-btn">[ BACK ]</div></div></div>
-<div id="weightModal" class="overlay"><div class="modal"><h3 id="final-ex-name" class="modal-title"></h3><input type="number" id="weight-input" class="input-box" style="border-color:var(--danger); color:var(--danger)" placeholder="WEIGHT KG"><button class="btn-list" style="background:var(--danger); color:#fff; justify-content:center; border:none; font-weight:900;" onclick="addExp()">REGISTER DATA</button><div class="back-btn" onclick="closeModal('weightModal')">[ CANCEL ]</div></div></div>
+
+<div id="weightModal" class="overlay"><div class="modal">
+    <h3 id="final-ex-name" class="modal-title"></h3>
+    <input type="number" id="w-val" class="input-box" style="border-color:var(--danger); color:var(--danger)" placeholder="WEIGHT (KG)">
+    <div class="input-grid">
+        <input type="number" id="s-val" class="input-box" placeholder="SETS">
+        <input type="number" id="r-val" class="input-box" placeholder="REPS">
+    </div>
+    <button class="btn-list" style="background:var(--danger); color:#fff; justify-content:center; border:none; font-weight:900;" onclick="addExp()">REGISTER RESULT</button>
+    <div class="back-btn" onclick="closeModal('weightModal')">[ CANCEL ]</div>
+</div></div>
 
 <script>
-    let db = JSON.parse(localStorage.getItem('SYSTEM_V22')) || { lvl: 1, exp: 0, records: {}, profile: {name:'PLAYER', age:'', height:'', weight:''} };
+    let db = JSON.parse(localStorage.getItem('SYSTEM_V23')) || { lvl: 1, exp: 0, records: {}, profile: {name:'PLAYER'} };
 
     const rankData = [
         { lvl: 1, name: "BRONZE", let: "E", col: "#cd7f32" },
@@ -126,29 +131,29 @@
 
     const trainingData = {
         'ГРУДЬ': {
-            'ВЕРХ': ['Жим штанги наклон.', 'Жим гантелей наклон.', 'Разводка наклон.', 'Кроссовер снизу', 'Жим в Смите наклон.'],
-            'НИЗ': ['Жим головой вниз', 'Брусья с весом', 'Кроссовер сверху', 'Отжимания от пола'],
-            'ЦЕНТР': ['Жим штанги гориз.', 'Жим гантелей гориз.', 'Жим в Хаммере', 'Пек-Дек (бабочка)', 'Пуловер']
+            'ВЕРХ': ['Жим штанги накл.', 'Жим гантелей накл.', 'Разводка накл.', 'Кроссовер снизу'],
+            'НИЗ': ['Жим головой вниз', 'Брусья с весом', 'Кроссовер сверху'],
+            'ЦЕНТР': ['Жим лежа', 'Жим гантелей гориз.', 'Хаммер', 'Бабочка', 'Пуловер']
         },
         'СПИНА': {
-            'ШИРИНА': ['Подтягивания шир.', 'Тяга верхнего блока', 'Тяга блока к груди', 'Пулловер на блоке', 'Тяга за голову'],
-            'ТОЛЩИНА': ['Тяга штанги накл.', 'Тяга гантели', 'Тяга Т-грифа', 'Рычажная тяга', 'Тяга блока к животу'],
-            'НИЗ': ['Становая тяга', 'Гиперэкстензия', 'Наклоны (Good Morning)']
+            'ШИРИНА': ['Подтягивания', 'Верхний блок', 'Тяга к груди', 'Пулловер на блоке'],
+            'ТОЛЩИНА': ['Тяга штанги накл.', 'Тяга гантели', 'Тяга Т-грифа', 'Рычажная тяга'],
+            'НИЗ': ['Становая тяга', 'Гиперэкстензия']
         },
         'НОГИ': {
             'ПЕРЕД': ['Приседания', 'Жим ногами', 'Разгибания ног', 'Гакк-присед', 'Выпады'],
-            'ЗАД': ['Мертвая тяга', 'Сгибания лежа', 'Сгибания сидя', 'Сгибания стоя'],
-            'ИКРЫ/ЯГОДИЦЫ': ['Икры стоя', 'Икры сидя', 'Ягодичный мостик', 'Махи назад', 'Приведения']
+            'ЗАД': ['Мертвая тяга', 'Сгибания ног'],
+            'ИКРЫ/ЯГОДИЦЫ': ['Икры стоя', 'Икры сидя', 'Ягодичный мостик']
         },
         'РУКИ': {
-            'БИЦЕПС': ['ПШН стоя', 'Молотки', 'Скамья Скотта', 'Бицепс на блоке', 'Концентрир. подъем'],
-            'ТРИЦЕПС': ['Французский жим', 'Узкий жим', 'Блок вниз', 'Разгибания из-за головы', 'Брусья на трицепс'],
-            'ПЛЕЧИ': ['Жим гантелей вверх', 'Махи в стороны', 'Махи в наклоне (задняя)', 'Махи вперед', 'Жим Арнольда', 'Шраги'],
-            'ПРЕДПЛЕЧЬЯ': ['Сгибания кистей', 'Обратный хват ПШН', 'Удержание веса']
+            'БИЦЕПС': ['ПШН стоя', 'Молотки', 'Скамья Скотта', 'Концентрир. подъем'],
+            'ТРИЦЕПС': ['Французский жим', 'Узкий жим', 'Блок вниз', 'Брусья на трицепс'],
+            'ПЛЕЧИ': ['Жим гантелей вверх', 'Махи в стороны', 'Махи в наклоне', 'Махи вперед'],
+            'ПРЕДПЛЕЧЬЯ': ['Сгибания кистей', 'Обратный хват']
         },
         'ПРЕСС/ШЕЯ': {
-            'ПРЕСС': ['Скручивания', 'Подъем ног в висе', 'Боковые наклоны', 'Колесо', 'Книжка'],
-            'ШЕЯ': ['Подъемы головы с диском', 'Борцовский мост', 'Боковые сопротивления']
+            'ПРЕСС': ['Скручивания', 'Подъем ног', 'Колесо', 'Книжка'],
+            'ШЕЯ': ['Подъемы головы', 'Мост']
         }
     };
 
@@ -168,10 +173,7 @@
         const cont = document.getElementById('ranks-container');
         cont.innerHTML = '';
         rankData.forEach(r => {
-            cont.innerHTML += `<div class="rank-item" style="color:${r.col}">
-                <span>${r.name} [${r.let}]</span>
-                <span>LVL ${r.lvl}</span>
-            </div>`;
+            cont.innerHTML += `<div class="rank-item" style="color:${r.col}"><span>${r.name} [${r.let}]</span><span>LVL ${r.lvl}</span></div>`;
         });
     }
 
@@ -204,19 +206,29 @@
         document.getElementById('ex-title').innerText = sub;
         const list = document.getElementById('ex-list'); list.innerHTML = '';
         trainingData[cat][sub].forEach(ex => {
-            let b = document.createElement('button'); b.className = 'btn-list'; b.innerHTML = `<span>${ex}</span> <span>${db.records[ex] || 0} KG</span>`;
+            let rec = db.records[ex] || {w:0, s:0, r:0};
+            let displayText = rec.w > 0 ? `${rec.w}KG | ${rec.s}x${rec.r}` : "0 KG";
+            let b = document.createElement('button'); b.className = 'btn-list'; b.innerHTML = `<span>${ex}</span> <span style="color:var(--neon)">${displayText}</span>`;
             b.onclick = () => { window.currentEx = ex; document.getElementById('final-ex-name').innerText = ex; openModal('weightModal'); };
             list.appendChild(b);
         }); document.getElementById('ex-back-btn').onclick = () => showSubs(cat); openModal('exModal');
     }
 
     function addExp() {
-        const val = parseFloat(document.getElementById('weight-input').value);
-        if(val) { db.records[window.currentEx] = Math.max(val, db.records[window.currentEx] || 0); db.exp += 25; if(db.exp >= 100) { db.lvl++; db.exp = 0; } save(); update(); closeModal('weightModal'); }
-        document.getElementById('weight-input').value = '';
+        const w = parseFloat(document.getElementById('w-val').value) || 0;
+        const s = parseInt(document.getElementById('s-val').value) || 0;
+        const r = parseInt(document.getElementById('r-val').value) || 0;
+        
+        if(w > 0) { 
+            db.records[window.currentEx] = {w, s, r}; 
+            db.exp += 25; 
+            if(db.exp >= 100) { db.lvl++; db.exp = 0; } 
+            save(); update(); closeModal('weightModal'); 
+        }
+        document.getElementById('w-val').value = ''; document.getElementById('s-val').value = ''; document.getElementById('r-val').value = '';
     }
 
-    function save() { localStorage.setItem('SYSTEM_V22', JSON.stringify(db)); }
+    function save() { localStorage.setItem('SYSTEM_V23', JSON.stringify(db)); }
 
     function update() {
         document.getElementById('current-lvl').innerText = db.lvl;
@@ -224,10 +236,10 @@
         document.getElementById('exp-bar').style.width = db.exp + '%';
         document.getElementById('exp-bar').innerText = db.exp + '%';
         
-        document.getElementById('p-name').value = db.profile.name;
-        document.getElementById('p-age').value = db.profile.age;
-        document.getElementById('p-height').value = db.profile.height;
-        document.getElementById('p-weight').value = db.profile.weight;
+        document.getElementById('p-name').value = db.profile.name || '';
+        document.getElementById('p-age').value = db.profile.age || '';
+        document.getElementById('p-height').value = db.profile.height || '';
+        document.getElementById('p-weight').value = db.profile.weight || '';
 
         let cur = rankData[0];
         for(let r of rankData) { if(db.lvl >= r.lvl) cur = r; }
