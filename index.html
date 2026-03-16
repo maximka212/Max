@@ -3,92 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SYSTEM: PROFILE REBORN v31.6</title>
+    <title>SYSTEM: OMNI-ATLAS v32.0 [120+ EXERCISES]</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --bg: #000;
-            --neon: #00d4ff;
-            --danger: #ff0044;
-            --rank-color: #cd7f32;
-            --surface: #0a0a0f;
-            --border: #1a1a22;
-        }
-
+        :root { --bg: #000; --neon: #00d4ff; --danger: #ff0044; --rank-color: #cd7f32; --surface: #0a0a0f; --border: #1a1a22; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body {
-            background: var(--bg);
-            color: #eee;
-            font-family: 'Orbitron', sans-serif;
-            margin: 0; padding: 0;
-            height: 100vh;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* HEADER */
-        .header {
-            padding: 25px 20px;
-            background: rgba(0,0,0,0.9);
-            border-bottom: 1px solid var(--border);
-            text-align: center;
-            z-index: 100;
-        }
+        body { background: var(--bg); color: #eee; font-family: 'Orbitron', sans-serif; margin: 0; padding: 0; height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
+        .header { padding: 20px; background: rgba(0,0,0,0.9); border-bottom: 1px solid var(--border); text-align: center; z-index: 100; }
         .rank-display { display: flex; align-items: center; justify-content: center; gap: 10px; font-weight: 900; }
         .rank-letter-box { padding: 4px 10px; border: 2px solid var(--rank-color); color: var(--rank-color); border-radius: 4px; }
-
-        /* MAIN */
-        .main-content { flex-grow: 1; overflow-y: auto; padding: 20px 20px 120px; }
+        .main-content { flex-grow: 1; overflow-y: auto; padding: 20px 20px 100px; }
         .page { display: none; flex-direction: column; animation: fadeIn 0.4s ease; }
         .page.active { display: flex; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        /* HOME CENTER */
-        .home-center { display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 30px 0; }
-        .main-circle {
-            width: 180px; height: 180px; border-radius: 50%; border: 4px solid var(--rank-color);
-            display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 0 20px rgba(var(--rank-color), 0.3); background: rgba(255,255,255,0.02);
-            position: relative;
-        }
-        .main-circle svg { width: 80px; fill: var(--rank-color); }
-        .lvl-badge { position: absolute; bottom: 5px; right: 5px; background: var(--rank-color); color: #000; padding: 5px 12px; border-radius: 20px; font-size: 0.8em; font-weight: 900; }
-
-        /* PROGRESS BAR */
-        .exp-box { width: 100%; margin: 20px 0; }
-        .exp-bar { width: 100%; height: 8px; background: #111; border-radius: 4px; overflow: hidden; border: 1px solid #222; }
-        #exp-fill { height: 100%; background: var(--neon); width: 0%; transition: 1s; box-shadow: 0 0 15px var(--neon); }
-
-        /* INPUTS & UI */
-        .input-group { background: rgba(255,255,255,0.03); padding: 20px; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 20px; }
-        .label-tag { font-size: 0.6em; color: var(--neon); margin-bottom: 8px; display: block; letter-spacing: 1px; }
-        input { width: 100%; background: #000; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 8px; font-family: 'Orbitron'; margin-bottom: 15px; outline: none; transition: 0.3s; }
-        input:focus { border-color: var(--neon); box-shadow: 0 0 10px rgba(0, 212, 255, 0.2); }
-        
-        .list-item { background: rgba(255,255,255,0.02); border: 1px solid var(--border); padding: 16px; border-radius: 10px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; font-size: 0.8em; }
-        .list-item.done { border-left: 4px solid #00ff88; color: #00ff88; opacity: 0.7; }
-        
-        .sys-btn { background: rgba(0,212,255,0.05); border: 1px solid var(--neon); color: var(--neon); padding: 12px; font-family: 'Orbitron'; font-size: 0.7em; border-radius: 6px; cursor: pointer; text-transform: uppercase; width: 100%; }
-
-        /* NAV */
-        .nav-bar { position: fixed; bottom: 0; width: 100%; height: 80px; background: #050507; border-top: 1px solid var(--border); display: grid; grid-template-columns: repeat(5, 1fr); z-index: 1000; }
-        .nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 0.5em; color: #444; gap: 5px; }
+        .home-center { display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 20px 0; }
+        .main-circle { width: 160px; height: 160px; border-radius: 50%; border: 4px solid var(--rank-color); display: flex; align-items: center; justify-content: center; box-shadow: 0 0 20px rgba(var(--rank-color), 0.3); position: relative; }
+        .main-circle svg { width: 70px; fill: var(--rank-color); }
+        .lvl-badge { position: absolute; bottom: 5px; right: 5px; background: var(--rank-color); color: #000; padding: 4px 10px; border-radius: 20px; font-size: 0.7em; font-weight: 900; }
+        .exp-bar { width: 100%; height: 8px; background: #111; border-radius: 4px; overflow: hidden; border: 1px solid #222; margin: 10px 0; }
+        #exp-fill { height: 100%; background: var(--neon); width: 0%; transition: 1s; }
+        .input-group { background: rgba(255,255,255,0.03); padding: 15px; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 15px; }
+        .label-tag { font-size: 0.55em; color: var(--neon); margin-bottom: 5px; display: block; letter-spacing: 1px; text-transform: uppercase; }
+        input { width: 100%; background: #000; border: 1px solid #333; color: #fff; padding: 10px; border-radius: 6px; font-family: 'Orbitron'; margin-bottom: 10px; outline: none; font-size: 0.8em; }
+        .list-item { background: rgba(255,255,255,0.02); border: 1px solid var(--border); padding: 14px; border-radius: 8px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; font-size: 0.75em; transition: 0.2s; }
+        .list-item:active { background: rgba(0, 212, 255, 0.1); }
+        .sys-btn { background: rgba(0,212,255,0.05); border: 1px solid var(--neon); color: var(--neon); padding: 12px; font-family: 'Orbitron'; font-size: 0.7em; border-radius: 6px; cursor: pointer; text-transform: uppercase; width: 100%; margin-top: 5px; }
+        .nav-bar { position: fixed; bottom: 0; width: 100%; height: 75px; background: #050507; border-top: 1px solid var(--border); display: grid; grid-template-columns: repeat(5, 1fr); z-index: 1000; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 0.5em; color: #444; gap: 4px; }
         .nav-item.active { color: var(--neon); }
-        .nav-item svg { width: 22px; height: 22px; fill: currentColor; }
-
-        .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .nav-item svg { width: 20px; height: 20px; fill: currentColor; }
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 2000; display: none; align-items: center; justify-content: center; padding: 20px; }
+        .modal { background: #0a0a0f; border: 1px solid var(--neon); padding: 20px; border-radius: 12px; width: 100%; text-align: center; }
     </style>
 </head>
 <body>
 
-    <div id="entryOverlay" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:2000; display:none; align-items:center; justify-content:center; padding:20px;">
-        <div style="background:#0a0a0f; border:1px solid var(--neon); padding:25px; border-radius:15px; width:100%; text-align:center;">
-            <h3 id="modal-title" style="color:var(--neon)">LOG DATA</h3>
-            <input type="number" id="input-weight" placeholder="KG">
+    <div id="entryOverlay" class="overlay">
+        <div class="modal">
+            <h4 id="modal-title" style="color:var(--neon); margin:0 0 15px;">LOG</h4>
+            <input type="number" id="input-weight" placeholder="KG / REPS">
             <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
-                <button class="sys-btn" onclick="confirmLog()">EXECUTE</button>
-                <button class="sys-btn" style="border-color:var(--danger); color:var(--danger);" onclick="document.getElementById('entryOverlay').style.display='none'">ABORT</button>
+                <button class="sys-btn" onclick="confirmLog()">SYNC</button>
+                <button class="sys-btn" style="border-color:var(--danger); color:var(--danger);" onclick="document.getElementById('entryOverlay').style.display='none'">BACK</button>
             </div>
         </div>
     </div>
@@ -98,7 +54,7 @@
             <span id="rank-name">BRONZE</span>
             <span id="rank-letter" class="rank-letter-box">E</span>
         </div>
-        <div style="font-size: 0.7em; color: var(--danger); margin-top: 5px;" id="clock">00:00:00</div>
+        <div id="clock" style="font-size: 0.6em; color: var(--danger); margin-top: 4px;">00:00:00</div>
     </div>
 
     <div class="main-content">
@@ -110,119 +66,109 @@
                 </div>
             </div>
             <div style="text-align: center;">
-                <h2 id="display-name" style="letter-spacing: 4px; margin: 0;">PLAYER</h2>
-                <div class="exp-box">
-                    <div style="display:flex; justify-content:space-between; font-size:0.6em; margin-bottom:5px; color:#555;">
-                        <span>SYSTEM SYNC</span><span id="exp-text">0%</span>
-                    </div>
-                    <div class="exp-bar"><div id="exp-fill"></div></div>
-                </div>
+                <h3 id="display-name" style="margin:0; letter-spacing:3px;">PLAYER</h3>
+                <div class="exp-bar"><div id="exp-fill"></div></div>
+                <div style="font-size:0.6em; color:var(--neon)">SYSTEM INTEGRITY: <span id="exp-text">0%</span></div>
             </div>
         </div>
 
         <div id="page-quests" class="page">
-            <h3 style="color:var(--neon); font-size: 0.9em; margin-bottom: 15px;">DAILY DELICA</h3>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px;">
-                <button class="sys-btn" onclick="rerollQuests()">REROLL</button>
-                <button class="sys-btn" onclick="addExtraQuest()">+ QUEST</button>
-            </div>
             <div id="quest-list"></div>
+            <button class="sys-btn" onclick="rerollQuests()" style="margin-top:15px;">REFRESH DAILY</button>
         </div>
 
         <div id="page-db" class="page">
-            <div style="display:flex; align-items:center; gap:10px; margin-bottom:20px;">
-                <button id="db-back" class="sys-btn" style="display:none; width:50px;" onclick="goBackDB()">←</button>
-                <h3 id="db-title" style="color:var(--neon); margin:0; font-size: 0.9em;">DATABASE</h3>
+            <div style="display:flex; align-items:center; gap:10px; margin-bottom:15px;">
+                <button id="db-back" class="sys-btn" style="display:none; width:40px; margin:0;" onclick="goBackDB()">←</button>
+                <h3 id="db-title" style="color:var(--neon); margin:0; font-size:0.8em;">DIRECTORIES</h3>
             </div>
             <div id="db-content"></div>
         </div>
 
         <div id="page-ranks" class="page">
-            <h3 style="color:var(--neon); margin-bottom: 15px;">HIERARCHY</h3>
             <div id="rank-list"></div>
         </div>
 
         <div id="page-user" class="page">
-            <h3 style="color:var(--neon); margin-bottom: 15px;">USER PROTOCOL</h3>
-            
             <div class="input-group">
-                <span class="label-tag">PLAYER IDENTITY</span>
-                <input type="text" id="set-name" placeholder="IDENTIFIER">
-                
-                <div class="stat-grid">
-                    <div>
-                        <span class="label-tag">HEIGHT (CM)</span>
-                        <input type="number" id="set-h" placeholder="0">
-                    </div>
-                    <div>
-                        <span class="label-tag">WEIGHT (KG)</span>
-                        <input type="number" id="set-w" placeholder="0">
-                    </div>
+                <span class="label-tag">IDENTIFIER</span>
+                <input type="text" id="set-name">
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                    <div><span class="label-tag">HEIGHT (CM)</span><input type="number" id="set-h"></div>
+                    <div><span class="label-tag">WEIGHT (KG)</span><input type="number" id="set-w"></div>
                 </div>
-
-                <div class="stat-grid">
-                    <div>
-                        <span class="label-tag">AGE (YRS)</span>
-                        <input type="number" id="set-age" placeholder="0">
-                    </div>
-                    <div>
-                        <span class="label-tag">FAT %</span>
-                        <input type="number" id="set-fat" placeholder="0">
-                    </div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                    <div><span class="label-tag">AGE</span><input type="number" id="set-age"></div>
+                    <div><span class="label-tag">FAT %</span><input type="number" id="set-fat"></div>
                 </div>
-
-                <button class="sys-btn" style="background:var(--neon); color:#000;" onclick="saveUser()">SYNC ALL DATA</button>
+                <button class="sys-btn" style="background:var(--neon); color:#000;" onclick="saveUser()">SYNC TO CLOUD</button>
             </div>
-
             <div class="list-item">
-                <div>
-                    <span class="label-tag">ACTIVE TITLE</span>
-                    <span id="current-title" style="font-size: 1.2em; font-weight: 900;">RECRUIT</span>
-                </div>
+                <span class="label-tag">CURRENT TITLE</span>
+                <span id="current-title" style="font-weight:900; color:var(--rank-color)">RECRUIT</span>
             </div>
-
-            <h3 style="color:var(--neon); margin-top: 20px; font-size: 0.8em;">STRENGTH RECORDS</h3>
             <div id="records-list"></div>
         </div>
     </div>
 
     <div class="nav-bar">
         <div class="nav-item active" onclick="showPage('home', this)"><svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>HOME</div>
-        <div class="nav-item" onclick="showPage('quests', this)"><svg viewBox="0 0 24 24"><path d="M19 3H5v14h14V3z M12 17l-5-5 1.4-1.4 3.6 3.6 7.6-7.6L21 8l-9 9z"/></svg>DELICA</div>
+        <div class="nav-item" onclick="showPage('quests', this)"><svg viewBox="0 0 24 24"><path d="M19 3H5v14h14V3z M12 17l-5-5 1.4-1.4 3.6 3.6 7.6-7.6L21 8l-9 9z"/></svg>QUESTS</div>
         <div class="nav-item" onclick="showPage('db', this)"><svg viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>DB</div>
         <div class="nav-item" onclick="showPage('ranks', this)"><svg viewBox="0 0 24 24"><path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/></svg>RANKS</div>
         <div class="nav-item" onclick="showPage('user', this)"><svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>USER</div>
     </div>
 
 <script>
-    const QUEST_POOL = ["100 Отжиманий", "50 Подтягиваний", "Бег 3 КМ", "Планка 5 мин", "100 Приседаний", "Жим штанги", "Тяга блока", "Без сахара", "10к шагов"];
-    const DB_DATA = {
-        'ГРУДЬ': { 'ВЕРХ': ['Жим 45°', 'Гантели 45°', 'Кроссовер'], 'НИЗ': ['Брусья', 'Жим вниз', 'Пуловер'] },
-        'СПИНА': { 'ШИРИНА': ['Подтягивания', 'Верхний блок'], 'ТОЛЩИНА': ['Тяга штанги', 'Тяга гантели'] },
-        'РУКИ': { 'БИЦЕПС': ['Штанга', 'Гантели', 'Молотки'], 'ТРИЦЕПС': ['Блок', 'Жим узким'] }
+    const MASTER_DB = {
+        'ГРУДЬ': {
+            'ВЕРХ': ['Жим 45°', 'Гантели 45°', 'Кроссовер снизу', 'Смит 45°', 'Хаммер вверх', 'Разводка 45°', 'Отжимания угол'],
+            'НИЗ': ['Брусья грудные', 'Жим вниз головой', 'Кроссовер сверху', 'Гантели вниз', 'Хаммер вниз', 'Пуловер', 'Отжимания на брусьях'],
+            'ЦЕНТР': ['Жим лежа', 'Жим гантелей', 'Пек-Дек', 'Смит горизонт', 'Хаммер центр', 'Разводка горизонт', 'Отжимания широкие']
+        },
+        'СПИНА': {
+            'ШИРИНА': ['Подтягивания', 'Верхний блок', 'Блок за голову', 'V-тяга блок', 'Рычажная тяга', 'Пуловер блок', 'Гравитрон'],
+            'ТОЛЩИНА': ['Тяга штанги', 'Тяга Т-грифа', 'Тяга гантели', 'Тяга в Хаммере', 'Тяга блока сидя', 'Тяга Пендли', 'Тяга гири'],
+            'НИЗ': ['Становая тяга', 'Гиперэкстензия', 'Румынская тяга', 'Гудморнинг', 'Мертвая тяга', 'Лодочка', 'Тяга сумо']
+        },
+        'ПЛЕЧИ': {
+            'ПЕРЕД': ['Армейский жим', 'Жим гантелей', 'Подъем перед собой', 'Жим Арнольда', 'Жим Смита', 'Блин перед собой', 'Жим из-за головы'],
+            'СРЕДНЯЯ': ['Махи гантели', 'Махи кроссовер', 'Тяга к подбородку', 'Махи в тренажере', 'Махи сидя', 'Лифт махи', 'Махи одной рукой'],
+            'ЗАДНЯЯ': ['Махи в наклоне', 'Обратный Пек-Дек', 'Facepull', 'Тяга на заднюю', 'Махи лежа', 'Тяга веревки', 'Махи кросс']
+        },
+        'РУКИ': {
+            'БИЦЕПС': ['ПШБ стоя', 'Гантели супинация', 'Молотки', 'Скамья Скотта', 'Бицепс блок', 'Концентрация', 'Бицепс сидя'],
+            'ТРИЦЕПС': ['Французский жим', 'Блок канат', 'Жим узким', 'Брусья узко', 'Разгибание из-за головы', 'Кикбэк', 'Обратные отжимания'],
+            'ПРЕДПЛЕЧЬЯ': ['Сгибания кистей', 'Разгибания кистей', 'Зоттман', 'Удержание веса', 'Вращение кисти', 'Вис на время', 'Экспандер']
+        },
+        'НОГИ': {
+            'КВАДРИЦЕПС': ['Приседания', 'Жим ногами', 'Разгибания ног', 'Гакк-присед', 'Выпады', 'Плие', 'Сплит-присед'],
+            'БИЦЕПС БЕДРА': ['Сгибания лежа', 'Сгибания сидя', 'Мертвая тяга', 'Сгибания стоя', 'Гиперэкстензия ноги', 'Тяга Кинга', 'Мостик'],
+            'ИКРЫ': ['Носки стоя', 'Носки сидя', 'Носки в жиме', 'Ослик', 'Пружинки', 'Носки в Смите', 'Носки на одной']
+        },
+        'КОР И ДР.': {
+            'ПРЕСС ВЕРХ': ['Скручивания', 'Молитва', 'V-складки', 'Ролик', 'Книжка', 'Верхний блок пресс', 'Велосипед'],
+            'ПРЕСС НИЗ': ['Подъем ног в висе', 'Ножницы', 'Альпинист', 'Обратные скручивания', 'Подъем колен', 'Свеча', 'Уголок'],
+            'ШЕЯ И ТРАП': ['Шраги штанга', 'Шраги гантели', 'Борцовский мост', 'Шраги в Смите', 'Подъем головы', 'Шраги блок', 'Удержание блина']
+        }
     };
+
+    let state = JSON.parse(localStorage.getItem('SYSTEM_V32_0')) || {
+        lvl: 1, exp: 0, quests: [], pr: {}, 
+        user: {name: 'PLAYER', h: 0, w: 0, age: 0, fat: 0},
+        lastDate: ""
+    };
+
     const RANKS = [
         {lvl: 1, n: "BRONZE", l: "E", c: "#cd7f32", t: "RECRUIT"},
         {lvl: 10, n: "SILVER", l: "D", c: "#c0c0c0", t: "SOLDIER"},
         {lvl: 25, n: "GOLD", l: "C", c: "#ffd700", t: "WARRIOR"},
         {lvl: 50, n: "PLATINUM", l: "B", c: "#00d4ff", t: "ELITE"},
         {lvl: 100, n: "DIAMOND", l: "A", c: "#b9f2ff", t: "GOD"},
-        {lvl: 250, n: "GRANDMASTER", l: "SSS", c: "#ff0044", t: "OVERLORD"}
+        {lvl: 200, n: "GRANDMASTER", l: "SSS", c: "#ff0044", t: "OVERLORD"}
     ];
 
-    let state = JSON.parse(localStorage.getItem('SYSTEM_V31_6')) || {
-        lvl: 1, exp: 0, quests: [], pr: {}, 
-        user: {name: 'PLAYER', h: 0, w: 0, age: 0, fat: 0},
-        lastDate: ""
-    };
-
     let dbStack = [];
-
-    function initQuests() {
-        if(state.quests.length === 0) {
-            for(let i=0; i<3; i++) state.quests.push({t: QUEST_POOL[Math.floor(Math.random()*QUEST_POOL.length)], d: false});
-        }
-    }
 
     function showPage(p, el) {
         document.querySelectorAll('.page').forEach(pg => pg.classList.remove('active'));
@@ -230,28 +176,10 @@
         document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
         if(el) el.classList.add('active');
         if(p === 'db') { dbStack = []; renderDB(); }
+        if(p === 'user') renderUser();
         if(p === 'quests') renderQuests();
         if(p === 'ranks') renderRanks();
-        if(p === 'user') renderUser();
     }
-
-    function renderQuests() {
-        const area = document.getElementById('quest-list'); area.innerHTML = '';
-        state.quests.forEach((q, i) => {
-            area.innerHTML += `<div class="list-item ${q.d?'done':''}" onclick="completeQuest(${i})"><span>${q.t}</span> <span>${q.d?'DONE':'ACTIVE'}</span></div>`;
-        });
-    }
-
-    function completeQuest(i) {
-        if(!state.quests[i].d) { state.quests[i].d = true; state.exp += 34; checkLvl(); save(); update(); renderQuests(); }
-    }
-
-    function rerollQuests() {
-        state.quests = state.quests.map(q => q.d ? q : {t: QUEST_POOL[Math.floor(Math.random()*QUEST_POOL.length)], d: false});
-        save(); renderQuests();
-    }
-
-    function addExtraQuest() { state.quests.push({t: QUEST_POOL[Math.floor(Math.random()*QUEST_POOL.length)], d: false}); save(); renderQuests(); }
 
     function renderDB() {
         const area = document.getElementById('db-content');
@@ -259,31 +187,49 @@
         const back = document.getElementById('db-back');
         area.innerHTML = '';
         if(dbStack.length === 0) {
-            title.innerText = "DATABASE"; back.style.display = 'none';
-            Object.keys(DB_DATA).forEach(k => area.innerHTML += `<div class="list-item" onclick="pushDB('${k}')">${k} <span>>></span></div>`);
+            title.innerText = "DIRECTORIES"; back.style.display = 'none';
+            Object.keys(MASTER_DB).forEach(k => area.innerHTML += `<div class="list-item" onclick="pushDB('${k}')">${k} <span>>></span></div>`);
         } else if(dbStack.length === 1) {
             title.innerText = dbStack[0]; back.style.display = 'block';
-            Object.keys(DB_DATA[dbStack[0]]).forEach(k => area.innerHTML += `<div class="list-item" onclick="pushDB('${k}')">${k} <span>>></span></div>`);
+            Object.keys(MASTER_DB[dbStack[0]]).forEach(k => area.innerHTML += `<div class="list-item" onclick="pushDB('${k}')">${k} <span>>></span></div>`);
         } else {
             title.innerText = dbStack[1]; back.style.display = 'block';
-            DB_DATA[dbStack[0]][dbStack[1]].forEach(ex => area.innerHTML += `<div class="list-item" onclick="openEntry('${ex}')">${ex} <span>LOG</span></div>`);
+            MASTER_DB[dbStack[0]][dbStack[1]].forEach(ex => area.innerHTML += `<div class="list-item" onclick="openEntry('${ex}')">${ex} <span>LOG</span></div>`);
         }
     }
 
     function pushDB(v) { dbStack.push(v); renderDB(); }
     function goBackDB() { dbStack.pop(); renderDB(); }
-
     function openEntry(ex) { window.activeEx = ex; document.getElementById('modal-title').innerText = ex; document.getElementById('entryOverlay').style.display = 'flex'; }
     function confirmLog() {
         const w = document.getElementById('input-weight').value;
-        if(w > 0) { state.pr[window.activeEx] = w; state.exp += 15; checkLvl(); save(); update(); document.getElementById('entryOverlay').style.display = 'none'; }
+        if(w > 0) { state.pr[window.activeEx] = w; state.exp += 15; checkLvl(); save(); update(); document.getElementById('entryOverlay').style.display='none'; }
+    }
+
+    function renderQuests() {
+        if(state.quests.length === 0) rerollQuests();
+        const area = document.getElementById('quest-list'); area.innerHTML = '';
+        state.quests.forEach((q, i) => {
+            area.innerHTML += `<div class="list-item ${q.d?'done':''}" onclick="completeQuest(${i})"><span>${q.t}</span> <span>${q.d?'DONE':'+30XP'}</span></div>`;
+        });
+    }
+
+    function completeQuest(i) {
+        if(!state.quests[i].d) { state.quests[i].d = true; state.exp += 30; checkLvl(); save(); update(); renderQuests(); }
+    }
+
+    function rerollQuests() {
+        const pools = ["100 Отжиманий", "50 Подтягиваний", "Бег 3км", "Планка 5 мин", "100 Приседаний", "Пресс 50 раз"];
+        state.quests = [];
+        for(let i=0; i<3; i++) state.quests.push({t: pools[Math.floor(Math.random()*pools.length)], d: false});
+        save(); renderQuests();
     }
 
     function renderRanks() {
         const area = document.getElementById('rank-list'); area.innerHTML = '';
         RANKS.forEach(r => {
             const lock = state.lvl < r.lvl;
-            area.innerHTML += `<div class="list-item" style="border-color:${lock?'#222':r.c}; opacity:${lock?0.3:1}"><span style="color:${r.c}">${r.n}</span> <span>LVL ${r.lvl}</span></div>`;
+            area.innerHTML += `<div class="list-item" style="border-color:${lock?'#111':r.c}; opacity:${lock?0.3:1}"><span style="color:${r.c}">${r.n}</span> <span>LVL ${r.lvl}</span></div>`;
         });
     }
 
@@ -293,30 +239,24 @@
         document.getElementById('set-w').value = state.user.w || '';
         document.getElementById('set-age').value = state.user.age || '';
         document.getElementById('set-fat').value = state.user.fat || '';
-        
-        const recArea = document.getElementById('records-list'); recArea.innerHTML = '';
-        for(let k in state.pr) recArea.innerHTML += `<div class="list-item"><span>${k}</span> <span>${state.pr[k]} KG</span></div>`;
-        
         let curR = RANKS[0]; RANKS.forEach(r => { if(state.lvl >= r.lvl) curR = r; });
         document.getElementById('current-title').innerText = curR.t;
+        const rec = document.getElementById('records-list'); rec.innerHTML = '';
+        for(let k in state.pr) rec.innerHTML += `<div class="list-item"><span>${k}</span> <span style="color:var(--neon)">${state.pr[k]}</span></div>`;
     }
 
     function saveUser() {
-        state.user.name = document.getElementById('set-name').value || 'PLAYER';
-        state.user.h = document.getElementById('set-h').value;
-        state.user.w = document.getElementById('set-w').value;
-        state.user.age = document.getElementById('set-age').value;
-        state.user.fat = document.getElementById('set-fat').value;
-        save(); update(); alert("PROFILE SYNCED");
+        state.user = { name: document.getElementById('set-name').value || 'PLAYER', h: document.getElementById('set-h').value, w: document.getElementById('set-w').value, age: document.getElementById('set-age').value, fat: document.getElementById('set-fat').value };
+        save(); update(); alert("SYNCED");
     }
 
     function checkLvl() { while(state.exp >= 100) { state.lvl++; state.exp -= 100; } }
-    function save() { localStorage.setItem('SYSTEM_V31_6', JSON.stringify(state)); }
+    function save() { localStorage.setItem('SYSTEM_V32_0', JSON.stringify(state)); }
 
     function update() {
         const now = new Date();
         document.getElementById('clock').innerText = now.toLocaleTimeString();
-        if(state.lastDate !== now.toDateString()) { state.quests = []; initQuests(); state.lastDate = now.toDateString(); save(); }
+        if(state.lastDate !== now.toDateString()) { state.quests = []; rerollQuests(); state.lastDate = now.toDateString(); save(); }
         document.getElementById('lvl-num').innerText = state.lvl;
         document.getElementById('display-name').innerText = state.user.name;
         document.getElementById('exp-fill').style.width = state.exp + '%';
@@ -327,7 +267,6 @@
         document.body.style.setProperty('--rank-color', curR.c);
     }
 
-    initQuests();
     setInterval(update, 1000);
     update();
 </script>
