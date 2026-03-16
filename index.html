@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SYSTEM: OMNI-ATLAS v32.0 [120+ EXERCISES]</title>
+    <title>SYSTEM: OMNI-ATLAS v32.1</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root { --bg: #000; --neon: #00d4ff; --danger: #ff0044; --rank-color: #cd7f32; --surface: #0a0a0f; --border: #1a1a22; }
@@ -26,7 +26,7 @@
         .label-tag { font-size: 0.55em; color: var(--neon); margin-bottom: 5px; display: block; letter-spacing: 1px; text-transform: uppercase; }
         input { width: 100%; background: #000; border: 1px solid #333; color: #fff; padding: 10px; border-radius: 6px; font-family: 'Orbitron'; margin-bottom: 10px; outline: none; font-size: 0.8em; }
         .list-item { background: rgba(255,255,255,0.02); border: 1px solid var(--border); padding: 14px; border-radius: 8px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; font-size: 0.75em; transition: 0.2s; }
-        .list-item:active { background: rgba(0, 212, 255, 0.1); }
+        .list-item.done { border-left: 4px solid #00ff88; color: #00ff88; opacity: 0.7; }
         .sys-btn { background: rgba(0,212,255,0.05); border: 1px solid var(--neon); color: var(--neon); padding: 12px; font-family: 'Orbitron'; font-size: 0.7em; border-radius: 6px; cursor: pointer; text-transform: uppercase; width: 100%; margin-top: 5px; }
         .nav-bar { position: fixed; bottom: 0; width: 100%; height: 75px; background: #050507; border-top: 1px solid var(--border); display: grid; grid-template-columns: repeat(5, 1fr); z-index: 1000; }
         .nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 0.5em; color: #444; gap: 4px; }
@@ -34,6 +34,7 @@
         .nav-item svg { width: 20px; height: 20px; fill: currentColor; }
         .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 2000; display: none; align-items: center; justify-content: center; padding: 20px; }
         .modal { background: #0a0a0f; border: 1px solid var(--neon); padding: 20px; border-radius: 12px; width: 100%; text-align: center; }
+        .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
     </style>
 </head>
 <body>
@@ -73,8 +74,12 @@
         </div>
 
         <div id="page-quests" class="page">
+            <h3 style="color:var(--neon); font-size: 0.8em; margin-bottom: 10px;">DAILY OBJECTIVES</h3>
             <div id="quest-list"></div>
-            <button class="sys-btn" onclick="rerollQuests()" style="margin-top:15px;">REFRESH DAILY</button>
+            <div class="btn-grid">
+                <button class="sys-btn" onclick="rerollQuests()">REFRESH ALL</button>
+                <button class="sys-btn" onclick="addExtraQuest()" style="border-color:#00ff88; color:#00ff88;">+ EXTRA</button>
+            </div>
         </div>
 
         <div id="page-db" class="page">
@@ -153,7 +158,9 @@
         }
     };
 
-    let state = JSON.parse(localStorage.getItem('SYSTEM_V32_0')) || {
+    const QUEST_POOL = ["100 Отжиманий", "50 Подтягиваний", "Бег 3км", "Планка 5 мин", "100 Приседаний", "Пресс 50 раз", "10к шагов", "Без сахара 24ч", "Прыжки 200 раз", "Скакалка 5 мин"];
+
+    let state = JSON.parse(localStorage.getItem('SYSTEM_V32_1')) || {
         lvl: 1, exp: 0, quests: [], pr: {}, 
         user: {name: 'PLAYER', h: 0, w: 0, age: 0, fat: 0},
         lastDate: ""
@@ -219,9 +226,15 @@
     }
 
     function rerollQuests() {
-        const pools = ["100 Отжиманий", "50 Подтягиваний", "Бег 3км", "Планка 5 мин", "100 Приседаний", "Пресс 50 раз"];
         state.quests = [];
-        for(let i=0; i<3; i++) state.quests.push({t: pools[Math.floor(Math.random()*pools.length)], d: false});
+        for(let i=0; i<3; i++) {
+            state.quests.push({t: QUEST_POOL[Math.floor(Math.random()*QUEST_POOL.length)], d: false});
+        }
+        save(); renderQuests();
+    }
+
+    function addExtraQuest() {
+        state.quests.push({t: QUEST_POOL[Math.floor(Math.random()*QUEST_POOL.length)], d: false});
         save(); renderQuests();
     }
 
@@ -251,7 +264,7 @@
     }
 
     function checkLvl() { while(state.exp >= 100) { state.lvl++; state.exp -= 100; } }
-    function save() { localStorage.setItem('SYSTEM_V32_0', JSON.stringify(state)); }
+    function save() { localStorage.setItem('SYSTEM_V32_1', JSON.stringify(state)); }
 
     function update() {
         const now = new Date();
